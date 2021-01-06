@@ -12,4 +12,7 @@ install:
   - python setup.py build_ext --inplace
 # command to run tests
 script:
-  - pytest
+  - py.test  --cov-report term --cov=app/test/
+
+after_success:
+  - codecov
