@@ -5,7 +5,7 @@ python:
   - "3.8"
   - "3.9"
   - "3.9-dev"  # 3.9 development branch
-  - "nightly"  # nightly build
+#  - "nightly"  # nightly build - seems to error, but all 3.9 should error :/
 # command to install dependencies
 install:
   - pip install -r requirements.txt
