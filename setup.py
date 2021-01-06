@@ -1,19 +1,11 @@
 # setup for cython functions
 # Whitebeam | Kieran Molloy | Lancaster University 2020
 
-import argparse
 
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 from Cython.Distutils import build_ext
 import numpy as np
 import pathlib
-
-parser = argparse.ArgumentParser()
-my_group = my_parser.add_mutually_exclusive_group(required=True)
-
-my_group.add_argument('-c', '--cython', action='store_true')
-my_group.add_argument('-b', '--build', action='store_true')
-args = parser.parse_args()
 
 NAME = "whitebeam"
 VERSION = "0.0.1"
@@ -22,9 +14,6 @@ REQUIRES = ["numpy", "cython", "joblib"]
 
 AUTHOR = "Kieran Molloy"
 EMAIL = "k.molloy@lancaster.ac.uk"
-
-SRC_DIR = "whitebeam"
-PACKAGES = [SRC_DIR]
 
 ext_1 = Extension(SRC_DIR + ".core._whitebeam",
                   sources=[SRC_DIR + "/core/_whitebeam.pyx"],
@@ -39,21 +28,7 @@ README = (HERE / "README.md").read_text()
 
 # This call to setup() does all the work
 
-if args.cython:
-    setup(ext_modules = [ext_1],
-        cmdclass={"build_ext": build_ext},
-        install_requires=REQUIRES,
-        packages=PACKAGES,
-        zip_safe=False,
-        name=NAME,
-        version=VERSION,
-        description=DESCR,
-        author=AUTHOR,
-        author_email=EMAIL
-        )
-
-if args.build:
-    setup(
+setup(
     name="Whitebeam",
     version="1.0.0",
     description="Whitebeam is a framework for creating decision tree functions.",
@@ -68,10 +43,5 @@ if args.build:
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    include_package_data=True,
-    entry_points={
-        "console_scripts": [
-            "realpython=reader.__main__:main",
-        ]
-    }
+    packages = find_packages()
 )
