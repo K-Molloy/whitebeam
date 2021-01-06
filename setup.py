@@ -33,7 +33,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 
 setup(
-    name="Whitebeam",
+    name="whitebeam",
     version="1.0.0",
     description="Whitebeam is a framework for creating decision tree functions.",
     long_description=README,
