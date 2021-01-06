@@ -15,10 +15,14 @@ REQUIRES = ["numpy", "cython", "joblib"]
 AUTHOR = "Kieran Molloy"
 EMAIL = "k.molloy@lancaster.ac.uk"
 
+SRC_DIR = "whitebeam"
+
 ext_1 = Extension(SRC_DIR + ".core._whitebeam",
                   sources=[SRC_DIR + "/core/_whitebeam.pyx"],
                   libraries=[],
                   include_dirs=[np.get_include()])
+
+EXTENSIONS = [ext_1]
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -43,5 +47,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    packages = find_packages()
+    packages = find_packages(),
+    cmdclass={"build_ext": build_ext},
+    ext_modules=EXTENSIONS
 )
