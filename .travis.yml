@@ -12,7 +12,7 @@ install:
   - python setup.py build_ext --inplace
 # command to run tests
 script:
-  - py.test  --cov-report term --cov=app/test/
+  - py.test  --cov-report term --cov=whitebeam/
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
