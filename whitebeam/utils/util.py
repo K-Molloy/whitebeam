@@ -2,7 +2,7 @@
 # Whitebeam | Kieran Molloy | Lancaster University 2020
 
 """
-This module provide miscellaneous functions for the Bonsai class such as:
+This module provide miscellaneous functions for the Whitebeam class such as:
 - get_child_branch
 - setup_canvas
 - reconstruct_tree
