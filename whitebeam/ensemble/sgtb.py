@@ -123,7 +123,7 @@ class GBM():
 
         # Done fit()
 
-    def predict(self, X):
+    def predict(self, X, output_type="response"):
 
         n, m = X.shape
         y_hat = np.full(n, self.intercept) 

@@ -7,9 +7,6 @@ from Cython.Distutils import build_ext
 import numpy as np
 import pathlib
 
-NAME = "whitebeam"
-VERSION = "0.0.1"
-DESCR = "Whitebeam is a framework for creating decision tree functions."
 REQUIRES = ["numpy", "cython", "joblib"]
 
 AUTHOR = "Kieran Molloy"
@@ -34,7 +31,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="whitebeam",
-    version="1.0.0",
+    version="1.0.2",
     description="Whitebeam is a framework for creating decision tree functions.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -44,9 +41,12 @@ setup(
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
+    install_requires = REQUIRES,
     packages = find_packages(),
     cmdclass={"build_ext": build_ext},
     ext_modules=EXTENSIONS
