@@ -7,7 +7,7 @@ This class implements RandomForests:
 """
 
 
-from whitebeam.base.regr import RegTree
+from whitebeam.base.gini import GiniTree
 import numpy as np
 
 class RandomForests():
@@ -25,14 +25,11 @@ class RandomForests():
 
         X = X.astype(np.float)
         y = y.astype(np.float)
-        if "random_state" not in self.base_params:
-            self.base_params["random_state"] = 1
  
-        whitebeam_tmp = RegTree()
+        whitebeam_tmp = GiniTree()
         whitebeam_tmp.init_cnvs(X)
         xdim, cnvs, cnvsn = whitebeam_tmp.get_cnvs()
         for i in range(self.n_estimators):
-            self.base_params["random_state"] += 1
             estimator = self.base_estimator(**self.base_params)
             estimator.set_cnvs(xdim, cnvs, cnvsn)
             estimator.fit(X, y, init_cnvs=False)
