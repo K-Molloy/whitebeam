@@ -6,30 +6,18 @@ python:
   - "3.9-dev"  # 3.9 development branch
 #  - "nightly"  # nightly build - seems to error, but all 3.9 should error :/
 
-
 before_install:
-- sudo apt-get install python3-dev build-essential
 - pip install poetry
+
 install:
 - poetry install
 - pip install -r requirements.txt
 script:
 - poetry build
-- poetry run coverage
-- pytest
-before_deploy:
-- poetry config repositories.mypypi http://mypypi.example.com/simple
-- poetry config http-basic.mypypi $MYPYPI_USER $MYPYPI_PASS
-- poetry build -f sdist
-deploy:
-  provider: script
-  script: poetry publish -r mypypi
-  skip_cleanup: true
-  on:
-    tags: true
+- py.test  --cov-report term --cov=whitebeam/
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
 
 
 
