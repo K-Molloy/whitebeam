@@ -6,44 +6,34 @@ python:
   - "3.9"
   - "3.9-dev"  # 3.9 development branch
 #  - "nightly"  # nightly build - seems to error, but all 3.9 should error :/
-# command to install dependencies
-jobs:
-  include:
-    - stage: lint
-      install:
-        - pip install pre-commit
-        - pre-commit install-hooks
-      script:
-        - pre-commit run --all-files
-    - stage: test
-      install:
-        - pip install --upgrade pip
-        - pip install poetry
-        - poetry install -v
-      script:
-        - pytest --cov
-    - stage: deploy
-      script:
-        - echo Deploying to PyPI...
+
+
+env:
+  global:
+  - secure: "<encrypted MYPYPI_USER=username>"
+  - secure: "<encrypted MYPYPI_PASS=p@ssword>"
+before_install:
+- pip install poetry
+install:
+- poetry install
+script:
+- poetry run flake8 my_package test
+- poetry run coverage
+- pytest
+before_deploy:
+- poetry config repositories.mypypi http://mypypi.example.com/simple
+- poetry config http-basic.mypypi $MYPYPI_USER $MYPYPI_PASS
+- poetry build -f sdist
+deploy:
+  provider: script
+  script: poetry publish -r mypypi
+  skip_cleanup: true
+  on:
+    tags: true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
-before_deploy:
-  # User and password environment variables are set as hidden variables through
-  # the web interface in the project settings.
-  - pip install --upgrade pip
-  - pip install poetry
-  - poetry config http-basic.pypi $PYPI_USER $PYPI_PASS
-  - poetry build
-  
-deploy:
-  provider: script
-  script: poetry publish
-  skip_cleanup: true
-  on:
-    all_branches: true  # Travis recognizes tag names as "branches"
-    condition: $TRAVIS_BUILD_STAGE_NAME = Deploy
-    repo: K-Molloy/whitebeam
-    tags: true
+
+
 
