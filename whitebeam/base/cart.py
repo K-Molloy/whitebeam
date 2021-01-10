@@ -9,7 +9,7 @@ by inheriting the alpha tree (alpha=2).
 from whitebeam.base.alpha import AlphaTree
 import numpy as np
 
-class GiniTree(AlphaTree):
+class DecisionTree(AlphaTree):
 
     def __init__(self, 
                 max_depth=5, 

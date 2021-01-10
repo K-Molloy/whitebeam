@@ -1,4 +1,4 @@
-from whitebeam.base.alpha import AlphaTree
+from whitebeam.base import AlphaTree
 
 from sklearn.model_selection import train_test_split
 import numpy as np

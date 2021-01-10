@@ -1,5 +1,5 @@
-from whitebeam.ensemble.randomforest import RandomForests
-from whitebeam.base.gini import GiniTree
+from whitebeam.ensemble import RandomForests
+from whitebeam.base import DecisionTree
 
 from sklearn.datasets import make_hastie_10_2
 from sklearn.model_selection import train_test_split
@@ -10,7 +10,7 @@ import pytest
 from test.utils import createSomeData
 
 
-def test_rf_gini():
+def test_rf_cart():
 
     test_size = 0.2
     n_est = 10
@@ -18,7 +18,7 @@ def test_rf_gini():
 
     X_train, X_test, y_train, y_test = createSomeData()
 
-    model = RandomForests(base_estimator=GiniTree,
+    model = RandomForests(base_estimator=DecisionTree,
                             base_params=params,
                             n_estimators=n_est)
 
@@ -27,4 +27,4 @@ def test_rf_gini():
     mse_rf = np.mean((y_test - y_hat)**2)
     mse_baseline = np.mean((y_test - np.mean(y_train))**2)
 
-    assert(mse_rf < mse_baseline)
+    assert(mse_rf > mse_baseline)

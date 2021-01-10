@@ -7,7 +7,7 @@ This class implements RandomForests:
 """
 
 
-from whitebeam.base.gini import GiniTree
+from whitebeam.base import DecisionTree
 import numpy as np
 
 class RandomForests():
@@ -29,7 +29,7 @@ class RandomForests():
         X = X.astype(np.float)
         y = y.astype(np.float)
  
-        whitebeam_tmp = GiniTree()
+        whitebeam_tmp = DecisionTree()
         whitebeam_tmp.init_cnvs(X)
         xdim, cnvs, cnvsn = whitebeam_tmp.get_cnvs()
         for i in range(self.n_estimators):

@@ -3,7 +3,7 @@ This class implements PaloBoost, an imprvoed Stochastic Gradient TreeBoost
  that is robust to overfitting and can provide robust performance.
 """
 
-from whitebeam.base.xgb import XGBTree
+from whitebeam.base import XGBTree
 
 from collections import Counter
 

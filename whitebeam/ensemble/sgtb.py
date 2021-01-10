@@ -9,7 +9,7 @@ scikit-learn and R, call SGTB as GBM.
 """
 
 
-from whitebeam.base.friedman import FriedmanTree
+from whitebeam.base import FriedmanTree
 import numpy as np
 from scipy.special import expit
 import time
@@ -18,7 +18,7 @@ from joblib import Parallel, delayed, cpu_count
 
 PRECISION = 1e-5
 
-class GBM():
+class SGTB():
 
     def __init__(self,
                 distribution="gaussian",

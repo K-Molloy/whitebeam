@@ -1,4 +1,4 @@
-from whitebeam.base.c45 import C45Tree
+from whitebeam.base import C45Tree
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score

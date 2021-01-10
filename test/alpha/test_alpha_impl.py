@@ -1,10 +1,9 @@
-from whitebeam.base.alpha import AlphaTree
-from whitebeam.base.c45 import C45Tree
-from whitebeam.base.gini import GiniTree
+from whitebeam.base import AlphaTree, C45Tree, DecisionTree
 
 from sklearn.datasets import make_hastie_10_2
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
+
 import numpy as np
 import pytest
 
