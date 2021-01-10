@@ -15,11 +15,14 @@ class RandomForests():
     def __init__(self,
                 base_estimator,
                 base_params,
-                n_estimators=100):
+                n_estimators=100,
+                is_classifier = True):
         self.base_estimator = base_estimator
         self.base_params = base_params.copy()
         self.n_estimators = n_estimators
         self.estimators = []
+
+        self.is_classifier = is_classifier
 
     def fit(self, X, y):
 
@@ -42,7 +45,11 @@ class RandomForests():
         for estimator in self.estimators:
             y_hat += estimator.predict(X) 
         y_hat /= k
-        return y_hat
+
+        if self.is_classifier:
+            return np.around(y_hat)
+        else:
+            return y_hat
 
     def dump(self, columns=[]): 
         return [estimator.dump(columns) 
