@@ -14,6 +14,7 @@ install:
 - poetry install
 - poetry add cython
 script:
+- poetry build
 - poetry run flake8 my_package test
 - poetry run coverage
 - pytest
