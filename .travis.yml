@@ -7,12 +7,43 @@ python:
   - "3.9-dev"  # 3.9 development branch
 #  - "nightly"  # nightly build - seems to error, but all 3.9 should error :/
 # command to install dependencies
-install:
-  - pip install -r requirements.txt
-  - python setup.py build_ext --inplace
-# command to run tests
-script:
-  - py.test  --cov-report term --cov=whitebeam/
+jobs:
+  include:
+    - stage: lint
+      install:
+        - pip install pre-commit
+        - pre-commit install-hooks
+      script:
+        - pre-commit run --all-files
+    - stage: test
+      install:
+        - pip install --upgrade pip
+        - pip install poetry
+        - poetry install -v
+      script:
+        - pytest --cov
+    - stage: deploy
+      script:
+        - echo Deploying to PyPI...
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+before_deploy:
+  # User and password environment variables are set as hidden variables through
+  # the web interface in the project settings.
+  - pip install --upgrade pip
+  - pip install poetry
+  - poetry config http-basic.pypi $PYPI_USER $PYPI_PASS
+  - poetry build
+  
+deploy:
+  provider: script
+  script: poetry publish
+  skip_cleanup: true
+  on:
+    all_branches: true  # Travis recognizes tag names as "branches"
+    condition: $TRAVIS_BUILD_STAGE_NAME = Deploy
+    repo: K-Molloy/whitebeam
+    tags: true
+
