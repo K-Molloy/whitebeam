@@ -222,7 +222,7 @@ class Whitebeam:
         y = np.zeros(n, dtype=np.float)
         out = apply_tree(self.tree_ind, self.tree_val, X, y, output_type)
 
-        print(out)
+        #print(out)
 
         # binary classifier only at the moment
         if self.is_classifier:
