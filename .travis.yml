@@ -12,6 +12,7 @@ before_install:
 - pip install poetry
 install:
 - poetry install
+- poetry add cython
 script:
 - poetry run flake8 my_package test
 - poetry run coverage
