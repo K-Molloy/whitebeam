@@ -1,8 +1,4 @@
-from whitebeam.base.alpha import AlphaTree
-from whitebeam.base.c45 import C45Tree
-from whitebeam.base.gini import GiniTree
-from whitebeam.base.regr import RegTree
-from whitebeam.base.xgb import XGBTree
+from whitebeam.base import AlphaTree, C45Tree, DecisionTree, RegTree, XGBTree
 
 from sklearn.metrics import roc_auc_score
 import numpy as np
@@ -22,12 +18,12 @@ def test_c45_auc():
     
     assert auc > 0.5
 
-def test_gini_auc():
+def test_cart_auc():
 
     X_train, X_test, y_train, y_test = createSomeData()
 
     max_depth = 4
-    model = GiniTree(max_depth=max_depth)
+    model = DecisionTree(max_depth=max_depth)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     auc = roc_auc_score(y_test, y_hat)

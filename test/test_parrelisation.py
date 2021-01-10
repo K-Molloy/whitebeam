@@ -1,5 +1,4 @@
-from whitebeam.base.regr import RegTree
-from whitebeam.base.xgb import XGBTree
+from whitebeam.base import RegTree, XGBTree
 
 from sklearn.datasets import make_friedman1
 from sklearn.datasets import make_friedman2
