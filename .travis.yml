@@ -12,10 +12,9 @@ before_install:
 - pip install poetry
 install:
 - poetry install
-- poetry add cython
+- pip install -r requirements.txt
 script:
 - poetry build
-- poetry run flake8 my_package test
 - poetry run coverage
 - pytest
 before_deploy:
