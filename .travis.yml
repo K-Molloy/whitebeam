@@ -1,6 +1,5 @@
 language: python
 python:
-  - "3.6"      # current default Python on Travis CI
   - "3.7"
   - "3.8"
   - "3.9"
@@ -9,7 +8,7 @@ python:
 
 
 before_install:
-- sudo apt-get install python-dev
+- sudo apt-get install python-dev build-essential
 - pip install poetry
 install:
 - poetry install
