@@ -28,6 +28,11 @@ import time
 import logging
 
 class Whitebeam:
+    """Base class for decision trees.
+    Warning: This class should not be used directly.
+    Use derived classes instead.
+    lol. copied this comment from sklearn docs
+    """
 
     def __init__(self, 
                 find_split,
@@ -36,7 +41,8 @@ class Whitebeam:
                 subsample = 1.0, # subsample rate for rows (samples)
                 random_state = None,
                 z_type = "M2",
-                n_jobs = -1):
+                n_jobs = -1,
+                is_classifier=True):
 
         self.find_split = find_split # user-defined
         self.is_leaf = is_leaf       # user-defined
@@ -44,6 +50,7 @@ class Whitebeam:
         self.subsample = np.clip(subsample, 0.0, 1.0)
         self.random_state = random_state
         self.z_type = z_type
+        self.is_classifier = is_classifier
 
         self.leaves = []
         self.feature_importances_ = None
@@ -214,7 +221,14 @@ class Whitebeam:
         n, m = X.shape
         y = np.zeros(n, dtype=np.float)
         out = apply_tree(self.tree_ind, self.tree_val, X, y, output_type)
-        return out 
+
+        print(out)
+
+        # binary classifier only at the moment
+        if self.is_classifier:
+            return np.around(out)
+        else:
+            return out 
 
     def init_cnvs(self, X):
         self.xdim = get_xdim(X, self.n_hist_max)
