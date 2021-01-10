@@ -8,11 +8,8 @@ python:
 #  - "nightly"  # nightly build - seems to error, but all 3.9 should error :/
 
 
-env:
-  global:
-  - secure: "<encrypted MYPYPI_USER=username>"
-  - secure: "<encrypted MYPYPI_PASS=p@ssword>"
 before_install:
+- sudo apt-get install python-dev
 - pip install poetry
 install:
 - poetry install
