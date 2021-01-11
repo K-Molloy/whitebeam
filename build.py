@@ -23,9 +23,10 @@ else:
     def build(setup_kwargs):
 
         # The file you want to compile
-        extensions = [
-            "whitebeam/core/_whitebeam.pyx"
-        ]
+        extensions = Extension("whitebeam.core._whitebeam",	
+                  sources=["whitebeam/core/_whitebeam.pyx"],	
+                  libraries=[],	
+                  include_dirs=[np.get_include()])
 
         # gcc arguments hack: enable optimizations
         os.environ['CFLAGS'] = '-O3'
