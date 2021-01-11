@@ -3,6 +3,17 @@ name = "whitebeam"
 version = "1.0.2"
 description = "Whitebeam is a framework for creating decision tree functions."
 authors = ["K-Molloy <kieran.b.molloy@outlook.com>"]
+readme = 'README.md'
+homepage = 'https://github.com/K-Molloy/whitebeam'
+repository = 'https://github.com/K-Molloy/whitebeam'
+keywords = ['Decision Tree', 'Classifier', 'Classification', 'Regression']
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Education",
+    "License :: Free For Educational Use",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: Unix"
+]
 build = 'build.py'
 
 [tool.poetry.dependencies]
