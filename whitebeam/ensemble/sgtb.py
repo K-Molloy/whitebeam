@@ -29,7 +29,7 @@ class SGTB():
                 reg_lambda=0.1,
                 n_jobs=-1,
                 random_state=0):
-        self.base_estimator = FriedmanTree
+        self.base_estimator = FriedmanTreeClassifier
         self.n_jobs = n_jobs
         if self.n_jobs < 0:
             self.n_jobs = cpu_count()
@@ -136,7 +136,9 @@ class SGTB():
             y_mat = np.zeros((y_hat.shape[0], 2)) 
             y_mat[:,0] = 1.0 - y_hat
             y_mat[:,1] = y_hat
-            return y_mat
+
+            print(y_mat)
+            return np.argmax(y_mat, axis=1)
         else:
             return y_hat
 
