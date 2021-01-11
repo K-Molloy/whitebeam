@@ -1,4 +1,4 @@
-from whitebeam.base import AlphaTree, C45Tree, DecisionTree
+from whitebeam.base import AlphaTreeClassifier
 
 from sklearn.datasets import make_hastie_10_2
 from sklearn.model_selection import train_test_split
@@ -7,7 +7,33 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 import pytest
 
-from test.utils import createSomeData
+from test.utils import generate_binary_classification
+
+
+# Check that model.predict outputs an array y_hat is length 1000
+def test_alpha_output():
+
+    X_train, X_test, y_train, y_test = generate_binary_classification()
+
+    model = AlphaTreeClassifier(alpha=3.0)
+    model.fit(X_train, y_train)
+    y_hat = model.predict(X_test)
+
+    # 200 is size of y_test because using 80/20 split
+    assert len(y_hat) == 200
+
+
+def test_alpha_labels():
+
+    X_train, X_test, y_train, y_test = generate_binary_classification()
+
+    model = AlphaTreeClassifier(alpha=3.0)
+    model.fit(X_train, y_train)
+    y_hat = model.predict(X_test)
+
+    # 200 is size of y_test because using 80/20 split
+    assert set([0, 1]) == set(y_hat)
+
 
 # Vary the depth of the alpha tree search, 1, 5, and 10 determined as
 # significant intervals. Initially 20 and 50 were considered too, but
@@ -16,9 +42,9 @@ from test.utils import createSomeData
 @pytest.mark.parametrize("param_depth", [1, 5, 10])
 def test_alpha_depth(param_depth):
 
-    X_train, X_test, y_train, y_test = createSomeData()
+    X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = AlphaTree(alpha=3.0, max_depth=param_depth)
+    model = AlphaTreeClassifier(alpha=3.0, max_depth=param_depth)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     auc = roc_auc_score(y_test, y_hat)
@@ -33,9 +59,9 @@ def test_alpha_depth(param_depth):
 @pytest.mark.parametrize("param_alpha", [1, 2, 3, 4])
 def test_alpha_alpha(param_alpha):
 
-    X_train, X_test, y_train, y_test = createSomeData()
+    X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = AlphaTree(alpha=param_alpha)
+    model = AlphaTreeClassifier(alpha=param_alpha)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     auc = roc_auc_score(y_test, y_hat)
@@ -46,8 +72,8 @@ def test_alpha_alpha(param_alpha):
 @pytest.mark.parametrize("param_split, param_leaf, ", [(1, 1), (1, 2), (2, 1), (2, 2), (3, 3)])
 def test_alpha_split_leaf(param_split, param_leaf):
 
-    X_train, X_test, y_train, y_test = createSomeData()
-    model = AlphaTree(alpha=0.3,
+    X_train, X_test, y_train, y_test = generate_binary_classification()
+    model = AlphaTreeClassifier(alpha=0.3,
                       max_depth=4,
                       min_samples_split=param_split,
                       min_samples_leaf= param_leaf)

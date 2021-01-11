@@ -12,7 +12,7 @@ User need to provide two additional functions to complete the Whitebeam class:
 
 from whitebeam.core._whitebeam import (
     reorder, 
-    sketch,
+    create_avc,
     apply_tree)
 from whitebeam.utils.util import (
     reconstruct_tree,
@@ -43,6 +43,17 @@ class Whitebeam:
                 z_type = "M2",
                 n_jobs = -1,
                 is_classifier=True):
+        """Initialise a tree
+
+        Args:
+            find_split (function): splitting function
+            is_leaf (function): node checking function
+            n_hist_max (int, optional): [description]. Defaults to 512.
+            subsample (float, optional): Subsample Rate for Rows. Defaults to 1.0.
+            z_type (str, optional): Objective Type. Defaults to "M2".
+            n_jobs (int, optional): Num of Threads. Defaults to -1.
+            is_classifier (bool, optional): Type of Tree. Defaults to True.
+        """        
 
         self.find_split = find_split # user-defined
         self.is_leaf = is_leaf       # user-defined
@@ -50,6 +61,8 @@ class Whitebeam:
         self.subsample = np.clip(subsample, 0.0, 1.0)
         self.random_state = random_state
         self.z_type = z_type
+
+        # TODO : change to function / proper attribute
         self.is_classifier = is_classifier
 
         self.leaves = []
@@ -74,7 +87,7 @@ class Whitebeam:
 
         # TODO: smart guidance on "n_jobs"
         k = int(np.ceil(m/self.n_jobs))
-        def psketch(i):
+        def p_create_avc(i):
             j_start = i*k
             if j_start > m-1:
                 return 1
@@ -86,11 +99,11 @@ class Whitebeam:
             xdim_j = self.xdim[j_start:j_end,:]
             cnvs_j = self.cnvs[jj_start:jj_end,:]
             cnvsn_j = self.cnvsn[j_start:j_end,:]
-            sketch(X_ij, y_i, z_i, xdim_j, cnvs_j, cnvsn_j)
+            create_avc(X_ij, y_i, z_i, xdim_j, cnvs_j, cnvsn_j)
             return 0
 
         #t0 = time.time()
-        parallel(delayed(psketch)(i) for i in range(self.n_jobs))
+        parallel(delayed(p_create_avc)(i) for i in range(self.n_jobs))
         #t1 = time.time() - t0
         #print(i_end-i_start, t1)
 
@@ -222,7 +235,7 @@ class Whitebeam:
         y = np.zeros(n, dtype=np.float)
         out = apply_tree(self.tree_ind, self.tree_val, X, y, output_type)
 
-        #print(out)
+        #print({"out" : out})
 
         # binary classifier only at the moment
         if self.is_classifier:

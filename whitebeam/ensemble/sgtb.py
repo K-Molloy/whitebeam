@@ -9,7 +9,7 @@ scikit-learn and R, call SGTB as GBM.
 """
 
 
-from whitebeam.base import FriedmanTree
+from whitebeam.base import FriedmanTreeClassifier
 import numpy as np
 from scipy.special import expit
 import time

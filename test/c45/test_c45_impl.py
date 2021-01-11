@@ -1,11 +1,11 @@
-from whitebeam.base import C45Tree
+from whitebeam.base import C45TreeClassifier
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 import numpy as np
 import pytest
 
-from test.utils import createSomeData
+from test.utils import generate_binary_classification
 
 # Vary the depth of the alpha tree search, 1, 5, and 10 determined as
 # significant intervals. Initially 20 and 50 were considered too, but
@@ -14,9 +14,9 @@ from test.utils import createSomeData
 @pytest.mark.parametrize("param_depth", [1, 5, 10])
 def test_c45_depth(param_depth):
 
-    X_train, X_test, y_train, y_test = createSomeData()
+    X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = C45Tree(max_depth=param_depth)
+    model = C45TreeClassifier(max_depth=param_depth)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     auc = roc_auc_score(y_test, y_hat)
@@ -27,8 +27,8 @@ def test_c45_depth(param_depth):
 @pytest.mark.parametrize("param_split, param_leaf, ", [(1, 1), (1, 2), (2, 1), (2, 2), (3, 3)])
 def test_c45_split_leaf(param_split, param_leaf):
 
-    X_train, X_test, y_train, y_test = createSomeData()
-    model = C45Tree(max_depth=4,
+    X_train, X_test, y_train, y_test = generate_binary_classification()
+    model = C45TreeClassifier(max_depth=4,
                     min_samples_split=param_split,
                     min_samples_leaf= param_leaf)
     model.fit(X_train, y_train)

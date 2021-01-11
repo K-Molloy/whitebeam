@@ -1,11 +1,10 @@
-from whitebeam.base import RegTree, XGBTree
+from whitebeam.base import DecisionTreeRegressor, XGBoostedRegressor
 
 from sklearn.datasets import make_friedman1
 from sklearn.datasets import make_friedman2
 from sklearn.datasets import make_friedman3
 
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.preprocessing import PolynomialFeatures
 
 import numpy as np
@@ -26,8 +25,8 @@ def test_regression_parallelisation():
     X_train, X_test, y_train, y_test = train_test_split(X, y, 
                                         test_size=test_size)
 
-    model_p1 = RegTree(max_depth=max_depth, n_jobs=1)
-    model_p2 = RegTree(max_depth=max_depth, n_jobs=2)
+    model_p1 = DecisionTreeRegressor(max_depth=max_depth, n_jobs=1)
+    model_p2 = DecisionTreeRegressor(max_depth=max_depth, n_jobs=2)
 
     start = time.time()
     model_p1.fit(X_train, y_train)
@@ -51,8 +50,8 @@ def test_xgboost_parallelisation():
     X_train, X_test, y_train, y_test = train_test_split(X, y, 
                                         test_size=test_size)
 
-    model_p1 = XGBTree(max_depth=max_depth, n_jobs=1)
-    model_p2 = XGBTree(max_depth=max_depth, n_jobs=2)
+    model_p1 = XGBoostedRegressor(max_depth=max_depth, n_jobs=1)
+    model_p2 = XGBoostedRegressor(max_depth=max_depth, n_jobs=2)
 
     start = time.time()
     model_p1.fit(X_train, y_train)

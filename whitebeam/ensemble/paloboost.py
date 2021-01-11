@@ -3,7 +3,7 @@ This class implements PaloBoost, an imprvoed Stochastic Gradient TreeBoost
  that is robust to overfitting and can provide robust performance.
 """
 
-from whitebeam.base import XGBTree
+from whitebeam.base import XGBoostedRegressor
 
 from collections import Counter
 
@@ -15,7 +15,7 @@ from joblib import Parallel, delayed, cpu_count
 
 PRECISION = 1e-5
 
-class PaloBoost():
+class PaloBoostEnsemble():
 
     def __init__(self,
                 distribution="gaussian",

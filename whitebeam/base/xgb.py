@@ -9,7 +9,7 @@ This class implements the XGBoost base tree that appeared in:
 from whitebeam.core.lib import Whitebeam
 import numpy as np
 
-class XGBTree(Whitebeam):
+class XGBoostedRegressor(Whitebeam):
     def __init__(self, 
                 max_depth=5, 
                 min_samples_split=2,

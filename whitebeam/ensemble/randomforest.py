@@ -7,10 +7,10 @@ This class implements RandomForests:
 """
 
 
-from whitebeam.base import DecisionTree
+from whitebeam.base import DecisionTreeClassifier
 import numpy as np
 
-class RandomForests():
+class RandomForestEnsemble():
 
     def __init__(self,
                 base_estimator,
@@ -29,7 +29,7 @@ class RandomForests():
         X = X.astype(np.float)
         y = y.astype(np.float)
  
-        whitebeam_tmp = DecisionTree()
+        whitebeam_tmp = DecisionTreeClassifier()
         whitebeam_tmp.init_cnvs(X)
         xdim, cnvs, cnvsn = whitebeam_tmp.get_cnvs()
         for i in range(self.n_estimators):

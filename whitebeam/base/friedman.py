@@ -13,7 +13,7 @@ from whitebeam.core.lib import Whitebeam
 import numpy as np
 import logging
 
-class FriedmanTree(Whitebeam):
+class FriedmanTreeClassifier(Whitebeam):
     def __init__(self, 
                 max_depth=5, 
                 min_samples_split=2,

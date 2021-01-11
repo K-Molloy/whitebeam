@@ -1,16 +1,17 @@
 # regression tree
 # Whitebeam | Kieran Molloy | Lancaster University 2020
 
-"""
-This class implements the regression tree in CART that uses
-the minimum variance criterion.
-"""
-
 from whitebeam.core.lib import Whitebeam
 import numpy as np
 import logging
 
-class RegTree(Whitebeam):
+class DecisionTreeRegressor(Whitebeam):
+    """This class implements the regression tree in CART that uses
+    the minimum variance criterion https://en.wikipedia.org/wiki/Minimum-variance_unbiased_estimator
+
+    Args:
+        Whitebeam (Class): Whitebeam Base Decision Tree
+    """
     def __init__(self, 
                 max_depth=5, 
                 min_samples_split=2,
@@ -20,6 +21,19 @@ class RegTree(Whitebeam):
                 random_state=1234,
                 n_jobs=-1,
                 **kwarg):
+        """Initialise a regression tree
+
+        Args:
+            max_depth (int, optional): Maximum Tree Depth. Defaults to 5.
+            min_samples_split (int, optional): Minimum Samples that can be split. Defaults to 2.
+            min_samples_leaf (int, optional): Minimum Number of Leafs. Defaults to 1.
+            min_varsum_decrease (float, optional): Minimum Varsum. Defaults to 0.0.
+            subsample (float, optional): Number of subsamples. Defaults to 1.0.
+            random_state (int, optional): Rng seed. Defaults to 1234.
+            n_jobs (int, optional): Number of Threads. Defaults to -1.
+
+        """                
+                
 
         self.max_depth=max_depth
         self.min_samples_split = min_samples_split

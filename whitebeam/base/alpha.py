@@ -12,7 +12,7 @@ from whitebeam.core.lib import Whitebeam
 import numpy as np
 
 
-class AlphaTree(Whitebeam):
+class AlphaTreeClassifier(Whitebeam):
 
     def __init__(self,
                 alpha=1.0, 

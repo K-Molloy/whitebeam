@@ -14,26 +14,34 @@ DTYPE = np.float64
 ctypedef np.float64_t DTYPE_t
 
 def reorder(X, y, z, i_start, i_end, j_split, split_value, missing):
+    """Reorders the thing
+
+    Args:
+        X (2-d Numpy Array): X Values
+        y (1-d Numpy Array): Y Values
+        z (1-d Numpy Array): z Values
+        i_start (integer): row index starting point
+        i_end (integer): row index ending point
+        j_split (integer): column index for splitting variable
+        split_value (integer): split threshold value
+        missing (boolean): Missing Values or not
+
+    Returns:
+        [integer]: head index
+    """
     return _reorder(X, y, z, i_start, i_end, j_split, split_value, missing)
  
 cdef size_t _reorder(
-        np.ndarray[DTYPE_t, ndim=2] X, 
-        np.ndarray[DTYPE_t, ndim=1] y, 
-        np.ndarray[DTYPE_t, ndim=1] z, 
-        size_t i_start, 
-        size_t i_end, 
-        size_t j_split, 
-        double split_value, 
+        np.ndarray[DTYPE_t, ndim=2] X, # X: 2-d numpy array (n x m)
+        np.ndarray[DTYPE_t, ndim=1] y, # y: 1-d numpy array (n)
+        np.ndarray[DTYPE_t, ndim=1] z, # z: 1-d numpy array (n)
+        size_t i_start, # i_start: row index to start
+        size_t i_end,  # i_end: row index to end
+        size_t j_split,  # j_split: column index for the splitting variable
+        double split_value,  # split_value: threshold
         size_t missing):
-    """
-    - X: 2-d numpy array (n x m)
-    - y: 1-d numpy array (n)
-    - z: 1-d numpy array (n)
-    - i_start: row index to start
-    - i_end: row index to end
-    - j_split: column index for the splitting variable
-    - split_value: threshold
-    """
+
+
     cdef size_t j
     cdef size_t m = X.shape[1]
     cdef size_t i_head = i_start
@@ -73,19 +81,25 @@ cdef size_t _reorder(
     return i_head
 
 
-def sketch(np.ndarray[DTYPE_t, ndim=2] X not None, 
+def create_avc(np.ndarray[DTYPE_t, ndim=2] X not None, 
         np.ndarray[DTYPE_t, ndim=1] y not None, 
         np.ndarray[DTYPE_t, ndim=1] z not None, 
         np.ndarray[DTYPE_t, ndim=2] xdim not None, 
         np.ndarray[DTYPE_t, ndim=2] cnvs not None, 
         np.ndarray[DTYPE_t, ndim=2] cnvsn not None):
+    """Calculate AVC Logic from component factors. And leave as component factors
 
-    # canvas --> (sketch) --> avc 
+    Returns:
+        0: Build pass
+    """        
+
+    # canvas --> (create_avc) --> avc 
     # AVC: Attribute-Value Class group in RainForest
-    _sketch(X, y, z, xdim, cnvs, cnvsn)
+    _create_avc(X, y, z, xdim, cnvs, cnvsn)
     return 0
 
-cdef void _sketch(
+
+cdef void _create_avc(
         np.ndarray[DTYPE_t, ndim=2] X, 
         np.ndarray[DTYPE_t, ndim=1] y, 
         np.ndarray[DTYPE_t, ndim=1] z, 
@@ -93,14 +107,26 @@ cdef void _sketch(
         np.ndarray[DTYPE_t, ndim=2] cnvs, 
         np.ndarray[DTYPE_t, ndim=2] cnvsn):
 
+    # indices
     cdef size_t i, j, k, k_raw, k_tld
+
+    # matrix sizes
     cdef size_t n = X.shape[0]
     cdef size_t m = X.shape[1]
+
+    # CNVs - Copy Number Variations
+    # A CNV is when the number of copies of a particular gene varies from one individual to the next.
     cdef size_t n_cnvs = <size_t> cnvs.shape[0]/2
+
+    # 
     cdef size_t n_bin
     cdef size_t xdim0 = <size_t> xdim[0, 4]
     cdef double k_prox
+
+    # iterators
     cdef double y_i, z_i
+
+    # totals
     cdef double y_tot = 0.0
     cdef double z_tot = 0.0
     cdef double n_na, y_na, z_na
@@ -108,22 +134,31 @@ cdef void _sketch(
     # update E[y] & E[z]
     with nogil:
 
+        # iterate over n dimensions
         for i in range(n):
 
+            # get the indices
             y_i = y[i]
             z_i = z[i]
+
+            # add to get the totals
             y_tot += y_i
             z_tot += z_i
 
+            # iterate over m dimensions
             for j in range(m):
 
                 #if xdim[j, 2] < 1e-12:
                 #    continue
+
+                # check isnan to prevent errors
                 if isnan(X[i, j]):
+                    # update CNVS
                     cnvsn[j, 1] += 1
                     cnvsn[j, 2] += y_i
                     cnvsn[j, 3] += z_i
                 else:
+
                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]
                     if k_prox < 0:
                         k_prox = 0
@@ -183,14 +218,27 @@ cdef void _sketch(
                 cnvs[k_tld, 7] += y_na
                 cnvs[k_tld, 8] += z_na
 
-    # done _sketch
+    # done _create_avc
 
 def apply_tree(tree_ind, tree_val, X, y, output_type):
+    """Apply trained tree to a dataset
+
+    Args:
+        tree_ind (2-d Numpy Array): base index
+        tree_val (2-d Numpy Array): values
+        X (2-d Numpy Array): X Values
+        y (1-d Numpy Array): Y Values
+        output_type (string): "index" returns indices
+
+    Returns:
+        1-d Numpy Array: Fitted Values
+    """    
     if output_type == "index":
         return _apply_tree0(tree_ind, tree_val, X, y)
     else:
         return _apply_tree1(tree_ind, tree_val, X, y)
 
+## I am not entirely sure why, but this only works in this format
 # output index
 cdef np.ndarray[DTYPE_t, ndim=1] _apply_tree0(
                             np.ndarray[np.int_t, ndim=2] tree_ind, 
@@ -244,5 +292,3 @@ cdef np.ndarray[DTYPE_t, ndim=1] _apply_tree1(
                         t = tree_ind[t,4]
             y[i] = tree_val[t,1]
     return y
-
-

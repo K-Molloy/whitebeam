@@ -5,13 +5,14 @@ The :mod:`whitebeam.base` module includes decision tree-based models for
 classification and regression.
 """
 
-from .alpha import AlphaTree
-from .c45 import C45Tree
-from .cart import DecisionTree
-from .friedman import FriedmanTree
-from .regr import RegTree
-from .xgb import XGBTree
+from .alpha import AlphaTreeClassifier
+from .c45 import C45TreeClassifier
+from .cart import DecisionTreeClassifier
+from .friedman import FriedmanTreeClassifier
+from .regr import DecisionTreeRegressor
+from .xgb import XGBoostedRegressor
 
-__all__ = ["AlphaTree",
-           "C45Tree", "DecisionTree",
-           "FriedmanTree", "RegTree", "XGBTree"]
+__all__ = ["AlphaTreeClassifier",
+           "C45TreeClassifier", "DecisionTreeClassifier",
+           "FriedmanTreeClassifier",
+           "DecisionTreeRegressor", "XGBoostedRegressor"]
