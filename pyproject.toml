@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "whitebeam"
-version = "1.0.2"
+version = "1.0.3"
 description = "Whitebeam is a framework for creating decision tree functions."
 authors = ["K-Molloy <kieran.b.molloy@outlook.com>"]
 readme = 'README.md'
