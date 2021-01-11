@@ -2,7 +2,7 @@ from whitebeam.base import AlphaTreeClassifier
 
 from sklearn.datasets import make_hastie_10_2
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import accuracy_score
 
 import numpy as np
 import pytest
@@ -47,9 +47,9 @@ def test_alpha_depth(param_depth):
     model = AlphaTreeClassifier(alpha=3.0, max_depth=param_depth)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
-    auc = roc_auc_score(y_test, y_hat)
+    score = accuracy_score(y_test, y_hat)
 
-    assert auc != 0
+    assert score > 0.8
 
 # Varying the alpha value for the alpha tree search
 # 1 is a regression tree
@@ -64,9 +64,9 @@ def test_alpha_alpha(param_alpha):
     model = AlphaTreeClassifier(alpha=param_alpha)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
-    auc = roc_auc_score(y_test, y_hat)
+    score = accuracy_score(y_test, y_hat)
 
-    assert auc != 0
+    assert score > 0.8
 
 # Test common split and leaf values
 @pytest.mark.parametrize("param_split, param_leaf, ", [(1, 1), (1, 2), (2, 1), (2, 2), (3, 3)])
@@ -79,6 +79,6 @@ def test_alpha_split_leaf(param_split, param_leaf):
                       min_samples_leaf= param_leaf)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
-    auc = roc_auc_score(y_test, y_hat)
+    score = accuracy_score(y_test, y_hat)
 
-    assert auc != 0
+    assert score > 0.8

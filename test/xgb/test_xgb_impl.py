@@ -1,4 +1,4 @@
-from whitebeam.base import C45TreeClassifier
+from whitebeam.base import XGBoostedRegressor
 
 from sklearn.metrics import accuracy_score
 
@@ -9,11 +9,11 @@ from test.utils import generate_binary_classification
 
 
 # Check that model.predict outputs an array y_hat is length 1000
-def test_c45_output():
+def test_xgb_output():
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = C45TreeClassifier()
+    model = XGBoostedRegressor()
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
 
@@ -21,11 +21,11 @@ def test_c45_output():
     assert len(y_hat) == 200
 
 
-def test_c45_labels():
+def test_xgb_labels():
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = C45TreeClassifier()
+    model = XGBoostedRegressor()
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
 
@@ -38,11 +38,11 @@ def test_c45_labels():
 # computation took 26s and 106s. Depth 10 continues to be the 3rd most
 # expensive test (2.05s) and may be removed soon
 @pytest.mark.parametrize("param_depth", [1, 5, 10])
-def test_c45_depth(param_depth):
+def test_xgb_depth(param_depth):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = C45TreeClassifier(max_depth=param_depth)
+    model = XGBoostedRegressor(max_depth=param_depth)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     score = accuracy_score(y_test, y_hat)
@@ -51,10 +51,10 @@ def test_c45_depth(param_depth):
 
 # Test common split and leaf values
 @pytest.mark.parametrize("param_split, param_leaf, ", [(1, 1), (1, 2), (2, 1), (2, 2), (3, 3)])
-def test_c45_split_leaf(param_split, param_leaf):
+def test_xgb_split_leaf(param_split, param_leaf):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
-    model = C45TreeClassifier(max_depth=4,
+    model = XGBoostedRegressor(max_depth=4,
                       min_samples_split=param_split,
                       min_samples_leaf= param_leaf)
     model.fit(X_train, y_train)
