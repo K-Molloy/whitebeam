@@ -1,7 +1,7 @@
 # whitebeam
 
 **whitebeam** is a python module for decision trees without the use of sklearn and SciPy
-
+| | |
 |---------|---|
 | docs    | [![Documentation Status](https://readthedocs.org/projects/whitebeam/badge/?version=latest)](https://whitebeam.readthedocs.io/en/latest/?badge=latest) |
 | test    | [![Build Status](https://travis-ci.com/K-Molloy/whitebeam.svg?branch=main)](https://travis-ci.com/K-Molloy/whitebeam) [![Requirements Status](https://requires.io/github/K-Molloy/whitebeam/requirements.svg?branch=main)](https://requires.io/github/K-Molloy/whitebeam/requirements/?branch=main)  |

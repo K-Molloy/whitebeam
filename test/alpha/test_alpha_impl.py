@@ -49,7 +49,7 @@ def test_alpha_depth(param_depth):
     y_hat = model.predict(X_test)
     score = accuracy_score(y_test, y_hat)
 
-    assert score > 0.8
+    assert score > 0.6
 
 # Varying the alpha value for the alpha tree search
 # 1 is a regression tree
@@ -66,7 +66,7 @@ def test_alpha_alpha(param_alpha):
     y_hat = model.predict(X_test)
     score = accuracy_score(y_test, y_hat)
 
-    assert score > 0.8
+    assert score > 0.6
 
 # Test common split and leaf values
 @pytest.mark.parametrize("param_split, param_leaf, ", [(1, 1), (1, 2), (2, 1), (2, 2), (3, 3)])
@@ -81,4 +81,4 @@ def test_alpha_split_leaf(param_split, param_leaf):
     y_hat = model.predict(X_test)
     score = accuracy_score(y_test, y_hat)
 
-    assert score > 0.8
+    assert score > 0.6
