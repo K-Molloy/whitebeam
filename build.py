@@ -23,12 +23,10 @@ else:
     def build(setup_kwargs):
 
         # The file you want to compile
-        extensions = cythonize([
-            Extension("whtitebeam.core._whitebeam.c",	
+        extensions = Extension("whitebeam.core._whitebeam",	
                   sources=["whitebeam/core/_whitebeam.pyx"],	
                   libraries=[],	
                   include_dirs=[np.get_include()])
-        ])
 
         # gcc arguments hack: enable optimizations
         os.environ['CFLAGS'] = '-O3'
