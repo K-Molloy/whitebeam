@@ -1,4 +1,4 @@
-from whitebeam.base import AlphaTreeClassifier
+from whitebeam.base import CCPTreeClassifier
 
 from sklearn.datasets import make_hastie_10_2
 from sklearn.model_selection import train_test_split
@@ -15,7 +15,7 @@ def test_alpha_output():
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = AlphaTreeClassifier(alpha=3.0)
+    model = CCPTreeClassifier(alpha=3.0)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
 
@@ -27,7 +27,7 @@ def test_alpha_labels():
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = AlphaTreeClassifier(alpha=3.0)
+    model = CCPTreeClassifier(alpha=3.0)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
 
@@ -44,7 +44,7 @@ def test_alpha_depth(param_depth):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = AlphaTreeClassifier(alpha=3.0, max_depth=param_depth)
+    model = CCPTreeClassifier(alpha=3.0, max_depth=param_depth)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     score = accuracy_score(y_test, y_hat)
@@ -61,7 +61,7 @@ def test_alpha_alpha(param_alpha):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = AlphaTreeClassifier(alpha=param_alpha)
+    model = CCPTreeClassifier(alpha=param_alpha)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     score = accuracy_score(y_test, y_hat)
@@ -73,7 +73,7 @@ def test_alpha_alpha(param_alpha):
 def test_alpha_split_leaf(param_split, param_leaf):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
-    model = AlphaTreeClassifier(alpha=0.3,
+    model = CCPTreeClassifier(alpha=0.3,
                       max_depth=4,
                       min_samples_split=param_split,
                       min_samples_leaf= param_leaf)

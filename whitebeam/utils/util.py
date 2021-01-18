@@ -93,19 +93,19 @@ def get_xdim(X, n_hist_max):
 
     return xdim       
 
-def get_cnvsn(xdim): 
+def get_summaryn(xdim): 
     # canvas for the missing values
     m, _ = xdim.shape
-    cnvsn = np.zeros((m, 4))
-    cnvsn[:,0] = np.arange(m)
-    return cnvsn
+    summaryn = np.zeros((m, 4))
+    summaryn[:,0] = np.arange(m)
+    return summaryn
 
-def get_cnvs(xdim):
+def get_summary(xdim):
     m, _ = xdim.shape
     n = int(np.sum(xdim[:,3]))
     n_ = n * 2 # half for missing to the left, the other half to the right
-    cnvs = np.zeros((n_, 10), dtype=np.float, order="C")
-    cnvs[:,0] = np.arange(n_) 
+    summary = np.zeros((n_, 10), dtype=np.float, order="C")
+    summary[:,0] = np.arange(n_) 
     for j in range(m):
         x_min = xdim[j, 1]
         x_delta = xdim[j, 2]
@@ -115,12 +115,12 @@ def get_cnvs(xdim):
         for k in range(n_bin):
             i = offset + k
             split_val += x_delta 
-            cnvs[i, 1] = j
-            cnvs[i, 2] = split_val
-            cnvs[(n_bin + i), 1] = j
-            cnvs[(n_bin + i), 2] = split_val
+            summary[i, 1] = j
+            summary[i, 2] = split_val
+            summary[(n_bin + i), 1] = j
+            summary[(n_bin + i), 2] = split_val
             
-    return cnvs
+    return summary
 
 def reconstruct_tree(leaves):
 

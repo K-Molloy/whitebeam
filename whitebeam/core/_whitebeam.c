@@ -1104,8 +1104,8 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "whitebeam/core/_whitebeam.pyx":14
- * 
+/* "whitebeam/core/_whitebeam.pyx":15
+ * # define default dtype
  * DTYPE = np.float64
  * ctypedef np.float64_t DTYPE_t             # <<<<<<<<<<<<<<
  * 
@@ -1502,6 +1502,12 @@ static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject 
 /* ExtTypeTest.proto */
 static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
 
+/* ArgTypeTest.proto */
+#define __Pyx_ArgTypeTest(obj, type, none_allowed, name, exact)\
+    ((likely((Py_TYPE(obj) == type) | (none_allowed && (obj == Py_None)))) ? 1 :\
+        __Pyx__ArgTypeTest(obj, type, name, exact))
+static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact);
+
 /* IsLittleEndian.proto */
 static CYTHON_INLINE int __Pyx_Is_Little_Endian(void);
 
@@ -1523,19 +1529,6 @@ static CYTHON_INLINE void __Pyx_SafeReleaseBuffer(Py_buffer* info);
 static Py_ssize_t __Pyx_minusones[] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 static Py_ssize_t __Pyx_zeros[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-#define __Pyx_BufPtrStrided2d(type, buf, i0, s0, i1, s1) (type)((char*)buf + i0 * s0 + i1 * s1)
-#define __Pyx_BufPtrStrided1d(type, buf, i0, s0) (type)((char*)buf + i0 * s0)
-/* WriteUnraisableException.proto */
-static void __Pyx_WriteUnraisable(const char *name, int clineno,
-                                  int lineno, const char *filename,
-                                  int full_traceback, int nogil);
-
-/* ArgTypeTest.proto */
-#define __Pyx_ArgTypeTest(obj, type, none_allowed, name, exact)\
-    ((likely((Py_TYPE(obj) == type) | (none_allowed && (obj == Py_None)))) ? 1 :\
-        __Pyx__ArgTypeTest(obj, type, name, exact))
-static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact);
-
 /* IncludeStringH.proto */
 #include <string.h>
 
@@ -1544,6 +1537,13 @@ static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int eq
 
 /* UnicodeEquals.proto */
 static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals);
+
+#define __Pyx_BufPtrStrided2d(type, buf, i0, s0, i1, s1) (type)((char*)buf + i0 * s0 + i1 * s1)
+#define __Pyx_BufPtrStrided1d(type, buf, i0, s0) (type)((char*)buf + i0 * s0)
+/* WriteUnraisableException.proto */
+static void __Pyx_WriteUnraisable(const char *name, int clineno,
+                                  int lineno, const char *filename,
+                                  int full_traceback, int nogil);
 
 /* GetTopmostException.proto */
 #if CYTHON_USE_EXC_INFO_STACK
@@ -1877,13 +1877,11 @@ static const char __pyx_k_X[] = "X";
 static const char __pyx_k_y[] = "y";
 static const char __pyx_k_z[] = "z";
 static const char __pyx_k_np[] = "np";
-static const char __pyx_k_cnvs[] = "cnvs";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_xdim[] = "xdim";
 static const char __pyx_k_DTYPE[] = "DTYPE";
-static const char __pyx_k_cnvsn[] = "cnvsn";
 static const char __pyx_k_i_end[] = "i_end";
 static const char __pyx_k_index[] = "index";
 static const char __pyx_k_numpy[] = "numpy";
@@ -1894,6 +1892,8 @@ static const char __pyx_k_i_start[] = "i_start";
 static const char __pyx_k_j_split[] = "j_split";
 static const char __pyx_k_missing[] = "missing";
 static const char __pyx_k_reorder[] = "reorder";
+static const char __pyx_k_summary[] = "summary";
+static const char __pyx_k_summaryn[] = "summaryn";
 static const char __pyx_k_tree_ind[] = "tree_ind";
 static const char __pyx_k_tree_val[] = "tree_val";
 static const char __pyx_k_apply_tree[] = "apply_tree";
@@ -1911,8 +1911,6 @@ static PyObject *__pyx_n_s_ImportError;
 static PyObject *__pyx_n_s_X;
 static PyObject *__pyx_n_s_apply_tree;
 static PyObject *__pyx_n_s_cline_in_traceback;
-static PyObject *__pyx_n_s_cnvs;
-static PyObject *__pyx_n_s_cnvsn;
 static PyObject *__pyx_n_s_create_avc;
 static PyObject *__pyx_n_s_float64;
 static PyObject *__pyx_n_s_i_end;
@@ -1931,6 +1929,8 @@ static PyObject *__pyx_n_s_output_type;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_reorder;
 static PyObject *__pyx_n_s_split_value;
+static PyObject *__pyx_n_s_summary;
+static PyObject *__pyx_n_s_summaryn;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_tree_ind;
 static PyObject *__pyx_n_s_tree_val;
@@ -1940,7 +1940,7 @@ static PyObject *__pyx_n_s_xdim;
 static PyObject *__pyx_n_s_y;
 static PyObject *__pyx_n_s_z;
 static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_reorder(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_X, PyObject *__pyx_v_y, PyObject *__pyx_v_z, PyObject *__pyx_v_i_start, PyObject *__pyx_v_i_end, PyObject *__pyx_v_j_split, PyObject *__pyx_v_split_value, PyObject *__pyx_v_missing); /* proto */
-static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, PyArrayObject *__pyx_v_z, PyArrayObject *__pyx_v_xdim, PyArrayObject *__pyx_v_cnvs, PyArrayObject *__pyx_v_cnvsn); /* proto */
+static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, PyArrayObject *__pyx_v_z, PyArrayObject *__pyx_v_xdim, PyArrayObject *__pyx_v_summary, PyArrayObject *__pyx_v_summaryn); /* proto */
 static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_4apply_tree(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_tree_ind, PyObject *__pyx_v_tree_val, PyObject *__pyx_v_X, PyObject *__pyx_v_y, PyObject *__pyx_v_output_type); /* proto */
 static PyObject *__pyx_int_0;
 static PyObject *__pyx_codeobj_;
@@ -1953,7 +1953,7 @@ static PyObject *__pyx_codeobj__2;
 static PyObject *__pyx_codeobj__3;
 /* Late includes */
 
-/* "whitebeam/core/_whitebeam.pyx":16
+/* "whitebeam/core/_whitebeam.pyx":17
  * ctypedef np.float64_t DTYPE_t
  * 
  * def reorder(X, y, z, i_start, i_end, j_split, split_value, missing):             # <<<<<<<<<<<<<<
@@ -2015,47 +2015,47 @@ static PyObject *__pyx_pw_9whitebeam_4core_10_whitebeam_1reorder(PyObject *__pyx
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 1); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 1); __PYX_ERR(0, 17, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 2); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 2); __PYX_ERR(0, 17, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i_start)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 3); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 3); __PYX_ERR(0, 17, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i_end)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 4); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 4); __PYX_ERR(0, 17, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_j_split)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 5); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 5); __PYX_ERR(0, 17, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_split_value)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 6); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 6); __PYX_ERR(0, 17, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_missing)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 7); __PYX_ERR(0, 16, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, 7); __PYX_ERR(0, 17, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "reorder") < 0)) __PYX_ERR(0, 16, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "reorder") < 0)) __PYX_ERR(0, 17, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 8) {
       goto __pyx_L5_argtuple_error;
@@ -2080,7 +2080,7 @@ static PyObject *__pyx_pw_9whitebeam_4core_10_whitebeam_1reorder(PyObject *__pyx
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 16, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("reorder", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 17, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("whitebeam.core._whitebeam.reorder", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2108,32 +2108,32 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_reorder(CYTHON_UNUSED Py
   int __pyx_clineno = 0;
   __Pyx_TraceFrameInit(__pyx_codeobj_)
   __Pyx_RefNannySetupContext("reorder", 0);
-  __Pyx_TraceCall("reorder", __pyx_f[0], 16, 0, __PYX_ERR(0, 16, __pyx_L1_error));
+  __Pyx_TraceCall("reorder", __pyx_f[0], 17, 0, __PYX_ERR(0, 17, __pyx_L1_error));
 
-  /* "whitebeam/core/_whitebeam.pyx":32
+  /* "whitebeam/core/_whitebeam.pyx":33
  *         [integer]: head index
  *     """
  *     return _reorder(X, y, z, i_start, i_end, j_split, split_value, missing)             # <<<<<<<<<<<<<<
  * 
- * cdef size_t _reorder(
+ * def create_avc(np.ndarray[DTYPE_t, ndim=2] X not None,
  */
-  __Pyx_TraceLine(32,0,__PYX_ERR(0, 32, __pyx_L1_error))
+  __Pyx_TraceLine(33,0,__PYX_ERR(0, 33, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
-  if (!(likely(((__pyx_v_X) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_X, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 32, __pyx_L1_error)
-  if (!(likely(((__pyx_v_y) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_y, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 32, __pyx_L1_error)
-  if (!(likely(((__pyx_v_z) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_z, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 32, __pyx_L1_error)
-  __pyx_t_1 = __Pyx_PyInt_As_size_t(__pyx_v_i_start); if (unlikely((__pyx_t_1 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_As_size_t(__pyx_v_i_end); if (unlikely((__pyx_t_2 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyInt_As_size_t(__pyx_v_j_split); if (unlikely((__pyx_t_3 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L1_error)
-  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_split_value); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyInt_As_size_t(__pyx_v_missing); if (unlikely((__pyx_t_5 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_FromSize_t(__pyx_f_9whitebeam_4core_10_whitebeam__reorder(((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y), ((PyArrayObject *)__pyx_v_z), __pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, __pyx_t_5)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 32, __pyx_L1_error)
+  if (!(likely(((__pyx_v_X) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_X, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 33, __pyx_L1_error)
+  if (!(likely(((__pyx_v_y) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_y, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 33, __pyx_L1_error)
+  if (!(likely(((__pyx_v_z) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_z, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_size_t(__pyx_v_i_start); if (unlikely((__pyx_t_1 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_size_t(__pyx_v_i_end); if (unlikely((__pyx_t_2 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_size_t(__pyx_v_j_split); if (unlikely((__pyx_t_3 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_split_value); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_size_t(__pyx_v_missing); if (unlikely((__pyx_t_5 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_FromSize_t(__pyx_f_9whitebeam_4core_10_whitebeam__reorder(((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y), ((PyArrayObject *)__pyx_v_z), __pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, __pyx_t_5)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_r = __pyx_t_6;
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "whitebeam/core/_whitebeam.pyx":16
+  /* "whitebeam/core/_whitebeam.pyx":17
  * ctypedef np.float64_t DTYPE_t
  * 
  * def reorder(X, y, z, i_start, i_end, j_split, split_value, missing):             # <<<<<<<<<<<<<<
@@ -2153,453 +2153,8 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_reorder(CYTHON_UNUSED Py
   return __pyx_r;
 }
 
-/* "whitebeam/core/_whitebeam.pyx":34
+/* "whitebeam/core/_whitebeam.pyx":35
  *     return _reorder(X, y, z, i_start, i_end, j_split, split_value, missing)
- * 
- * cdef size_t _reorder(             # <<<<<<<<<<<<<<
- *         np.ndarray[DTYPE_t, ndim=2] X, # X: 2-d numpy array (n x m)
- *         np.ndarray[DTYPE_t, ndim=1] y, # y: 1-d numpy array (n)
- */
-
-static size_t __pyx_f_9whitebeam_4core_10_whitebeam__reorder(PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, PyArrayObject *__pyx_v_z, size_t __pyx_v_i_start, size_t __pyx_v_i_end, size_t __pyx_v_j_split, double __pyx_v_split_value, size_t __pyx_v_missing) {
-  size_t __pyx_v_j;
-  size_t __pyx_v_m;
-  size_t __pyx_v_i_head;
-  size_t __pyx_v_i_tail;
-  size_t __pyx_v_do_swap;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_X;
-  __Pyx_Buffer __pyx_pybuffer_X;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_y;
-  __Pyx_Buffer __pyx_pybuffer_y;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_z;
-  __Pyx_Buffer __pyx_pybuffer_z;
-  size_t __pyx_r;
-  __Pyx_TraceDeclarations
-  __Pyx_RefNannyDeclarations
-  int __pyx_t_1;
-  size_t __pyx_t_2;
-  size_t __pyx_t_3;
-  size_t __pyx_t_4;
-  size_t __pyx_t_5;
-  size_t __pyx_t_6;
-  __pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t __pyx_t_7;
-  __pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t __pyx_t_8;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("_reorder", 0);
-  __Pyx_TraceCall("_reorder", __pyx_f[0], 34, 0, __PYX_ERR(0, 34, __pyx_L1_error));
-  __pyx_pybuffer_X.pybuffer.buf = NULL;
-  __pyx_pybuffer_X.refcount = 0;
-  __pyx_pybuffernd_X.data = NULL;
-  __pyx_pybuffernd_X.rcbuffer = &__pyx_pybuffer_X;
-  __pyx_pybuffer_y.pybuffer.buf = NULL;
-  __pyx_pybuffer_y.refcount = 0;
-  __pyx_pybuffernd_y.data = NULL;
-  __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
-  __pyx_pybuffer_z.pybuffer.buf = NULL;
-  __pyx_pybuffer_z.refcount = 0;
-  __pyx_pybuffernd_z.data = NULL;
-  __pyx_pybuffernd_z.rcbuffer = &__pyx_pybuffer_z;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 34, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 34, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_z.rcbuffer->pybuffer, (PyObject*)__pyx_v_z, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 34, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_z.diminfo[0].strides = __pyx_pybuffernd_z.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_z.diminfo[0].shape = __pyx_pybuffernd_z.rcbuffer->pybuffer.shape[0];
-
-  /* "whitebeam/core/_whitebeam.pyx":46
- * 
- *     cdef size_t j
- *     cdef size_t m = X.shape[1]             # <<<<<<<<<<<<<<
- *     cdef size_t i_head = i_start
- *     cdef size_t i_tail = i_end - 1
- */
-  __Pyx_TraceLine(46,0,__PYX_ERR(0, 46, __pyx_L1_error))
-  __pyx_v_m = (__pyx_v_X->dimensions[1]);
-
-  /* "whitebeam/core/_whitebeam.pyx":47
- *     cdef size_t j
- *     cdef size_t m = X.shape[1]
- *     cdef size_t i_head = i_start             # <<<<<<<<<<<<<<
- *     cdef size_t i_tail = i_end - 1
- *     cdef size_t do_swap = 0
- */
-  __Pyx_TraceLine(47,0,__PYX_ERR(0, 47, __pyx_L1_error))
-  __pyx_v_i_head = __pyx_v_i_start;
-
-  /* "whitebeam/core/_whitebeam.pyx":48
- *     cdef size_t m = X.shape[1]
- *     cdef size_t i_head = i_start
- *     cdef size_t i_tail = i_end - 1             # <<<<<<<<<<<<<<
- *     cdef size_t do_swap = 0
- * 
- */
-  __Pyx_TraceLine(48,0,__PYX_ERR(0, 48, __pyx_L1_error))
-  __pyx_v_i_tail = (__pyx_v_i_end - 1);
-
-  /* "whitebeam/core/_whitebeam.pyx":49
- *     cdef size_t i_head = i_start
- *     cdef size_t i_tail = i_end - 1
- *     cdef size_t do_swap = 0             # <<<<<<<<<<<<<<
- * 
- *     with nogil:
- */
-  __Pyx_TraceLine(49,0,__PYX_ERR(0, 49, __pyx_L1_error))
-  __pyx_v_do_swap = 0;
-
-  /* "whitebeam/core/_whitebeam.pyx":51
- *     cdef size_t do_swap = 0
- * 
- *     with nogil:             # <<<<<<<<<<<<<<
- *         while i_head <= i_tail:
- * 
- */
-  __Pyx_TraceLine(51,0,__PYX_ERR(0, 51, __pyx_L1_error))
-  {
-      #ifdef WITH_THREAD
-      PyThreadState *_save;
-      Py_UNBLOCK_THREADS
-      __Pyx_FastGIL_Remember();
-      #endif
-      /*try:*/ {
-
-        /* "whitebeam/core/_whitebeam.pyx":52
- * 
- *     with nogil:
- *         while i_head <= i_tail:             # <<<<<<<<<<<<<<
- * 
- *             if i_tail == 0:
- */
-        __Pyx_TraceLine(52,1,__PYX_ERR(0, 52, __pyx_L4_error))
-        while (1) {
-          __pyx_t_1 = ((__pyx_v_i_head <= __pyx_v_i_tail) != 0);
-          if (!__pyx_t_1) break;
-
-          /* "whitebeam/core/_whitebeam.pyx":54
- *         while i_head <= i_tail:
- * 
- *             if i_tail == 0:             # <<<<<<<<<<<<<<
- *                 # if tail is 'zero', should break
- *                 # otherwise, segmentation fault,
- */
-          __Pyx_TraceLine(54,1,__PYX_ERR(0, 54, __pyx_L4_error))
-          __pyx_t_1 = ((__pyx_v_i_tail == 0) != 0);
-          if (__pyx_t_1) {
-
-            /* "whitebeam/core/_whitebeam.pyx":58
- *                 # otherwise, segmentation fault,
- *                 # as size_t has no sign. 0 - 1 => huge number
- *                 break             # <<<<<<<<<<<<<<
- * 
- *             do_swap = 0
- */
-            __Pyx_TraceLine(58,1,__PYX_ERR(0, 58, __pyx_L4_error))
-            goto __pyx_L7_break;
-
-            /* "whitebeam/core/_whitebeam.pyx":54
- *         while i_head <= i_tail:
- * 
- *             if i_tail == 0:             # <<<<<<<<<<<<<<
- *                 # if tail is 'zero', should break
- *                 # otherwise, segmentation fault,
- */
-          }
-
-          /* "whitebeam/core/_whitebeam.pyx":60
- *                 break
- * 
- *             do_swap = 0             # <<<<<<<<<<<<<<
- *             if isnan(X[i_head,j_split]):
- *                 if missing == 1: # send the missing to the right node
- */
-          __Pyx_TraceLine(60,1,__PYX_ERR(0, 60, __pyx_L4_error))
-          __pyx_v_do_swap = 0;
-
-          /* "whitebeam/core/_whitebeam.pyx":61
- * 
- *             do_swap = 0
- *             if isnan(X[i_head,j_split]):             # <<<<<<<<<<<<<<
- *                 if missing == 1: # send the missing to the right node
- *                     do_swap = 1
- */
-          __Pyx_TraceLine(61,1,__PYX_ERR(0, 61, __pyx_L4_error))
-          __pyx_t_2 = __pyx_v_i_head;
-          __pyx_t_3 = __pyx_v_j_split;
-          __pyx_t_1 = (isnan((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_3, __pyx_pybuffernd_X.diminfo[1].strides))) != 0);
-          if (__pyx_t_1) {
-
-            /* "whitebeam/core/_whitebeam.pyx":62
- *             do_swap = 0
- *             if isnan(X[i_head,j_split]):
- *                 if missing == 1: # send the missing to the right node             # <<<<<<<<<<<<<<
- *                     do_swap = 1
- *             else:
- */
-            __Pyx_TraceLine(62,1,__PYX_ERR(0, 62, __pyx_L4_error))
-            __pyx_t_1 = ((__pyx_v_missing == 1) != 0);
-            if (__pyx_t_1) {
-
-              /* "whitebeam/core/_whitebeam.pyx":63
- *             if isnan(X[i_head,j_split]):
- *                 if missing == 1: # send the missing to the right node
- *                     do_swap = 1             # <<<<<<<<<<<<<<
- *             else:
- *                 if X[i_head,j_split] >= split_value:
- */
-              __Pyx_TraceLine(63,1,__PYX_ERR(0, 63, __pyx_L4_error))
-              __pyx_v_do_swap = 1;
-
-              /* "whitebeam/core/_whitebeam.pyx":62
- *             do_swap = 0
- *             if isnan(X[i_head,j_split]):
- *                 if missing == 1: # send the missing to the right node             # <<<<<<<<<<<<<<
- *                     do_swap = 1
- *             else:
- */
-            }
-
-            /* "whitebeam/core/_whitebeam.pyx":61
- * 
- *             do_swap = 0
- *             if isnan(X[i_head,j_split]):             # <<<<<<<<<<<<<<
- *                 if missing == 1: # send the missing to the right node
- *                     do_swap = 1
- */
-            goto __pyx_L9;
-          }
-
-          /* "whitebeam/core/_whitebeam.pyx":65
- *                     do_swap = 1
- *             else:
- *                 if X[i_head,j_split] >= split_value:             # <<<<<<<<<<<<<<
- *                     do_swap = 1
- * 
- */
-          __Pyx_TraceLine(65,1,__PYX_ERR(0, 65, __pyx_L4_error))
-          /*else*/ {
-            __pyx_t_3 = __pyx_v_i_head;
-            __pyx_t_2 = __pyx_v_j_split;
-            __pyx_t_1 = (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_X.diminfo[1].strides)) >= __pyx_v_split_value) != 0);
-            if (__pyx_t_1) {
-
-              /* "whitebeam/core/_whitebeam.pyx":66
- *             else:
- *                 if X[i_head,j_split] >= split_value:
- *                     do_swap = 1             # <<<<<<<<<<<<<<
- * 
- *             if do_swap == 1:
- */
-              __Pyx_TraceLine(66,1,__PYX_ERR(0, 66, __pyx_L4_error))
-              __pyx_v_do_swap = 1;
-
-              /* "whitebeam/core/_whitebeam.pyx":65
- *                     do_swap = 1
- *             else:
- *                 if X[i_head,j_split] >= split_value:             # <<<<<<<<<<<<<<
- *                     do_swap = 1
- * 
- */
-            }
-          }
-          __pyx_L9:;
-
-          /* "whitebeam/core/_whitebeam.pyx":68
- *                     do_swap = 1
- * 
- *             if do_swap == 1:             # <<<<<<<<<<<<<<
- *                 # swap X rows
- *                 for j in range(m):
- */
-          __Pyx_TraceLine(68,1,__PYX_ERR(0, 68, __pyx_L4_error))
-          __pyx_t_1 = ((__pyx_v_do_swap == 1) != 0);
-          if (__pyx_t_1) {
-
-            /* "whitebeam/core/_whitebeam.pyx":70
- *             if do_swap == 1:
- *                 # swap X rows
- *                 for j in range(m):             # <<<<<<<<<<<<<<
- *                     X[i_head,j], X[i_tail,j] = X[i_tail,j], X[i_head,j]
- *                 # swap y, z values
- */
-            __Pyx_TraceLine(70,1,__PYX_ERR(0, 70, __pyx_L4_error))
-            __pyx_t_2 = __pyx_v_m;
-            __pyx_t_3 = __pyx_t_2;
-            for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
-              __pyx_v_j = __pyx_t_4;
-
-              /* "whitebeam/core/_whitebeam.pyx":71
- *                 # swap X rows
- *                 for j in range(m):
- *                     X[i_head,j], X[i_tail,j] = X[i_tail,j], X[i_head,j]             # <<<<<<<<<<<<<<
- *                 # swap y, z values
- *                 y[i_head], y[i_tail] = y[i_tail], y[i_head]
- */
-              __Pyx_TraceLine(71,1,__PYX_ERR(0, 71, __pyx_L4_error))
-              __pyx_t_5 = __pyx_v_i_tail;
-              __pyx_t_6 = __pyx_v_j;
-              __pyx_t_7 = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_5, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_6, __pyx_pybuffernd_X.diminfo[1].strides));
-              __pyx_t_6 = __pyx_v_i_head;
-              __pyx_t_5 = __pyx_v_j;
-              __pyx_t_8 = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_X.diminfo[1].strides));
-              __pyx_t_5 = __pyx_v_i_head;
-              __pyx_t_6 = __pyx_v_j;
-              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_5, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_6, __pyx_pybuffernd_X.diminfo[1].strides) = __pyx_t_7;
-              __pyx_t_6 = __pyx_v_i_tail;
-              __pyx_t_5 = __pyx_v_j;
-              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_X.diminfo[1].strides) = __pyx_t_8;
-            }
-
-            /* "whitebeam/core/_whitebeam.pyx":73
- *                     X[i_head,j], X[i_tail,j] = X[i_tail,j], X[i_head,j]
- *                 # swap y, z values
- *                 y[i_head], y[i_tail] = y[i_tail], y[i_head]             # <<<<<<<<<<<<<<
- *                 z[i_head], z[i_tail] = z[i_tail], z[i_head]
- *                 # decrease the tail index
- */
-            __Pyx_TraceLine(73,1,__PYX_ERR(0, 73, __pyx_L4_error))
-            __pyx_t_2 = __pyx_v_i_tail;
-            __pyx_t_8 = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_y.diminfo[0].strides));
-            __pyx_t_2 = __pyx_v_i_head;
-            __pyx_t_7 = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_y.diminfo[0].strides));
-            __pyx_t_2 = __pyx_v_i_head;
-            *__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_y.diminfo[0].strides) = __pyx_t_8;
-            __pyx_t_2 = __pyx_v_i_tail;
-            *__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_y.diminfo[0].strides) = __pyx_t_7;
-
-            /* "whitebeam/core/_whitebeam.pyx":74
- *                 # swap y, z values
- *                 y[i_head], y[i_tail] = y[i_tail], y[i_head]
- *                 z[i_head], z[i_tail] = z[i_tail], z[i_head]             # <<<<<<<<<<<<<<
- *                 # decrease the tail index
- *                 i_tail -= 1
- */
-            __Pyx_TraceLine(74,1,__PYX_ERR(0, 74, __pyx_L4_error))
-            __pyx_t_2 = __pyx_v_i_tail;
-            __pyx_t_7 = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_z.diminfo[0].strides));
-            __pyx_t_2 = __pyx_v_i_head;
-            __pyx_t_8 = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_z.diminfo[0].strides));
-            __pyx_t_2 = __pyx_v_i_head;
-            *__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_z.diminfo[0].strides) = __pyx_t_7;
-            __pyx_t_2 = __pyx_v_i_tail;
-            *__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_z.diminfo[0].strides) = __pyx_t_8;
-
-            /* "whitebeam/core/_whitebeam.pyx":76
- *                 z[i_head], z[i_tail] = z[i_tail], z[i_head]
- *                 # decrease the tail index
- *                 i_tail -= 1             # <<<<<<<<<<<<<<
- *             else:
- *                 # increase the head index
- */
-            __Pyx_TraceLine(76,1,__PYX_ERR(0, 76, __pyx_L4_error))
-            __pyx_v_i_tail = (__pyx_v_i_tail - 1);
-
-            /* "whitebeam/core/_whitebeam.pyx":68
- *                     do_swap = 1
- * 
- *             if do_swap == 1:             # <<<<<<<<<<<<<<
- *                 # swap X rows
- *                 for j in range(m):
- */
-            goto __pyx_L12;
-          }
-
-          /* "whitebeam/core/_whitebeam.pyx":79
- *             else:
- *                 # increase the head index
- *                 i_head += 1             # <<<<<<<<<<<<<<
- * 
- *     return i_head
- */
-          __Pyx_TraceLine(79,1,__PYX_ERR(0, 79, __pyx_L4_error))
-          /*else*/ {
-            __pyx_v_i_head = (__pyx_v_i_head + 1);
-          }
-          __pyx_L12:;
-        }
-        __pyx_L7_break:;
-      }
-
-      /* "whitebeam/core/_whitebeam.pyx":51
- *     cdef size_t do_swap = 0
- * 
- *     with nogil:             # <<<<<<<<<<<<<<
- *         while i_head <= i_tail:
- * 
- */
-      __Pyx_TraceLine(51,1,__PYX_ERR(0, 51, __pyx_L4_error))
-      /*finally:*/ {
-        /*normal exit:*/{
-          #ifdef WITH_THREAD
-          __Pyx_FastGIL_Forget();
-          Py_BLOCK_THREADS
-          #endif
-          goto __pyx_L5;
-        }
-        __pyx_L4_error: {
-          #ifdef WITH_THREAD
-          __Pyx_FastGIL_Forget();
-          Py_BLOCK_THREADS
-          #endif
-          goto __pyx_L1_error;
-        }
-        __pyx_L5:;
-      }
-  }
-
-  /* "whitebeam/core/_whitebeam.pyx":81
- *                 i_head += 1
- * 
- *     return i_head             # <<<<<<<<<<<<<<
- * 
- * 
- */
-  __Pyx_TraceLine(81,0,__PYX_ERR(0, 81, __pyx_L1_error))
-  __pyx_r = __pyx_v_i_head;
-  goto __pyx_L0;
-
-  /* "whitebeam/core/_whitebeam.pyx":34
- *     return _reorder(X, y, z, i_start, i_end, j_split, split_value, missing)
- * 
- * cdef size_t _reorder(             # <<<<<<<<<<<<<<
- *         np.ndarray[DTYPE_t, ndim=2] X, # X: 2-d numpy array (n x m)
- *         np.ndarray[DTYPE_t, ndim=1] y, # y: 1-d numpy array (n)
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("whitebeam.core._whitebeam._reorder", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_r = 0;
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __Pyx_TraceReturn(Py_None, 0);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "whitebeam/core/_whitebeam.pyx":84
- * 
  * 
  * def create_avc(np.ndarray[DTYPE_t, ndim=2] X not None,             # <<<<<<<<<<<<<<
  *         np.ndarray[DTYPE_t, ndim=1] y not None,
@@ -2615,8 +2170,8 @@ static PyObject *__pyx_pw_9whitebeam_4core_10_whitebeam_3create_avc(PyObject *__
   PyArrayObject *__pyx_v_y = 0;
   PyArrayObject *__pyx_v_z = 0;
   PyArrayObject *__pyx_v_xdim = 0;
-  PyArrayObject *__pyx_v_cnvs = 0;
-  PyArrayObject *__pyx_v_cnvsn = 0;
+  PyArrayObject *__pyx_v_summary = 0;
+  PyArrayObject *__pyx_v_summaryn = 0;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2624,7 +2179,7 @@ static PyObject *__pyx_pw_9whitebeam_4core_10_whitebeam_3create_avc(PyObject *__
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("create_avc (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_X,&__pyx_n_s_y,&__pyx_n_s_z,&__pyx_n_s_xdim,&__pyx_n_s_cnvs,&__pyx_n_s_cnvsn,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_X,&__pyx_n_s_y,&__pyx_n_s_z,&__pyx_n_s_xdim,&__pyx_n_s_summary,&__pyx_n_s_summaryn,0};
     PyObject* values[6] = {0,0,0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -2654,35 +2209,35 @@ static PyObject *__pyx_pw_9whitebeam_4core_10_whitebeam_3create_avc(PyObject *__
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 1); __PYX_ERR(0, 84, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 1); __PYX_ERR(0, 35, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 2); __PYX_ERR(0, 84, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 2); __PYX_ERR(0, 35, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_xdim)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 3); __PYX_ERR(0, 84, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 3); __PYX_ERR(0, 35, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
-        if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cnvs)) != 0)) kw_args--;
+        if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_summary)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 4); __PYX_ERR(0, 84, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 4); __PYX_ERR(0, 35, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
-        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_cnvsn)) != 0)) kw_args--;
+        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_summaryn)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 5); __PYX_ERR(0, 84, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, 5); __PYX_ERR(0, 35, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create_avc") < 0)) __PYX_ERR(0, 84, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create_avc") < 0)) __PYX_ERR(0, 35, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 6) {
       goto __pyx_L5_argtuple_error;
@@ -2698,24 +2253,24 @@ static PyObject *__pyx_pw_9whitebeam_4core_10_whitebeam_3create_avc(PyObject *__
     __pyx_v_y = ((PyArrayObject *)values[1]);
     __pyx_v_z = ((PyArrayObject *)values[2]);
     __pyx_v_xdim = ((PyArrayObject *)values[3]);
-    __pyx_v_cnvs = ((PyArrayObject *)values[4]);
-    __pyx_v_cnvsn = ((PyArrayObject *)values[5]);
+    __pyx_v_summary = ((PyArrayObject *)values[4]);
+    __pyx_v_summaryn = ((PyArrayObject *)values[5]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 84, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("create_avc", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 35, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("whitebeam.core._whitebeam.create_avc", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 0, "X", 0))) __PYX_ERR(0, 84, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), __pyx_ptype_5numpy_ndarray, 0, "y", 0))) __PYX_ERR(0, 85, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_z), __pyx_ptype_5numpy_ndarray, 0, "z", 0))) __PYX_ERR(0, 86, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_xdim), __pyx_ptype_5numpy_ndarray, 0, "xdim", 0))) __PYX_ERR(0, 87, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cnvs), __pyx_ptype_5numpy_ndarray, 0, "cnvs", 0))) __PYX_ERR(0, 88, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_cnvsn), __pyx_ptype_5numpy_ndarray, 0, "cnvsn", 0))) __PYX_ERR(0, 89, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(__pyx_self, __pyx_v_X, __pyx_v_y, __pyx_v_z, __pyx_v_xdim, __pyx_v_cnvs, __pyx_v_cnvsn);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 0, "X", 0))) __PYX_ERR(0, 35, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_y), __pyx_ptype_5numpy_ndarray, 0, "y", 0))) __PYX_ERR(0, 36, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_z), __pyx_ptype_5numpy_ndarray, 0, "z", 0))) __PYX_ERR(0, 37, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_xdim), __pyx_ptype_5numpy_ndarray, 0, "xdim", 0))) __PYX_ERR(0, 38, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_summary), __pyx_ptype_5numpy_ndarray, 0, "summary", 0))) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_summaryn), __pyx_ptype_5numpy_ndarray, 0, "summaryn", 0))) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(__pyx_self, __pyx_v_X, __pyx_v_y, __pyx_v_z, __pyx_v_xdim, __pyx_v_summary, __pyx_v_summaryn);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2726,13 +2281,13 @@ static PyObject *__pyx_pw_9whitebeam_4core_10_whitebeam_3create_avc(PyObject *__
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, PyArrayObject *__pyx_v_z, PyArrayObject *__pyx_v_xdim, PyArrayObject *__pyx_v_cnvs, PyArrayObject *__pyx_v_cnvsn) {
+static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, PyArrayObject *__pyx_v_z, PyArrayObject *__pyx_v_xdim, PyArrayObject *__pyx_v_summary, PyArrayObject *__pyx_v_summaryn) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_X;
   __Pyx_Buffer __pyx_pybuffer_X;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_cnvs;
-  __Pyx_Buffer __pyx_pybuffer_cnvs;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_cnvsn;
-  __Pyx_Buffer __pyx_pybuffer_cnvsn;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_summary;
+  __Pyx_Buffer __pyx_pybuffer_summary;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_summaryn;
+  __Pyx_Buffer __pyx_pybuffer_summaryn;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_xdim;
   __Pyx_Buffer __pyx_pybuffer_xdim;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_y;
@@ -2747,7 +2302,7 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(CYTHON_UNUSE
   int __pyx_clineno = 0;
   __Pyx_TraceFrameInit(__pyx_codeobj__2)
   __Pyx_RefNannySetupContext("create_avc", 0);
-  __Pyx_TraceCall("create_avc", __pyx_f[0], 84, 0, __PYX_ERR(0, 84, __pyx_L1_error));
+  __Pyx_TraceCall("create_avc", __pyx_f[0], 35, 0, __PYX_ERR(0, 35, __pyx_L1_error));
   __pyx_pybuffer_X.pybuffer.buf = NULL;
   __pyx_pybuffer_X.refcount = 0;
   __pyx_pybuffernd_X.data = NULL;
@@ -2764,70 +2319,70 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(CYTHON_UNUSE
   __pyx_pybuffer_xdim.refcount = 0;
   __pyx_pybuffernd_xdim.data = NULL;
   __pyx_pybuffernd_xdim.rcbuffer = &__pyx_pybuffer_xdim;
-  __pyx_pybuffer_cnvs.pybuffer.buf = NULL;
-  __pyx_pybuffer_cnvs.refcount = 0;
-  __pyx_pybuffernd_cnvs.data = NULL;
-  __pyx_pybuffernd_cnvs.rcbuffer = &__pyx_pybuffer_cnvs;
-  __pyx_pybuffer_cnvsn.pybuffer.buf = NULL;
-  __pyx_pybuffer_cnvsn.refcount = 0;
-  __pyx_pybuffernd_cnvsn.data = NULL;
-  __pyx_pybuffernd_cnvsn.rcbuffer = &__pyx_pybuffer_cnvsn;
+  __pyx_pybuffer_summary.pybuffer.buf = NULL;
+  __pyx_pybuffer_summary.refcount = 0;
+  __pyx_pybuffernd_summary.data = NULL;
+  __pyx_pybuffernd_summary.rcbuffer = &__pyx_pybuffer_summary;
+  __pyx_pybuffer_summaryn.pybuffer.buf = NULL;
+  __pyx_pybuffer_summaryn.refcount = 0;
+  __pyx_pybuffernd_summaryn.data = NULL;
+  __pyx_pybuffernd_summaryn.rcbuffer = &__pyx_pybuffer_summaryn;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 84, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 35, __pyx_L1_error)
   }
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 84, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 35, __pyx_L1_error)
   }
   __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_z.rcbuffer->pybuffer, (PyObject*)__pyx_v_z, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 84, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_z.rcbuffer->pybuffer, (PyObject*)__pyx_v_z, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 35, __pyx_L1_error)
   }
   __pyx_pybuffernd_z.diminfo[0].strides = __pyx_pybuffernd_z.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_z.diminfo[0].shape = __pyx_pybuffernd_z.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer, (PyObject*)__pyx_v_xdim, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 84, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer, (PyObject*)__pyx_v_xdim, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 35, __pyx_L1_error)
   }
   __pyx_pybuffernd_xdim.diminfo[0].strides = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_xdim.diminfo[0].shape = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_xdim.diminfo[1].strides = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_xdim.diminfo[1].shape = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_cnvs.rcbuffer->pybuffer, (PyObject*)__pyx_v_cnvs, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 84, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_summary.rcbuffer->pybuffer, (PyObject*)__pyx_v_summary, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 35, __pyx_L1_error)
   }
-  __pyx_pybuffernd_cnvs.diminfo[0].strides = __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_cnvs.diminfo[0].shape = __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_cnvs.diminfo[1].strides = __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_cnvs.diminfo[1].shape = __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.shape[1];
+  __pyx_pybuffernd_summary.diminfo[0].strides = __pyx_pybuffernd_summary.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_summary.diminfo[0].shape = __pyx_pybuffernd_summary.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_summary.diminfo[1].strides = __pyx_pybuffernd_summary.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_summary.diminfo[1].shape = __pyx_pybuffernd_summary.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_cnvsn.rcbuffer->pybuffer, (PyObject*)__pyx_v_cnvsn, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 84, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_summaryn.rcbuffer->pybuffer, (PyObject*)__pyx_v_summaryn, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 35, __pyx_L1_error)
   }
-  __pyx_pybuffernd_cnvsn.diminfo[0].strides = __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_cnvsn.diminfo[0].shape = __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_cnvsn.diminfo[1].strides = __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_cnvsn.diminfo[1].shape = __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.shape[1];
+  __pyx_pybuffernd_summaryn.diminfo[0].strides = __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_summaryn.diminfo[0].shape = __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_summaryn.diminfo[1].strides = __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_summaryn.diminfo[1].shape = __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.shape[1];
 
-  /* "whitebeam/core/_whitebeam.pyx":98
+  /* "whitebeam/core/_whitebeam.pyx":49
  *     # canvas --> (create_avc) --> avc
  *     # AVC: Attribute-Value Class group in RainForest
- *     _create_avc(X, y, z, xdim, cnvs, cnvsn)             # <<<<<<<<<<<<<<
+ *     _create_avc(X, y, z, xdim, summary, summaryn)             # <<<<<<<<<<<<<<
  *     return 0
  * 
  */
-  __Pyx_TraceLine(98,0,__PYX_ERR(0, 98, __pyx_L1_error))
-  __pyx_f_9whitebeam_4core_10_whitebeam__create_avc(((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y), ((PyArrayObject *)__pyx_v_z), ((PyArrayObject *)__pyx_v_xdim), ((PyArrayObject *)__pyx_v_cnvs), ((PyArrayObject *)__pyx_v_cnvsn));
+  __Pyx_TraceLine(49,0,__PYX_ERR(0, 49, __pyx_L1_error))
+  __pyx_f_9whitebeam_4core_10_whitebeam__create_avc(((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y), ((PyArrayObject *)__pyx_v_z), ((PyArrayObject *)__pyx_v_xdim), ((PyArrayObject *)__pyx_v_summary), ((PyArrayObject *)__pyx_v_summaryn));
 
-  /* "whitebeam/core/_whitebeam.pyx":99
+  /* "whitebeam/core/_whitebeam.pyx":50
  *     # AVC: Attribute-Value Class group in RainForest
- *     _create_avc(X, y, z, xdim, cnvs, cnvsn)
+ *     _create_avc(X, y, z, xdim, summary, summaryn)
  *     return 0             # <<<<<<<<<<<<<<
  * 
- * 
+ * def apply_tree(tree_ind, tree_val, X, y, output_type):
  */
-  __Pyx_TraceLine(99,0,__PYX_ERR(0, 99, __pyx_L1_error))
+  __Pyx_TraceLine(50,0,__PYX_ERR(0, 50, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_int_0);
   __pyx_r = __pyx_int_0;
   goto __pyx_L0;
 
-  /* "whitebeam/core/_whitebeam.pyx":84
- * 
+  /* "whitebeam/core/_whitebeam.pyx":35
+ *     return _reorder(X, y, z, i_start, i_end, j_split, split_value, missing)
  * 
  * def create_avc(np.ndarray[DTYPE_t, ndim=2] X not None,             # <<<<<<<<<<<<<<
  *         np.ndarray[DTYPE_t, ndim=1] y not None,
@@ -2841,8 +2396,8 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(CYTHON_UNUSE
     __Pyx_PyThreadState_assign
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_cnvs.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_cnvsn.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_summary.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_summaryn.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
@@ -2852,8 +2407,8 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(CYTHON_UNUSE
   goto __pyx_L2;
   __pyx_L0:;
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_cnvs.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_cnvsn.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_summary.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_summaryn.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
@@ -2864,1090 +2419,8 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_2create_avc(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "whitebeam/core/_whitebeam.pyx":102
- * 
- * 
- * cdef void _create_avc(             # <<<<<<<<<<<<<<
- *         np.ndarray[DTYPE_t, ndim=2] X,
- *         np.ndarray[DTYPE_t, ndim=1] y,
- */
-
-static void __pyx_f_9whitebeam_4core_10_whitebeam__create_avc(PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, PyArrayObject *__pyx_v_z, PyArrayObject *__pyx_v_xdim, PyArrayObject *__pyx_v_cnvs, PyArrayObject *__pyx_v_cnvsn) {
-  size_t __pyx_v_i;
-  size_t __pyx_v_j;
-  size_t __pyx_v_k;
-  size_t __pyx_v_k_raw;
-  size_t __pyx_v_k_tld;
-  size_t __pyx_v_n;
-  size_t __pyx_v_m;
-  CYTHON_UNUSED size_t __pyx_v_n_cnvs;
-  size_t __pyx_v_n_bin;
-  size_t __pyx_v_xdim0;
-  double __pyx_v_k_prox;
-  double __pyx_v_y_i;
-  double __pyx_v_z_i;
-  double __pyx_v_y_tot;
-  double __pyx_v_z_tot;
-  double __pyx_v_n_na;
-  double __pyx_v_y_na;
-  double __pyx_v_z_na;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_X;
-  __Pyx_Buffer __pyx_pybuffer_X;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_cnvs;
-  __Pyx_Buffer __pyx_pybuffer_cnvs;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_cnvsn;
-  __Pyx_Buffer __pyx_pybuffer_cnvsn;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_xdim;
-  __Pyx_Buffer __pyx_pybuffer_xdim;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_y;
-  __Pyx_Buffer __pyx_pybuffer_y;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_z;
-  __Pyx_Buffer __pyx_pybuffer_z;
-  __Pyx_TraceDeclarations
-  __Pyx_RefNannyDeclarations
-  Py_ssize_t __pyx_t_1;
-  Py_ssize_t __pyx_t_2;
-  size_t __pyx_t_3;
-  size_t __pyx_t_4;
-  size_t __pyx_t_5;
-  size_t __pyx_t_6;
-  size_t __pyx_t_7;
-  size_t __pyx_t_8;
-  size_t __pyx_t_9;
-  size_t __pyx_t_10;
-  int __pyx_t_11;
-  size_t __pyx_t_12;
-  size_t __pyx_t_13;
-  Py_ssize_t __pyx_t_14;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("_create_avc", 0);
-  __Pyx_TraceCall("_create_avc", __pyx_f[0], 102, 0, __PYX_ERR(0, 102, __pyx_L1_error));
-  __pyx_pybuffer_X.pybuffer.buf = NULL;
-  __pyx_pybuffer_X.refcount = 0;
-  __pyx_pybuffernd_X.data = NULL;
-  __pyx_pybuffernd_X.rcbuffer = &__pyx_pybuffer_X;
-  __pyx_pybuffer_y.pybuffer.buf = NULL;
-  __pyx_pybuffer_y.refcount = 0;
-  __pyx_pybuffernd_y.data = NULL;
-  __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
-  __pyx_pybuffer_z.pybuffer.buf = NULL;
-  __pyx_pybuffer_z.refcount = 0;
-  __pyx_pybuffernd_z.data = NULL;
-  __pyx_pybuffernd_z.rcbuffer = &__pyx_pybuffer_z;
-  __pyx_pybuffer_xdim.pybuffer.buf = NULL;
-  __pyx_pybuffer_xdim.refcount = 0;
-  __pyx_pybuffernd_xdim.data = NULL;
-  __pyx_pybuffernd_xdim.rcbuffer = &__pyx_pybuffer_xdim;
-  __pyx_pybuffer_cnvs.pybuffer.buf = NULL;
-  __pyx_pybuffer_cnvs.refcount = 0;
-  __pyx_pybuffernd_cnvs.data = NULL;
-  __pyx_pybuffernd_cnvs.rcbuffer = &__pyx_pybuffer_cnvs;
-  __pyx_pybuffer_cnvsn.pybuffer.buf = NULL;
-  __pyx_pybuffer_cnvsn.refcount = 0;
-  __pyx_pybuffernd_cnvsn.data = NULL;
-  __pyx_pybuffernd_cnvsn.rcbuffer = &__pyx_pybuffer_cnvsn;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 102, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 102, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_z.rcbuffer->pybuffer, (PyObject*)__pyx_v_z, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 102, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_z.diminfo[0].strides = __pyx_pybuffernd_z.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_z.diminfo[0].shape = __pyx_pybuffernd_z.rcbuffer->pybuffer.shape[0];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer, (PyObject*)__pyx_v_xdim, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 102, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_xdim.diminfo[0].strides = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_xdim.diminfo[0].shape = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_xdim.diminfo[1].strides = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_xdim.diminfo[1].shape = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.shape[1];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_cnvs.rcbuffer->pybuffer, (PyObject*)__pyx_v_cnvs, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 102, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_cnvs.diminfo[0].strides = __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_cnvs.diminfo[0].shape = __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_cnvs.diminfo[1].strides = __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_cnvs.diminfo[1].shape = __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.shape[1];
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_cnvsn.rcbuffer->pybuffer, (PyObject*)__pyx_v_cnvsn, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 102, __pyx_L1_error)
-  }
-  __pyx_pybuffernd_cnvsn.diminfo[0].strides = __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_cnvsn.diminfo[0].shape = __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_cnvsn.diminfo[1].strides = __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_cnvsn.diminfo[1].shape = __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.shape[1];
-
-  /* "whitebeam/core/_whitebeam.pyx":114
- * 
- *     # matrix sizes
- *     cdef size_t n = X.shape[0]             # <<<<<<<<<<<<<<
- *     cdef size_t m = X.shape[1]
- * 
- */
-  __Pyx_TraceLine(114,0,__PYX_ERR(0, 114, __pyx_L1_error))
-  __pyx_v_n = (__pyx_v_X->dimensions[0]);
-
-  /* "whitebeam/core/_whitebeam.pyx":115
- *     # matrix sizes
- *     cdef size_t n = X.shape[0]
- *     cdef size_t m = X.shape[1]             # <<<<<<<<<<<<<<
- * 
- *     # CNVs - Copy Number Variations
- */
-  __Pyx_TraceLine(115,0,__PYX_ERR(0, 115, __pyx_L1_error))
-  __pyx_v_m = (__pyx_v_X->dimensions[1]);
-
-  /* "whitebeam/core/_whitebeam.pyx":119
- *     # CNVs - Copy Number Variations
- *     # A CNV is when the number of copies of a particular gene varies from one individual to the next.
- *     cdef size_t n_cnvs = <size_t> cnvs.shape[0]/2             # <<<<<<<<<<<<<<
- * 
- *     #
- */
-  __Pyx_TraceLine(119,0,__PYX_ERR(0, 119, __pyx_L1_error))
-  __pyx_v_n_cnvs = (((size_t)(__pyx_v_cnvs->dimensions[0])) / 2);
-
-  /* "whitebeam/core/_whitebeam.pyx":123
- *     #
- *     cdef size_t n_bin
- *     cdef size_t xdim0 = <size_t> xdim[0, 4]             # <<<<<<<<<<<<<<
- *     cdef double k_prox
- * 
- */
-  __Pyx_TraceLine(123,0,__PYX_ERR(0, 123, __pyx_L1_error))
-  __pyx_t_1 = 0;
-  __pyx_t_2 = 4;
-  if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[0].shape;
-  if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-  __pyx_v_xdim0 = ((size_t)(*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_xdim.diminfo[1].strides)));
-
-  /* "whitebeam/core/_whitebeam.pyx":130
- * 
- *     # totals
- *     cdef double y_tot = 0.0             # <<<<<<<<<<<<<<
- *     cdef double z_tot = 0.0
- *     cdef double n_na, y_na, z_na
- */
-  __Pyx_TraceLine(130,0,__PYX_ERR(0, 130, __pyx_L1_error))
-  __pyx_v_y_tot = 0.0;
-
-  /* "whitebeam/core/_whitebeam.pyx":131
- *     # totals
- *     cdef double y_tot = 0.0
- *     cdef double z_tot = 0.0             # <<<<<<<<<<<<<<
- *     cdef double n_na, y_na, z_na
- * 
- */
-  __Pyx_TraceLine(131,0,__PYX_ERR(0, 131, __pyx_L1_error))
-  __pyx_v_z_tot = 0.0;
-
-  /* "whitebeam/core/_whitebeam.pyx":135
- * 
- *     # update E[y] & E[z]
- *     with nogil:             # <<<<<<<<<<<<<<
- * 
- *         # iterate over n dimensions
- */
-  __Pyx_TraceLine(135,0,__PYX_ERR(0, 135, __pyx_L1_error))
-  {
-      #ifdef WITH_THREAD
-      PyThreadState *_save;
-      Py_UNBLOCK_THREADS
-      __Pyx_FastGIL_Remember();
-      #endif
-      /*try:*/ {
-
-        /* "whitebeam/core/_whitebeam.pyx":138
- * 
- *         # iterate over n dimensions
- *         for i in range(n):             # <<<<<<<<<<<<<<
- * 
- *             # get the indices
- */
-        __Pyx_TraceLine(138,1,__PYX_ERR(0, 138, __pyx_L4_error))
-        __pyx_t_3 = __pyx_v_n;
-        __pyx_t_4 = __pyx_t_3;
-        for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
-          __pyx_v_i = __pyx_t_5;
-
-          /* "whitebeam/core/_whitebeam.pyx":141
- * 
- *             # get the indices
- *             y_i = y[i]             # <<<<<<<<<<<<<<
- *             z_i = z[i]
- * 
- */
-          __Pyx_TraceLine(141,1,__PYX_ERR(0, 141, __pyx_L4_error))
-          __pyx_t_6 = __pyx_v_i;
-          __pyx_v_y_i = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_y.diminfo[0].strides));
-
-          /* "whitebeam/core/_whitebeam.pyx":142
- *             # get the indices
- *             y_i = y[i]
- *             z_i = z[i]             # <<<<<<<<<<<<<<
- * 
- *             # add to get the totals
- */
-          __Pyx_TraceLine(142,1,__PYX_ERR(0, 142, __pyx_L4_error))
-          __pyx_t_6 = __pyx_v_i;
-          __pyx_v_z_i = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_z.diminfo[0].strides));
-
-          /* "whitebeam/core/_whitebeam.pyx":145
- * 
- *             # add to get the totals
- *             y_tot += y_i             # <<<<<<<<<<<<<<
- *             z_tot += z_i
- * 
- */
-          __Pyx_TraceLine(145,1,__PYX_ERR(0, 145, __pyx_L4_error))
-          __pyx_v_y_tot = (__pyx_v_y_tot + __pyx_v_y_i);
-
-          /* "whitebeam/core/_whitebeam.pyx":146
- *             # add to get the totals
- *             y_tot += y_i
- *             z_tot += z_i             # <<<<<<<<<<<<<<
- * 
- *             # iterate over m dimensions
- */
-          __Pyx_TraceLine(146,1,__PYX_ERR(0, 146, __pyx_L4_error))
-          __pyx_v_z_tot = (__pyx_v_z_tot + __pyx_v_z_i);
-
-          /* "whitebeam/core/_whitebeam.pyx":149
- * 
- *             # iterate over m dimensions
- *             for j in range(m):             # <<<<<<<<<<<<<<
- * 
- *                 #if xdim[j, 2] < 1e-12:
- */
-          __Pyx_TraceLine(149,1,__PYX_ERR(0, 149, __pyx_L4_error))
-          __pyx_t_6 = __pyx_v_m;
-          __pyx_t_7 = __pyx_t_6;
-          for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
-            __pyx_v_j = __pyx_t_8;
-
-            /* "whitebeam/core/_whitebeam.pyx":155
- * 
- *                 # check isnan to prevent errors
- *                 if isnan(X[i, j]):             # <<<<<<<<<<<<<<
- *                     # update CNVS
- *                     cnvsn[j, 1] += 1
- */
-            __Pyx_TraceLine(155,1,__PYX_ERR(0, 155, __pyx_L4_error))
-            __pyx_t_9 = __pyx_v_i;
-            __pyx_t_10 = __pyx_v_j;
-            __pyx_t_11 = (isnan((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_X.diminfo[1].strides))) != 0);
-            if (__pyx_t_11) {
-
-              /* "whitebeam/core/_whitebeam.pyx":157
- *                 if isnan(X[i, j]):
- *                     # update CNVS
- *                     cnvsn[j, 1] += 1             # <<<<<<<<<<<<<<
- *                     cnvsn[j, 2] += y_i
- *                     cnvsn[j, 3] += z_i
- */
-              __Pyx_TraceLine(157,1,__PYX_ERR(0, 157, __pyx_L4_error))
-              __pyx_t_10 = __pyx_v_j;
-              __pyx_t_2 = 1;
-              if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvsn.diminfo[1].strides) += 1.0;
-
-              /* "whitebeam/core/_whitebeam.pyx":158
- *                     # update CNVS
- *                     cnvsn[j, 1] += 1
- *                     cnvsn[j, 2] += y_i             # <<<<<<<<<<<<<<
- *                     cnvsn[j, 3] += z_i
- *                 else:
- */
-              __Pyx_TraceLine(158,1,__PYX_ERR(0, 158, __pyx_L4_error))
-              __pyx_t_10 = __pyx_v_j;
-              __pyx_t_2 = 2;
-              if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvsn.diminfo[1].strides) += __pyx_v_y_i;
-
-              /* "whitebeam/core/_whitebeam.pyx":159
- *                     cnvsn[j, 1] += 1
- *                     cnvsn[j, 2] += y_i
- *                     cnvsn[j, 3] += z_i             # <<<<<<<<<<<<<<
- *                 else:
- * 
- */
-              __Pyx_TraceLine(159,1,__PYX_ERR(0, 159, __pyx_L4_error))
-              __pyx_t_10 = __pyx_v_j;
-              __pyx_t_2 = 3;
-              if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvsn.diminfo[1].strides) += __pyx_v_z_i;
-
-              /* "whitebeam/core/_whitebeam.pyx":155
- * 
- *                 # check isnan to prevent errors
- *                 if isnan(X[i, j]):             # <<<<<<<<<<<<<<
- *                     # update CNVS
- *                     cnvsn[j, 1] += 1
- */
-              goto __pyx_L10;
-            }
-
-            /* "whitebeam/core/_whitebeam.pyx":162
- *                 else:
- * 
- *                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]             # <<<<<<<<<<<<<<
- *                     if k_prox < 0:
- *                         k_prox = 0
- */
-            __Pyx_TraceLine(162,1,__PYX_ERR(0, 162, __pyx_L4_error))
-            /*else*/ {
-              __pyx_t_10 = __pyx_v_i;
-              __pyx_t_9 = __pyx_v_j;
-              __pyx_t_12 = __pyx_v_j;
-              __pyx_t_2 = 1;
-              if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-              __pyx_t_13 = __pyx_v_j;
-              __pyx_t_1 = 2;
-              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-              __pyx_v_k_prox = (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_9, __pyx_pybuffernd_X.diminfo[1].strides)) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_xdim.diminfo[1].strides))) / (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)));
-
-              /* "whitebeam/core/_whitebeam.pyx":163
- * 
- *                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]
- *                     if k_prox < 0:             # <<<<<<<<<<<<<<
- *                         k_prox = 0
- *                     elif k_prox > xdim[j, 3] - 1:
- */
-              __Pyx_TraceLine(163,1,__PYX_ERR(0, 163, __pyx_L4_error))
-              __pyx_t_11 = ((__pyx_v_k_prox < 0.0) != 0);
-              if (__pyx_t_11) {
-
-                /* "whitebeam/core/_whitebeam.pyx":164
- *                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]
- *                     if k_prox < 0:
- *                         k_prox = 0             # <<<<<<<<<<<<<<
- *                     elif k_prox > xdim[j, 3] - 1:
- *                         k_prox = xdim[j, 3] - 1
- */
-                __Pyx_TraceLine(164,1,__PYX_ERR(0, 164, __pyx_L4_error))
-                __pyx_v_k_prox = 0.0;
-
-                /* "whitebeam/core/_whitebeam.pyx":163
- * 
- *                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]
- *                     if k_prox < 0:             # <<<<<<<<<<<<<<
- *                         k_prox = 0
- *                     elif k_prox > xdim[j, 3] - 1:
- */
-                goto __pyx_L11;
-              }
-
-              /* "whitebeam/core/_whitebeam.pyx":165
- *                     if k_prox < 0:
- *                         k_prox = 0
- *                     elif k_prox > xdim[j, 3] - 1:             # <<<<<<<<<<<<<<
- *                         k_prox = xdim[j, 3] - 1
- *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
- */
-              __Pyx_TraceLine(165,1,__PYX_ERR(0, 165, __pyx_L4_error))
-              __pyx_t_13 = __pyx_v_j;
-              __pyx_t_1 = 3;
-              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-              __pyx_t_11 = ((__pyx_v_k_prox > ((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - 1.0)) != 0);
-              if (__pyx_t_11) {
-
-                /* "whitebeam/core/_whitebeam.pyx":166
- *                         k_prox = 0
- *                     elif k_prox > xdim[j, 3] - 1:
- *                         k_prox = xdim[j, 3] - 1             # <<<<<<<<<<<<<<
- *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
- *                     cnvs[k, 3] += 1
- */
-                __Pyx_TraceLine(166,1,__PYX_ERR(0, 166, __pyx_L4_error))
-                __pyx_t_13 = __pyx_v_j;
-                __pyx_t_1 = 3;
-                if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-                __pyx_v_k_prox = ((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - 1.0);
-
-                /* "whitebeam/core/_whitebeam.pyx":165
- *                     if k_prox < 0:
- *                         k_prox = 0
- *                     elif k_prox > xdim[j, 3] - 1:             # <<<<<<<<<<<<<<
- *                         k_prox = xdim[j, 3] - 1
- *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
- */
-              }
-              __pyx_L11:;
-
-              /* "whitebeam/core/_whitebeam.pyx":167
- *                     elif k_prox > xdim[j, 3] - 1:
- *                         k_prox = xdim[j, 3] - 1
- *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)             # <<<<<<<<<<<<<<
- *                     cnvs[k, 3] += 1
- *                     cnvs[k, 4] += y_i
- */
-              __Pyx_TraceLine(167,1,__PYX_ERR(0, 167, __pyx_L4_error))
-              __pyx_t_13 = __pyx_v_j;
-              __pyx_t_1 = 4;
-              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-              __pyx_v_k = ((size_t)(__pyx_v_k_prox + (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - __pyx_v_xdim0) * 2.0)));
-
-              /* "whitebeam/core/_whitebeam.pyx":168
- *                         k_prox = xdim[j, 3] - 1
- *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
- *                     cnvs[k, 3] += 1             # <<<<<<<<<<<<<<
- *                     cnvs[k, 4] += y_i
- *                     cnvs[k, 5] += z_i
- */
-              __Pyx_TraceLine(168,1,__PYX_ERR(0, 168, __pyx_L4_error))
-              __pyx_t_13 = __pyx_v_k;
-              __pyx_t_1 = 3;
-              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) += 1.0;
-
-              /* "whitebeam/core/_whitebeam.pyx":169
- *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
- *                     cnvs[k, 3] += 1
- *                     cnvs[k, 4] += y_i             # <<<<<<<<<<<<<<
- *                     cnvs[k, 5] += z_i
- * 
- */
-              __Pyx_TraceLine(169,1,__PYX_ERR(0, 169, __pyx_L4_error))
-              __pyx_t_13 = __pyx_v_k;
-              __pyx_t_1 = 4;
-              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) += __pyx_v_y_i;
-
-              /* "whitebeam/core/_whitebeam.pyx":170
- *                     cnvs[k, 3] += 1
- *                     cnvs[k, 4] += y_i
- *                     cnvs[k, 5] += z_i             # <<<<<<<<<<<<<<
- * 
- *         # accumulate stats
- */
-              __Pyx_TraceLine(170,1,__PYX_ERR(0, 170, __pyx_L4_error))
-              __pyx_t_13 = __pyx_v_k;
-              __pyx_t_1 = 5;
-              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) += __pyx_v_z_i;
-            }
-            __pyx_L10:;
-          }
-        }
-
-        /* "whitebeam/core/_whitebeam.pyx":173
- * 
- *         # accumulate stats
- *         for j in range(m):             # <<<<<<<<<<<<<<
- *             n_bin = <size_t> xdim[j, 3]
- * 
- */
-        __Pyx_TraceLine(173,1,__PYX_ERR(0, 173, __pyx_L4_error))
-        __pyx_t_3 = __pyx_v_m;
-        __pyx_t_4 = __pyx_t_3;
-        for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
-          __pyx_v_j = __pyx_t_5;
-
-          /* "whitebeam/core/_whitebeam.pyx":174
- *         # accumulate stats
- *         for j in range(m):
- *             n_bin = <size_t> xdim[j, 3]             # <<<<<<<<<<<<<<
- * 
- *             for k_raw in range(1, n_bin):
- */
-          __Pyx_TraceLine(174,1,__PYX_ERR(0, 174, __pyx_L4_error))
-          __pyx_t_6 = __pyx_v_j;
-          __pyx_t_1 = 3;
-          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-          __pyx_v_n_bin = ((size_t)(*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)));
-
-          /* "whitebeam/core/_whitebeam.pyx":176
- *             n_bin = <size_t> xdim[j, 3]
- * 
- *             for k_raw in range(1, n_bin):             # <<<<<<<<<<<<<<
- *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
- *                 cnvs[k, 3] += cnvs[k-1, 3]
- */
-          __Pyx_TraceLine(176,1,__PYX_ERR(0, 176, __pyx_L4_error))
-          __pyx_t_6 = __pyx_v_n_bin;
-          __pyx_t_7 = __pyx_t_6;
-          for (__pyx_t_8 = 1; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
-            __pyx_v_k_raw = __pyx_t_8;
-
-            /* "whitebeam/core/_whitebeam.pyx":177
- * 
- *             for k_raw in range(1, n_bin):
- *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)             # <<<<<<<<<<<<<<
- *                 cnvs[k, 3] += cnvs[k-1, 3]
- *                 cnvs[k, 4] += cnvs[k-1, 4]
- */
-            __Pyx_TraceLine(177,1,__PYX_ERR(0, 177, __pyx_L4_error))
-            __pyx_t_13 = __pyx_v_j;
-            __pyx_t_1 = 4;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-            __pyx_v_k = ((size_t)(__pyx_v_k_raw + (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - __pyx_v_xdim0) * 2.0)));
-
-            /* "whitebeam/core/_whitebeam.pyx":178
- *             for k_raw in range(1, n_bin):
- *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
- *                 cnvs[k, 3] += cnvs[k-1, 3]             # <<<<<<<<<<<<<<
- *                 cnvs[k, 4] += cnvs[k-1, 4]
- *                 cnvs[k, 5] += cnvs[k-1, 5]
- */
-            __Pyx_TraceLine(178,1,__PYX_ERR(0, 178, __pyx_L4_error))
-            __pyx_t_13 = (__pyx_v_k - 1);
-            __pyx_t_1 = 3;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_2 = 3;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides) += (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides));
-
-            /* "whitebeam/core/_whitebeam.pyx":179
- *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
- *                 cnvs[k, 3] += cnvs[k-1, 3]
- *                 cnvs[k, 4] += cnvs[k-1, 4]             # <<<<<<<<<<<<<<
- *                 cnvs[k, 5] += cnvs[k-1, 5]
- *                 # fill the right node at the same time
- */
-            __Pyx_TraceLine(179,1,__PYX_ERR(0, 179, __pyx_L4_error))
-            __pyx_t_13 = (__pyx_v_k - 1);
-            __pyx_t_1 = 4;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_2 = 4;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides) += (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides));
-
-            /* "whitebeam/core/_whitebeam.pyx":180
- *                 cnvs[k, 3] += cnvs[k-1, 3]
- *                 cnvs[k, 4] += cnvs[k-1, 4]
- *                 cnvs[k, 5] += cnvs[k-1, 5]             # <<<<<<<<<<<<<<
- *                 # fill the right node at the same time
- *                 cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]
- */
-            __Pyx_TraceLine(180,1,__PYX_ERR(0, 180, __pyx_L4_error))
-            __pyx_t_13 = (__pyx_v_k - 1);
-            __pyx_t_1 = 5;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_2 = 5;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides) += (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides));
-
-            /* "whitebeam/core/_whitebeam.pyx":182
- *                 cnvs[k, 5] += cnvs[k-1, 5]
- *                 # fill the right node at the same time
- *                 cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]             # <<<<<<<<<<<<<<
- *                 cnvs[k, 7] = y_tot - cnvs[k, 4] - cnvsn[j, 2]
- *                 cnvs[k, 8] = z_tot - cnvs[k, 5] - cnvsn[j, 3]
- */
-            __Pyx_TraceLine(182,1,__PYX_ERR(0, 182, __pyx_L4_error))
-            __pyx_t_13 = __pyx_v_k;
-            __pyx_t_1 = 3;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_12 = __pyx_v_j;
-            __pyx_t_2 = 1;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-            __pyx_t_9 = __pyx_v_k;
-            __pyx_t_14 = 6;
-            if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_cnvs.diminfo[1].strides) = ((__pyx_v_n - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvsn.diminfo[1].strides)));
-
-            /* "whitebeam/core/_whitebeam.pyx":183
- *                 # fill the right node at the same time
- *                 cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]
- *                 cnvs[k, 7] = y_tot - cnvs[k, 4] - cnvsn[j, 2]             # <<<<<<<<<<<<<<
- *                 cnvs[k, 8] = z_tot - cnvs[k, 5] - cnvsn[j, 3]
- * 
- */
-            __Pyx_TraceLine(183,1,__PYX_ERR(0, 183, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_2 = 4;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_13 = __pyx_v_j;
-            __pyx_t_1 = 2;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-            __pyx_t_9 = __pyx_v_k;
-            __pyx_t_14 = 7;
-            if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_cnvs.diminfo[1].strides) = ((__pyx_v_y_tot - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvsn.diminfo[1].strides)));
-
-            /* "whitebeam/core/_whitebeam.pyx":184
- *                 cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]
- *                 cnvs[k, 7] = y_tot - cnvs[k, 4] - cnvsn[j, 2]
- *                 cnvs[k, 8] = z_tot - cnvs[k, 5] - cnvsn[j, 3]             # <<<<<<<<<<<<<<
- * 
- *             # fill the right node
- */
-            __Pyx_TraceLine(184,1,__PYX_ERR(0, 184, __pyx_L4_error))
-            __pyx_t_13 = __pyx_v_k;
-            __pyx_t_1 = 5;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_12 = __pyx_v_j;
-            __pyx_t_2 = 3;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-            __pyx_t_9 = __pyx_v_k;
-            __pyx_t_14 = 8;
-            if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_cnvs.diminfo[1].strides) = ((__pyx_v_z_tot - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvsn.diminfo[1].strides)));
-          }
-
-          /* "whitebeam/core/_whitebeam.pyx":187
- * 
- *             # fill the right node
- *             k = <size_t> ((xdim[j, 4] - xdim0)*2)             # <<<<<<<<<<<<<<
- *             cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]
- *             cnvs[k, 7] = y_tot - cnvs[k, 4] - cnvsn[j, 2]
- */
-          __Pyx_TraceLine(187,1,__PYX_ERR(0, 187, __pyx_L4_error))
-          __pyx_t_6 = __pyx_v_j;
-          __pyx_t_2 = 4;
-          if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-          __pyx_v_k = ((size_t)(((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_xdim.diminfo[1].strides)) - __pyx_v_xdim0) * 2.0));
-
-          /* "whitebeam/core/_whitebeam.pyx":188
- *             # fill the right node
- *             k = <size_t> ((xdim[j, 4] - xdim0)*2)
- *             cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]             # <<<<<<<<<<<<<<
- *             cnvs[k, 7] = y_tot - cnvs[k, 4] - cnvsn[j, 2]
- *             cnvs[k, 8] = z_tot - cnvs[k, 5] - cnvsn[j, 3]
- */
-          __Pyx_TraceLine(188,1,__PYX_ERR(0, 188, __pyx_L4_error))
-          __pyx_t_6 = __pyx_v_k;
-          __pyx_t_2 = 3;
-          if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-          __pyx_t_7 = __pyx_v_j;
-          __pyx_t_1 = 1;
-          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-          __pyx_t_8 = __pyx_v_k;
-          __pyx_t_14 = 6;
-          if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-          *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_cnvs.diminfo[1].strides) = ((__pyx_v_n - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvsn.diminfo[1].strides)));
-
-          /* "whitebeam/core/_whitebeam.pyx":189
- *             k = <size_t> ((xdim[j, 4] - xdim0)*2)
- *             cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]
- *             cnvs[k, 7] = y_tot - cnvs[k, 4] - cnvsn[j, 2]             # <<<<<<<<<<<<<<
- *             cnvs[k, 8] = z_tot - cnvs[k, 5] - cnvsn[j, 3]
- * 
- */
-          __Pyx_TraceLine(189,1,__PYX_ERR(0, 189, __pyx_L4_error))
-          __pyx_t_7 = __pyx_v_k;
-          __pyx_t_1 = 4;
-          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-          __pyx_t_6 = __pyx_v_j;
-          __pyx_t_2 = 2;
-          if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-          __pyx_t_8 = __pyx_v_k;
-          __pyx_t_14 = 7;
-          if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-          *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_cnvs.diminfo[1].strides) = ((__pyx_v_y_tot - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvsn.diminfo[1].strides)));
-
-          /* "whitebeam/core/_whitebeam.pyx":190
- *             cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]
- *             cnvs[k, 7] = y_tot - cnvs[k, 4] - cnvsn[j, 2]
- *             cnvs[k, 8] = z_tot - cnvs[k, 5] - cnvsn[j, 3]             # <<<<<<<<<<<<<<
- * 
- *         # missing values
- */
-          __Pyx_TraceLine(190,1,__PYX_ERR(0, 190, __pyx_L4_error))
-          __pyx_t_6 = __pyx_v_k;
-          __pyx_t_2 = 5;
-          if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-          __pyx_t_7 = __pyx_v_j;
-          __pyx_t_1 = 3;
-          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-          __pyx_t_8 = __pyx_v_k;
-          __pyx_t_14 = 8;
-          if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-          *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_cnvs.diminfo[1].strides) = ((__pyx_v_z_tot - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvsn.diminfo[1].strides)));
-        }
-
-        /* "whitebeam/core/_whitebeam.pyx":193
- * 
- *         # missing values
- *         for j in range(m):             # <<<<<<<<<<<<<<
- * 
- *             n_bin = <size_t> xdim[j, 3]
- */
-        __Pyx_TraceLine(193,1,__PYX_ERR(0, 193, __pyx_L4_error))
-        __pyx_t_3 = __pyx_v_m;
-        __pyx_t_4 = __pyx_t_3;
-        for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
-          __pyx_v_j = __pyx_t_5;
-
-          /* "whitebeam/core/_whitebeam.pyx":195
- *         for j in range(m):
- * 
- *             n_bin = <size_t> xdim[j, 3]             # <<<<<<<<<<<<<<
- *             n_na = cnvsn[j, 1]
- *             y_na = cnvsn[j, 2]
- */
-          __Pyx_TraceLine(195,1,__PYX_ERR(0, 195, __pyx_L4_error))
-          __pyx_t_7 = __pyx_v_j;
-          __pyx_t_1 = 3;
-          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-          __pyx_v_n_bin = ((size_t)(*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)));
-
-          /* "whitebeam/core/_whitebeam.pyx":196
- * 
- *             n_bin = <size_t> xdim[j, 3]
- *             n_na = cnvsn[j, 1]             # <<<<<<<<<<<<<<
- *             y_na = cnvsn[j, 2]
- *             z_na = cnvsn[j, 3]
- */
-          __Pyx_TraceLine(196,1,__PYX_ERR(0, 196, __pyx_L4_error))
-          __pyx_t_7 = __pyx_v_j;
-          __pyx_t_1 = 1;
-          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-          __pyx_v_n_na = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvsn.diminfo[1].strides));
-
-          /* "whitebeam/core/_whitebeam.pyx":197
- *             n_bin = <size_t> xdim[j, 3]
- *             n_na = cnvsn[j, 1]
- *             y_na = cnvsn[j, 2]             # <<<<<<<<<<<<<<
- *             z_na = cnvsn[j, 3]
- * 
- */
-          __Pyx_TraceLine(197,1,__PYX_ERR(0, 197, __pyx_L4_error))
-          __pyx_t_7 = __pyx_v_j;
-          __pyx_t_1 = 2;
-          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-          __pyx_v_y_na = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvsn.diminfo[1].strides));
-
-          /* "whitebeam/core/_whitebeam.pyx":198
- *             n_na = cnvsn[j, 1]
- *             y_na = cnvsn[j, 2]
- *             z_na = cnvsn[j, 3]             # <<<<<<<<<<<<<<
- * 
- *             if n_na == 0:
- */
-          __Pyx_TraceLine(198,1,__PYX_ERR(0, 198, __pyx_L4_error))
-          __pyx_t_7 = __pyx_v_j;
-          __pyx_t_1 = 3;
-          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvsn.diminfo[1].shape;
-          __pyx_v_z_na = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvsn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_cnvsn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvsn.diminfo[1].strides));
-
-          /* "whitebeam/core/_whitebeam.pyx":200
- *             z_na = cnvsn[j, 3]
- * 
- *             if n_na == 0:             # <<<<<<<<<<<<<<
- *                 continue
- * 
- */
-          __Pyx_TraceLine(200,1,__PYX_ERR(0, 200, __pyx_L4_error))
-          __pyx_t_11 = ((__pyx_v_n_na == 0.0) != 0);
-          if (__pyx_t_11) {
-
-            /* "whitebeam/core/_whitebeam.pyx":201
- * 
- *             if n_na == 0:
- *                 continue             # <<<<<<<<<<<<<<
- * 
- *             for k_raw in range(n_bin):
- */
-            __Pyx_TraceLine(201,1,__PYX_ERR(0, 201, __pyx_L4_error))
-            goto __pyx_L16_continue;
-
-            /* "whitebeam/core/_whitebeam.pyx":200
- *             z_na = cnvsn[j, 3]
- * 
- *             if n_na == 0:             # <<<<<<<<<<<<<<
- *                 continue
- * 
- */
-          }
-
-          /* "whitebeam/core/_whitebeam.pyx":203
- *                 continue
- * 
- *             for k_raw in range(n_bin):             # <<<<<<<<<<<<<<
- *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
- *                 k_tld = k + n_bin
- */
-          __Pyx_TraceLine(203,1,__PYX_ERR(0, 203, __pyx_L4_error))
-          __pyx_t_7 = __pyx_v_n_bin;
-          __pyx_t_6 = __pyx_t_7;
-          for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_6; __pyx_t_8+=1) {
-            __pyx_v_k_raw = __pyx_t_8;
-
-            /* "whitebeam/core/_whitebeam.pyx":204
- * 
- *             for k_raw in range(n_bin):
- *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)             # <<<<<<<<<<<<<<
- *                 k_tld = k + n_bin
- *                 cnvs[k_tld, 3] = cnvs[k, 3]
- */
-            __Pyx_TraceLine(204,1,__PYX_ERR(0, 204, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_j;
-            __pyx_t_1 = 4;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
-            __pyx_v_k = ((size_t)(__pyx_v_k_raw + (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - __pyx_v_xdim0) * 2.0)));
-
-            /* "whitebeam/core/_whitebeam.pyx":205
- *             for k_raw in range(n_bin):
- *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
- *                 k_tld = k + n_bin             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 3] = cnvs[k, 3]
- *                 cnvs[k_tld, 4] = cnvs[k, 4]
- */
-            __Pyx_TraceLine(205,1,__PYX_ERR(0, 205, __pyx_L4_error))
-            __pyx_v_k_tld = (__pyx_v_k + __pyx_v_n_bin);
-
-            /* "whitebeam/core/_whitebeam.pyx":206
- *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
- *                 k_tld = k + n_bin
- *                 cnvs[k_tld, 3] = cnvs[k, 3]             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 4] = cnvs[k, 4]
- *                 cnvs[k_tld, 5] = cnvs[k, 5]
- */
-            __Pyx_TraceLine(206,1,__PYX_ERR(0, 206, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_1 = 3;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_13 = __pyx_v_k_tld;
-            __pyx_t_2 = 3;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides));
-
-            /* "whitebeam/core/_whitebeam.pyx":207
- *                 k_tld = k + n_bin
- *                 cnvs[k_tld, 3] = cnvs[k, 3]
- *                 cnvs[k_tld, 4] = cnvs[k, 4]             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 5] = cnvs[k, 5]
- *                 cnvs[k_tld, 6] = cnvs[k, 6]
- */
-            __Pyx_TraceLine(207,1,__PYX_ERR(0, 207, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_1 = 4;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_13 = __pyx_v_k_tld;
-            __pyx_t_2 = 4;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides));
-
-            /* "whitebeam/core/_whitebeam.pyx":208
- *                 cnvs[k_tld, 3] = cnvs[k, 3]
- *                 cnvs[k_tld, 4] = cnvs[k, 4]
- *                 cnvs[k_tld, 5] = cnvs[k, 5]             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 6] = cnvs[k, 6]
- *                 cnvs[k_tld, 7] = cnvs[k, 7]
- */
-            __Pyx_TraceLine(208,1,__PYX_ERR(0, 208, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_1 = 5;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_13 = __pyx_v_k_tld;
-            __pyx_t_2 = 5;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides));
-
-            /* "whitebeam/core/_whitebeam.pyx":209
- *                 cnvs[k_tld, 4] = cnvs[k, 4]
- *                 cnvs[k_tld, 5] = cnvs[k, 5]
- *                 cnvs[k_tld, 6] = cnvs[k, 6]             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 7] = cnvs[k, 7]
- *                 cnvs[k_tld, 8] = cnvs[k, 8]
- */
-            __Pyx_TraceLine(209,1,__PYX_ERR(0, 209, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_1 = 6;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_13 = __pyx_v_k_tld;
-            __pyx_t_2 = 6;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides));
-
-            /* "whitebeam/core/_whitebeam.pyx":210
- *                 cnvs[k_tld, 5] = cnvs[k, 5]
- *                 cnvs[k_tld, 6] = cnvs[k, 6]
- *                 cnvs[k_tld, 7] = cnvs[k, 7]             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 8] = cnvs[k, 8]
- *                 cnvs[k_tld, 9] = 1
- */
-            __Pyx_TraceLine(210,1,__PYX_ERR(0, 210, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_1 = 7;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_13 = __pyx_v_k_tld;
-            __pyx_t_2 = 7;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides));
-
-            /* "whitebeam/core/_whitebeam.pyx":211
- *                 cnvs[k_tld, 6] = cnvs[k, 6]
- *                 cnvs[k_tld, 7] = cnvs[k, 7]
- *                 cnvs[k_tld, 8] = cnvs[k, 8]             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 9] = 1
- * 
- */
-            __Pyx_TraceLine(211,1,__PYX_ERR(0, 211, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_1 = 8;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            __pyx_t_13 = __pyx_v_k_tld;
-            __pyx_t_2 = 8;
-            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_cnvs.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides));
-
-            /* "whitebeam/core/_whitebeam.pyx":212
- *                 cnvs[k_tld, 7] = cnvs[k, 7]
- *                 cnvs[k_tld, 8] = cnvs[k, 8]
- *                 cnvs[k_tld, 9] = 1             # <<<<<<<<<<<<<<
- * 
- *                 cnvs[k, 3] += n_na
- */
-            __Pyx_TraceLine(212,1,__PYX_ERR(0, 212, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k_tld;
-            __pyx_t_1 = 9;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) = 1.0;
-
-            /* "whitebeam/core/_whitebeam.pyx":214
- *                 cnvs[k_tld, 9] = 1
- * 
- *                 cnvs[k, 3] += n_na             # <<<<<<<<<<<<<<
- *                 cnvs[k, 4] += y_na
- *                 cnvs[k, 5] += z_na
- */
-            __Pyx_TraceLine(214,1,__PYX_ERR(0, 214, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_1 = 3;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) += __pyx_v_n_na;
-
-            /* "whitebeam/core/_whitebeam.pyx":215
- * 
- *                 cnvs[k, 3] += n_na
- *                 cnvs[k, 4] += y_na             # <<<<<<<<<<<<<<
- *                 cnvs[k, 5] += z_na
- *                 cnvs[k_tld, 6] += n_na
- */
-            __Pyx_TraceLine(215,1,__PYX_ERR(0, 215, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_1 = 4;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) += __pyx_v_y_na;
-
-            /* "whitebeam/core/_whitebeam.pyx":216
- *                 cnvs[k, 3] += n_na
- *                 cnvs[k, 4] += y_na
- *                 cnvs[k, 5] += z_na             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 6] += n_na
- *                 cnvs[k_tld, 7] += y_na
- */
-            __Pyx_TraceLine(216,1,__PYX_ERR(0, 216, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k;
-            __pyx_t_1 = 5;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) += __pyx_v_z_na;
-
-            /* "whitebeam/core/_whitebeam.pyx":217
- *                 cnvs[k, 4] += y_na
- *                 cnvs[k, 5] += z_na
- *                 cnvs[k_tld, 6] += n_na             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 7] += y_na
- *                 cnvs[k_tld, 8] += z_na
- */
-            __Pyx_TraceLine(217,1,__PYX_ERR(0, 217, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k_tld;
-            __pyx_t_1 = 6;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) += __pyx_v_n_na;
-
-            /* "whitebeam/core/_whitebeam.pyx":218
- *                 cnvs[k, 5] += z_na
- *                 cnvs[k_tld, 6] += n_na
- *                 cnvs[k_tld, 7] += y_na             # <<<<<<<<<<<<<<
- *                 cnvs[k_tld, 8] += z_na
- * 
- */
-            __Pyx_TraceLine(218,1,__PYX_ERR(0, 218, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k_tld;
-            __pyx_t_1 = 7;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) += __pyx_v_y_na;
-
-            /* "whitebeam/core/_whitebeam.pyx":219
- *                 cnvs[k_tld, 6] += n_na
- *                 cnvs[k_tld, 7] += y_na
- *                 cnvs[k_tld, 8] += z_na             # <<<<<<<<<<<<<<
- * 
- *     # done _create_avc
- */
-            __Pyx_TraceLine(219,1,__PYX_ERR(0, 219, __pyx_L4_error))
-            __pyx_t_12 = __pyx_v_k_tld;
-            __pyx_t_1 = 8;
-            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_cnvs.diminfo[1].shape;
-            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_cnvs.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_cnvs.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_cnvs.diminfo[1].strides) += __pyx_v_z_na;
-          }
-          __pyx_L16_continue:;
-        }
-      }
-
-      /* "whitebeam/core/_whitebeam.pyx":135
- * 
- *     # update E[y] & E[z]
- *     with nogil:             # <<<<<<<<<<<<<<
- * 
- *         # iterate over n dimensions
- */
-      __Pyx_TraceLine(135,1,__PYX_ERR(0, 135, __pyx_L4_error))
-      /*finally:*/ {
-        /*normal exit:*/{
-          #ifdef WITH_THREAD
-          __Pyx_FastGIL_Forget();
-          Py_BLOCK_THREADS
-          #endif
-          goto __pyx_L5;
-        }
-        __pyx_L4_error: {
-          #ifdef WITH_THREAD
-          __Pyx_FastGIL_Forget();
-          Py_BLOCK_THREADS
-          #endif
-          goto __pyx_L1_error;
-        }
-        __pyx_L5:;
-      }
-  }
-
-  /* "whitebeam/core/_whitebeam.pyx":102
- * 
- * 
- * cdef void _create_avc(             # <<<<<<<<<<<<<<
- *         np.ndarray[DTYPE_t, ndim=2] X,
- *         np.ndarray[DTYPE_t, ndim=1] y,
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_cnvs.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_cnvsn.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("whitebeam.core._whitebeam._create_avc", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_cnvs.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_cnvsn.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __Pyx_TraceReturn(Py_None, 0);
-  __Pyx_RefNannyFinishContext();
-}
-
-/* "whitebeam/core/_whitebeam.pyx":223
- *     # done _create_avc
+/* "whitebeam/core/_whitebeam.pyx":52
+ *     return 0
  * 
  * def apply_tree(tree_ind, tree_val, X, y, output_type):             # <<<<<<<<<<<<<<
  *     """Apply trained tree to a dataset
@@ -3999,29 +2472,29 @@ static PyObject *__pyx_pw_9whitebeam_4core_10_whitebeam_5apply_tree(PyObject *__
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_tree_val)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, 1); __PYX_ERR(0, 223, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, 1); __PYX_ERR(0, 52, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_X)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, 2); __PYX_ERR(0, 223, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, 2); __PYX_ERR(0, 52, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, 3); __PYX_ERR(0, 223, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, 3); __PYX_ERR(0, 52, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_output_type)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, 4); __PYX_ERR(0, 223, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, 4); __PYX_ERR(0, 52, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "apply_tree") < 0)) __PYX_ERR(0, 223, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "apply_tree") < 0)) __PYX_ERR(0, 52, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 5) {
       goto __pyx_L5_argtuple_error;
@@ -4040,7 +2513,7 @@ static PyObject *__pyx_pw_9whitebeam_4core_10_whitebeam_5apply_tree(PyObject *__
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 223, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("apply_tree", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 52, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("whitebeam.core._whitebeam.apply_tree", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -4064,39 +2537,39 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_4apply_tree(CYTHON_UNUSE
   int __pyx_clineno = 0;
   __Pyx_TraceFrameInit(__pyx_codeobj__3)
   __Pyx_RefNannySetupContext("apply_tree", 0);
-  __Pyx_TraceCall("apply_tree", __pyx_f[0], 223, 0, __PYX_ERR(0, 223, __pyx_L1_error));
+  __Pyx_TraceCall("apply_tree", __pyx_f[0], 52, 0, __PYX_ERR(0, 52, __pyx_L1_error));
 
-  /* "whitebeam/core/_whitebeam.pyx":236
+  /* "whitebeam/core/_whitebeam.pyx":65
  *         1-d Numpy Array: Fitted Values
  *     """
  *     if output_type == "index":             # <<<<<<<<<<<<<<
  *         return _apply_tree0(tree_ind, tree_val, X, y)
  *     else:
  */
-  __Pyx_TraceLine(236,0,__PYX_ERR(0, 236, __pyx_L1_error))
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_output_type, __pyx_n_u_index, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 236, __pyx_L1_error)
+  __Pyx_TraceLine(65,0,__PYX_ERR(0, 65, __pyx_L1_error))
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_output_type, __pyx_n_u_index, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "whitebeam/core/_whitebeam.pyx":237
+    /* "whitebeam/core/_whitebeam.pyx":66
  *     """
  *     if output_type == "index":
  *         return _apply_tree0(tree_ind, tree_val, X, y)             # <<<<<<<<<<<<<<
  *     else:
  *         return _apply_tree1(tree_ind, tree_val, X, y)
  */
-    __Pyx_TraceLine(237,0,__PYX_ERR(0, 237, __pyx_L1_error))
+    __Pyx_TraceLine(66,0,__PYX_ERR(0, 66, __pyx_L1_error))
     __Pyx_XDECREF(__pyx_r);
-    if (!(likely(((__pyx_v_tree_ind) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_tree_ind, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 237, __pyx_L1_error)
-    if (!(likely(((__pyx_v_tree_val) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_tree_val, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 237, __pyx_L1_error)
-    if (!(likely(((__pyx_v_X) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_X, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 237, __pyx_L1_error)
-    if (!(likely(((__pyx_v_y) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_y, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 237, __pyx_L1_error)
-    __pyx_t_2 = ((PyObject *)__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(((PyArrayObject *)__pyx_v_tree_ind), ((PyArrayObject *)__pyx_v_tree_val), ((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 237, __pyx_L1_error)
+    if (!(likely(((__pyx_v_tree_ind) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_tree_ind, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 66, __pyx_L1_error)
+    if (!(likely(((__pyx_v_tree_val) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_tree_val, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 66, __pyx_L1_error)
+    if (!(likely(((__pyx_v_X) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_X, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 66, __pyx_L1_error)
+    if (!(likely(((__pyx_v_y) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_y, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 66, __pyx_L1_error)
+    __pyx_t_2 = ((PyObject *)__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(((PyArrayObject *)__pyx_v_tree_ind), ((PyArrayObject *)__pyx_v_tree_val), ((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 66, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_r = __pyx_t_2;
     __pyx_t_2 = 0;
     goto __pyx_L0;
 
-    /* "whitebeam/core/_whitebeam.pyx":236
+    /* "whitebeam/core/_whitebeam.pyx":65
  *         1-d Numpy Array: Fitted Values
  *     """
  *     if output_type == "index":             # <<<<<<<<<<<<<<
@@ -4105,29 +2578,29 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_4apply_tree(CYTHON_UNUSE
  */
   }
 
-  /* "whitebeam/core/_whitebeam.pyx":239
+  /* "whitebeam/core/_whitebeam.pyx":68
  *         return _apply_tree0(tree_ind, tree_val, X, y)
  *     else:
  *         return _apply_tree1(tree_ind, tree_val, X, y)             # <<<<<<<<<<<<<<
  * 
- * ## I am not entirely sure why, but this only works in this format
+ * ################################################################################
  */
-  __Pyx_TraceLine(239,0,__PYX_ERR(0, 239, __pyx_L1_error))
+  __Pyx_TraceLine(68,0,__PYX_ERR(0, 68, __pyx_L1_error))
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    if (!(likely(((__pyx_v_tree_ind) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_tree_ind, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 239, __pyx_L1_error)
-    if (!(likely(((__pyx_v_tree_val) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_tree_val, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 239, __pyx_L1_error)
-    if (!(likely(((__pyx_v_X) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_X, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 239, __pyx_L1_error)
-    if (!(likely(((__pyx_v_y) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_y, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 239, __pyx_L1_error)
-    __pyx_t_2 = ((PyObject *)__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(((PyArrayObject *)__pyx_v_tree_ind), ((PyArrayObject *)__pyx_v_tree_val), ((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 239, __pyx_L1_error)
+    if (!(likely(((__pyx_v_tree_ind) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_tree_ind, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 68, __pyx_L1_error)
+    if (!(likely(((__pyx_v_tree_val) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_tree_val, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 68, __pyx_L1_error)
+    if (!(likely(((__pyx_v_X) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_X, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 68, __pyx_L1_error)
+    if (!(likely(((__pyx_v_y) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_y, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 68, __pyx_L1_error)
+    __pyx_t_2 = ((PyObject *)__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(((PyArrayObject *)__pyx_v_tree_ind), ((PyArrayObject *)__pyx_v_tree_val), ((PyArrayObject *)__pyx_v_X), ((PyArrayObject *)__pyx_v_y))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 68, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_r = __pyx_t_2;
     __pyx_t_2 = 0;
     goto __pyx_L0;
   }
 
-  /* "whitebeam/core/_whitebeam.pyx":223
- *     # done _create_avc
+  /* "whitebeam/core/_whitebeam.pyx":52
+ *     return 0
  * 
  * def apply_tree(tree_ind, tree_val, X, y, output_type):             # <<<<<<<<<<<<<<
  *     """Apply trained tree to a dataset
@@ -4146,8 +2619,1535 @@ static PyObject *__pyx_pf_9whitebeam_4core_10_whitebeam_4apply_tree(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "whitebeam/core/_whitebeam.pyx":243
- * ## I am not entirely sure why, but this only works in this format
+/* "whitebeam/core/_whitebeam.pyx":74
+ * 
+ * 
+ * cdef size_t _reorder(             # <<<<<<<<<<<<<<
+ *         np.ndarray[DTYPE_t, ndim=2] X, # X: 2-d numpy array (n x m)
+ *         np.ndarray[DTYPE_t, ndim=1] y, # y: 1-d numpy array (n)
+ */
+
+static size_t __pyx_f_9whitebeam_4core_10_whitebeam__reorder(PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, PyArrayObject *__pyx_v_z, size_t __pyx_v_i_start, size_t __pyx_v_i_end, size_t __pyx_v_j_split, double __pyx_v_split_value, size_t __pyx_v_missing) {
+  size_t __pyx_v_j;
+  size_t __pyx_v_m;
+  size_t __pyx_v_i_head;
+  size_t __pyx_v_i_tail;
+  size_t __pyx_v_do_swap;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_X;
+  __Pyx_Buffer __pyx_pybuffer_X;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_y;
+  __Pyx_Buffer __pyx_pybuffer_y;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_z;
+  __Pyx_Buffer __pyx_pybuffer_z;
+  size_t __pyx_r;
+  __Pyx_TraceDeclarations
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  size_t __pyx_t_2;
+  size_t __pyx_t_3;
+  size_t __pyx_t_4;
+  size_t __pyx_t_5;
+  size_t __pyx_t_6;
+  __pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t __pyx_t_7;
+  __pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t __pyx_t_8;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("_reorder", 0);
+  __Pyx_TraceCall("_reorder", __pyx_f[0], 74, 0, __PYX_ERR(0, 74, __pyx_L1_error));
+  __pyx_pybuffer_X.pybuffer.buf = NULL;
+  __pyx_pybuffer_X.refcount = 0;
+  __pyx_pybuffernd_X.data = NULL;
+  __pyx_pybuffernd_X.rcbuffer = &__pyx_pybuffer_X;
+  __pyx_pybuffer_y.pybuffer.buf = NULL;
+  __pyx_pybuffer_y.refcount = 0;
+  __pyx_pybuffernd_y.data = NULL;
+  __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
+  __pyx_pybuffer_z.pybuffer.buf = NULL;
+  __pyx_pybuffer_z.refcount = 0;
+  __pyx_pybuffernd_z.data = NULL;
+  __pyx_pybuffernd_z.rcbuffer = &__pyx_pybuffer_z;
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 74, __pyx_L1_error)
+  }
+  __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1];
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 74, __pyx_L1_error)
+  }
+  __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_z.rcbuffer->pybuffer, (PyObject*)__pyx_v_z, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 74, __pyx_L1_error)
+  }
+  __pyx_pybuffernd_z.diminfo[0].strides = __pyx_pybuffernd_z.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_z.diminfo[0].shape = __pyx_pybuffernd_z.rcbuffer->pybuffer.shape[0];
+
+  /* "whitebeam/core/_whitebeam.pyx":86
+ * 
+ *     cdef size_t j
+ *     cdef size_t m = X.shape[1]             # <<<<<<<<<<<<<<
+ *     cdef size_t i_head = i_start
+ *     cdef size_t i_tail = i_end - 1
+ */
+  __Pyx_TraceLine(86,0,__PYX_ERR(0, 86, __pyx_L1_error))
+  __pyx_v_m = (__pyx_v_X->dimensions[1]);
+
+  /* "whitebeam/core/_whitebeam.pyx":87
+ *     cdef size_t j
+ *     cdef size_t m = X.shape[1]
+ *     cdef size_t i_head = i_start             # <<<<<<<<<<<<<<
+ *     cdef size_t i_tail = i_end - 1
+ *     cdef size_t do_swap = 0
+ */
+  __Pyx_TraceLine(87,0,__PYX_ERR(0, 87, __pyx_L1_error))
+  __pyx_v_i_head = __pyx_v_i_start;
+
+  /* "whitebeam/core/_whitebeam.pyx":88
+ *     cdef size_t m = X.shape[1]
+ *     cdef size_t i_head = i_start
+ *     cdef size_t i_tail = i_end - 1             # <<<<<<<<<<<<<<
+ *     cdef size_t do_swap = 0
+ * 
+ */
+  __Pyx_TraceLine(88,0,__PYX_ERR(0, 88, __pyx_L1_error))
+  __pyx_v_i_tail = (__pyx_v_i_end - 1);
+
+  /* "whitebeam/core/_whitebeam.pyx":89
+ *     cdef size_t i_head = i_start
+ *     cdef size_t i_tail = i_end - 1
+ *     cdef size_t do_swap = 0             # <<<<<<<<<<<<<<
+ * 
+ *     with nogil:
+ */
+  __Pyx_TraceLine(89,0,__PYX_ERR(0, 89, __pyx_L1_error))
+  __pyx_v_do_swap = 0;
+
+  /* "whitebeam/core/_whitebeam.pyx":91
+ *     cdef size_t do_swap = 0
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         while i_head <= i_tail:
+ * 
+ */
+  __Pyx_TraceLine(91,0,__PYX_ERR(0, 91, __pyx_L1_error))
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      __Pyx_FastGIL_Remember();
+      #endif
+      /*try:*/ {
+
+        /* "whitebeam/core/_whitebeam.pyx":92
+ * 
+ *     with nogil:
+ *         while i_head <= i_tail:             # <<<<<<<<<<<<<<
+ * 
+ *             if i_tail == 0:
+ */
+        __Pyx_TraceLine(92,1,__PYX_ERR(0, 92, __pyx_L4_error))
+        while (1) {
+          __pyx_t_1 = ((__pyx_v_i_head <= __pyx_v_i_tail) != 0);
+          if (!__pyx_t_1) break;
+
+          /* "whitebeam/core/_whitebeam.pyx":94
+ *         while i_head <= i_tail:
+ * 
+ *             if i_tail == 0:             # <<<<<<<<<<<<<<
+ *                 # if tail is 'zero', should break
+ *                 # otherwise, segmentation fault,
+ */
+          __Pyx_TraceLine(94,1,__PYX_ERR(0, 94, __pyx_L4_error))
+          __pyx_t_1 = ((__pyx_v_i_tail == 0) != 0);
+          if (__pyx_t_1) {
+
+            /* "whitebeam/core/_whitebeam.pyx":98
+ *                 # otherwise, segmentation fault,
+ *                 # as size_t has no sign. 0 - 1 => huge number
+ *                 break             # <<<<<<<<<<<<<<
+ * 
+ *             do_swap = 0
+ */
+            __Pyx_TraceLine(98,1,__PYX_ERR(0, 98, __pyx_L4_error))
+            goto __pyx_L7_break;
+
+            /* "whitebeam/core/_whitebeam.pyx":94
+ *         while i_head <= i_tail:
+ * 
+ *             if i_tail == 0:             # <<<<<<<<<<<<<<
+ *                 # if tail is 'zero', should break
+ *                 # otherwise, segmentation fault,
+ */
+          }
+
+          /* "whitebeam/core/_whitebeam.pyx":100
+ *                 break
+ * 
+ *             do_swap = 0             # <<<<<<<<<<<<<<
+ *             if isnan(X[i_head,j_split]):
+ *                 if missing == 1: # send the missing to the right node
+ */
+          __Pyx_TraceLine(100,1,__PYX_ERR(0, 100, __pyx_L4_error))
+          __pyx_v_do_swap = 0;
+
+          /* "whitebeam/core/_whitebeam.pyx":101
+ * 
+ *             do_swap = 0
+ *             if isnan(X[i_head,j_split]):             # <<<<<<<<<<<<<<
+ *                 if missing == 1: # send the missing to the right node
+ *                     do_swap = 1
+ */
+          __Pyx_TraceLine(101,1,__PYX_ERR(0, 101, __pyx_L4_error))
+          __pyx_t_2 = __pyx_v_i_head;
+          __pyx_t_3 = __pyx_v_j_split;
+          __pyx_t_1 = (isnan((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_3, __pyx_pybuffernd_X.diminfo[1].strides))) != 0);
+          if (__pyx_t_1) {
+
+            /* "whitebeam/core/_whitebeam.pyx":102
+ *             do_swap = 0
+ *             if isnan(X[i_head,j_split]):
+ *                 if missing == 1: # send the missing to the right node             # <<<<<<<<<<<<<<
+ *                     do_swap = 1
+ *             else:
+ */
+            __Pyx_TraceLine(102,1,__PYX_ERR(0, 102, __pyx_L4_error))
+            __pyx_t_1 = ((__pyx_v_missing == 1) != 0);
+            if (__pyx_t_1) {
+
+              /* "whitebeam/core/_whitebeam.pyx":103
+ *             if isnan(X[i_head,j_split]):
+ *                 if missing == 1: # send the missing to the right node
+ *                     do_swap = 1             # <<<<<<<<<<<<<<
+ *             else:
+ *                 if X[i_head,j_split] >= split_value:
+ */
+              __Pyx_TraceLine(103,1,__PYX_ERR(0, 103, __pyx_L4_error))
+              __pyx_v_do_swap = 1;
+
+              /* "whitebeam/core/_whitebeam.pyx":102
+ *             do_swap = 0
+ *             if isnan(X[i_head,j_split]):
+ *                 if missing == 1: # send the missing to the right node             # <<<<<<<<<<<<<<
+ *                     do_swap = 1
+ *             else:
+ */
+            }
+
+            /* "whitebeam/core/_whitebeam.pyx":101
+ * 
+ *             do_swap = 0
+ *             if isnan(X[i_head,j_split]):             # <<<<<<<<<<<<<<
+ *                 if missing == 1: # send the missing to the right node
+ *                     do_swap = 1
+ */
+            goto __pyx_L9;
+          }
+
+          /* "whitebeam/core/_whitebeam.pyx":105
+ *                     do_swap = 1
+ *             else:
+ *                 if X[i_head,j_split] >= split_value:             # <<<<<<<<<<<<<<
+ *                     do_swap = 1
+ * 
+ */
+          __Pyx_TraceLine(105,1,__PYX_ERR(0, 105, __pyx_L4_error))
+          /*else*/ {
+            __pyx_t_3 = __pyx_v_i_head;
+            __pyx_t_2 = __pyx_v_j_split;
+            __pyx_t_1 = (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_X.diminfo[1].strides)) >= __pyx_v_split_value) != 0);
+            if (__pyx_t_1) {
+
+              /* "whitebeam/core/_whitebeam.pyx":106
+ *             else:
+ *                 if X[i_head,j_split] >= split_value:
+ *                     do_swap = 1             # <<<<<<<<<<<<<<
+ * 
+ *             if do_swap == 1:
+ */
+              __Pyx_TraceLine(106,1,__PYX_ERR(0, 106, __pyx_L4_error))
+              __pyx_v_do_swap = 1;
+
+              /* "whitebeam/core/_whitebeam.pyx":105
+ *                     do_swap = 1
+ *             else:
+ *                 if X[i_head,j_split] >= split_value:             # <<<<<<<<<<<<<<
+ *                     do_swap = 1
+ * 
+ */
+            }
+          }
+          __pyx_L9:;
+
+          /* "whitebeam/core/_whitebeam.pyx":108
+ *                     do_swap = 1
+ * 
+ *             if do_swap == 1:             # <<<<<<<<<<<<<<
+ *                 # swap X rows
+ *                 for j in range(m):
+ */
+          __Pyx_TraceLine(108,1,__PYX_ERR(0, 108, __pyx_L4_error))
+          __pyx_t_1 = ((__pyx_v_do_swap == 1) != 0);
+          if (__pyx_t_1) {
+
+            /* "whitebeam/core/_whitebeam.pyx":110
+ *             if do_swap == 1:
+ *                 # swap X rows
+ *                 for j in range(m):             # <<<<<<<<<<<<<<
+ *                     X[i_head,j], X[i_tail,j] = X[i_tail,j], X[i_head,j]
+ *                 # swap y, z values
+ */
+            __Pyx_TraceLine(110,1,__PYX_ERR(0, 110, __pyx_L4_error))
+            __pyx_t_2 = __pyx_v_m;
+            __pyx_t_3 = __pyx_t_2;
+            for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
+              __pyx_v_j = __pyx_t_4;
+
+              /* "whitebeam/core/_whitebeam.pyx":111
+ *                 # swap X rows
+ *                 for j in range(m):
+ *                     X[i_head,j], X[i_tail,j] = X[i_tail,j], X[i_head,j]             # <<<<<<<<<<<<<<
+ *                 # swap y, z values
+ *                 y[i_head], y[i_tail] = y[i_tail], y[i_head]
+ */
+              __Pyx_TraceLine(111,1,__PYX_ERR(0, 111, __pyx_L4_error))
+              __pyx_t_5 = __pyx_v_i_tail;
+              __pyx_t_6 = __pyx_v_j;
+              __pyx_t_7 = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_5, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_6, __pyx_pybuffernd_X.diminfo[1].strides));
+              __pyx_t_6 = __pyx_v_i_head;
+              __pyx_t_5 = __pyx_v_j;
+              __pyx_t_8 = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_X.diminfo[1].strides));
+              __pyx_t_5 = __pyx_v_i_head;
+              __pyx_t_6 = __pyx_v_j;
+              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_5, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_6, __pyx_pybuffernd_X.diminfo[1].strides) = __pyx_t_7;
+              __pyx_t_6 = __pyx_v_i_tail;
+              __pyx_t_5 = __pyx_v_j;
+              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_X.diminfo[1].strides) = __pyx_t_8;
+            }
+
+            /* "whitebeam/core/_whitebeam.pyx":113
+ *                     X[i_head,j], X[i_tail,j] = X[i_tail,j], X[i_head,j]
+ *                 # swap y, z values
+ *                 y[i_head], y[i_tail] = y[i_tail], y[i_head]             # <<<<<<<<<<<<<<
+ *                 z[i_head], z[i_tail] = z[i_tail], z[i_head]
+ *                 # decrease the tail index
+ */
+            __Pyx_TraceLine(113,1,__PYX_ERR(0, 113, __pyx_L4_error))
+            __pyx_t_2 = __pyx_v_i_tail;
+            __pyx_t_8 = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_y.diminfo[0].strides));
+            __pyx_t_2 = __pyx_v_i_head;
+            __pyx_t_7 = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_y.diminfo[0].strides));
+            __pyx_t_2 = __pyx_v_i_head;
+            *__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_y.diminfo[0].strides) = __pyx_t_8;
+            __pyx_t_2 = __pyx_v_i_tail;
+            *__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_y.diminfo[0].strides) = __pyx_t_7;
+
+            /* "whitebeam/core/_whitebeam.pyx":114
+ *                 # swap y, z values
+ *                 y[i_head], y[i_tail] = y[i_tail], y[i_head]
+ *                 z[i_head], z[i_tail] = z[i_tail], z[i_head]             # <<<<<<<<<<<<<<
+ *                 # decrease the tail index
+ *                 i_tail -= 1
+ */
+            __Pyx_TraceLine(114,1,__PYX_ERR(0, 114, __pyx_L4_error))
+            __pyx_t_2 = __pyx_v_i_tail;
+            __pyx_t_7 = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_z.diminfo[0].strides));
+            __pyx_t_2 = __pyx_v_i_head;
+            __pyx_t_8 = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_z.diminfo[0].strides));
+            __pyx_t_2 = __pyx_v_i_head;
+            *__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_z.diminfo[0].strides) = __pyx_t_7;
+            __pyx_t_2 = __pyx_v_i_tail;
+            *__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_2, __pyx_pybuffernd_z.diminfo[0].strides) = __pyx_t_8;
+
+            /* "whitebeam/core/_whitebeam.pyx":116
+ *                 z[i_head], z[i_tail] = z[i_tail], z[i_head]
+ *                 # decrease the tail index
+ *                 i_tail -= 1             # <<<<<<<<<<<<<<
+ *             else:
+ *                 # increase the head index
+ */
+            __Pyx_TraceLine(116,1,__PYX_ERR(0, 116, __pyx_L4_error))
+            __pyx_v_i_tail = (__pyx_v_i_tail - 1);
+
+            /* "whitebeam/core/_whitebeam.pyx":108
+ *                     do_swap = 1
+ * 
+ *             if do_swap == 1:             # <<<<<<<<<<<<<<
+ *                 # swap X rows
+ *                 for j in range(m):
+ */
+            goto __pyx_L12;
+          }
+
+          /* "whitebeam/core/_whitebeam.pyx":119
+ *             else:
+ *                 # increase the head index
+ *                 i_head += 1             # <<<<<<<<<<<<<<
+ * 
+ *     return i_head
+ */
+          __Pyx_TraceLine(119,1,__PYX_ERR(0, 119, __pyx_L4_error))
+          /*else*/ {
+            __pyx_v_i_head = (__pyx_v_i_head + 1);
+          }
+          __pyx_L12:;
+        }
+        __pyx_L7_break:;
+      }
+
+      /* "whitebeam/core/_whitebeam.pyx":91
+ *     cdef size_t do_swap = 0
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         while i_head <= i_tail:
+ * 
+ */
+      __Pyx_TraceLine(91,1,__PYX_ERR(0, 91, __pyx_L4_error))
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L5;
+        }
+        __pyx_L4_error: {
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L1_error;
+        }
+        __pyx_L5:;
+      }
+  }
+
+  /* "whitebeam/core/_whitebeam.pyx":121
+ *                 i_head += 1
+ * 
+ *     return i_head             # <<<<<<<<<<<<<<
+ * 
+ * # create the avc :D
+ */
+  __Pyx_TraceLine(121,0,__PYX_ERR(0, 121, __pyx_L1_error))
+  __pyx_r = __pyx_v_i_head;
+  goto __pyx_L0;
+
+  /* "whitebeam/core/_whitebeam.pyx":74
+ * 
+ * 
+ * cdef size_t _reorder(             # <<<<<<<<<<<<<<
+ *         np.ndarray[DTYPE_t, ndim=2] X, # X: 2-d numpy array (n x m)
+ *         np.ndarray[DTYPE_t, ndim=1] y, # y: 1-d numpy array (n)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_WriteUnraisable("whitebeam.core._whitebeam._reorder", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __pyx_r = 0;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __Pyx_TraceReturn(Py_None, 0);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "whitebeam/core/_whitebeam.pyx":124
+ * 
+ * # create the avc :D
+ * cdef void _create_avc(             # <<<<<<<<<<<<<<
+ *         np.ndarray[DTYPE_t, ndim=2] X,
+ *         np.ndarray[DTYPE_t, ndim=1] y,
+ */
+
+static void __pyx_f_9whitebeam_4core_10_whitebeam__create_avc(PyArrayObject *__pyx_v_X, PyArrayObject *__pyx_v_y, PyArrayObject *__pyx_v_z, PyArrayObject *__pyx_v_xdim, PyArrayObject *__pyx_v_summary, PyArrayObject *__pyx_v_summaryn) {
+  size_t __pyx_v_i;
+  size_t __pyx_v_j;
+  size_t __pyx_v_k;
+  size_t __pyx_v_k_raw;
+  size_t __pyx_v_k_tld;
+  size_t __pyx_v_n;
+  size_t __pyx_v_m;
+  CYTHON_UNUSED size_t __pyx_v_n_summary;
+  size_t __pyx_v_n_bin;
+  size_t __pyx_v_xdim0;
+  double __pyx_v_k_prox;
+  double __pyx_v_y_i;
+  double __pyx_v_z_i;
+  double __pyx_v_y_tot;
+  double __pyx_v_z_tot;
+  double __pyx_v_n_na;
+  double __pyx_v_y_na;
+  double __pyx_v_z_na;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_X;
+  __Pyx_Buffer __pyx_pybuffer_X;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_summary;
+  __Pyx_Buffer __pyx_pybuffer_summary;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_summaryn;
+  __Pyx_Buffer __pyx_pybuffer_summaryn;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_xdim;
+  __Pyx_Buffer __pyx_pybuffer_xdim;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_y;
+  __Pyx_Buffer __pyx_pybuffer_y;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_z;
+  __Pyx_Buffer __pyx_pybuffer_z;
+  __Pyx_TraceDeclarations
+  __Pyx_RefNannyDeclarations
+  Py_ssize_t __pyx_t_1;
+  Py_ssize_t __pyx_t_2;
+  size_t __pyx_t_3;
+  size_t __pyx_t_4;
+  size_t __pyx_t_5;
+  size_t __pyx_t_6;
+  size_t __pyx_t_7;
+  size_t __pyx_t_8;
+  size_t __pyx_t_9;
+  size_t __pyx_t_10;
+  int __pyx_t_11;
+  size_t __pyx_t_12;
+  size_t __pyx_t_13;
+  Py_ssize_t __pyx_t_14;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("_create_avc", 0);
+  __Pyx_TraceCall("_create_avc", __pyx_f[0], 124, 0, __PYX_ERR(0, 124, __pyx_L1_error));
+  __pyx_pybuffer_X.pybuffer.buf = NULL;
+  __pyx_pybuffer_X.refcount = 0;
+  __pyx_pybuffernd_X.data = NULL;
+  __pyx_pybuffernd_X.rcbuffer = &__pyx_pybuffer_X;
+  __pyx_pybuffer_y.pybuffer.buf = NULL;
+  __pyx_pybuffer_y.refcount = 0;
+  __pyx_pybuffernd_y.data = NULL;
+  __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
+  __pyx_pybuffer_z.pybuffer.buf = NULL;
+  __pyx_pybuffer_z.refcount = 0;
+  __pyx_pybuffernd_z.data = NULL;
+  __pyx_pybuffernd_z.rcbuffer = &__pyx_pybuffer_z;
+  __pyx_pybuffer_xdim.pybuffer.buf = NULL;
+  __pyx_pybuffer_xdim.refcount = 0;
+  __pyx_pybuffernd_xdim.data = NULL;
+  __pyx_pybuffernd_xdim.rcbuffer = &__pyx_pybuffer_xdim;
+  __pyx_pybuffer_summary.pybuffer.buf = NULL;
+  __pyx_pybuffer_summary.refcount = 0;
+  __pyx_pybuffernd_summary.data = NULL;
+  __pyx_pybuffernd_summary.rcbuffer = &__pyx_pybuffer_summary;
+  __pyx_pybuffer_summaryn.pybuffer.buf = NULL;
+  __pyx_pybuffer_summaryn.refcount = 0;
+  __pyx_pybuffernd_summaryn.data = NULL;
+  __pyx_pybuffernd_summaryn.rcbuffer = &__pyx_pybuffer_summaryn;
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 124, __pyx_L1_error)
+  }
+  __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1];
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 124, __pyx_L1_error)
+  }
+  __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_z.rcbuffer->pybuffer, (PyObject*)__pyx_v_z, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 124, __pyx_L1_error)
+  }
+  __pyx_pybuffernd_z.diminfo[0].strides = __pyx_pybuffernd_z.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_z.diminfo[0].shape = __pyx_pybuffernd_z.rcbuffer->pybuffer.shape[0];
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer, (PyObject*)__pyx_v_xdim, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 124, __pyx_L1_error)
+  }
+  __pyx_pybuffernd_xdim.diminfo[0].strides = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_xdim.diminfo[0].shape = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_xdim.diminfo[1].strides = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_xdim.diminfo[1].shape = __pyx_pybuffernd_xdim.rcbuffer->pybuffer.shape[1];
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_summary.rcbuffer->pybuffer, (PyObject*)__pyx_v_summary, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 124, __pyx_L1_error)
+  }
+  __pyx_pybuffernd_summary.diminfo[0].strides = __pyx_pybuffernd_summary.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_summary.diminfo[0].shape = __pyx_pybuffernd_summary.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_summary.diminfo[1].strides = __pyx_pybuffernd_summary.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_summary.diminfo[1].shape = __pyx_pybuffernd_summary.rcbuffer->pybuffer.shape[1];
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_summaryn.rcbuffer->pybuffer, (PyObject*)__pyx_v_summaryn, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 124, __pyx_L1_error)
+  }
+  __pyx_pybuffernd_summaryn.diminfo[0].strides = __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_summaryn.diminfo[0].shape = __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_summaryn.diminfo[1].strides = __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_summaryn.diminfo[1].shape = __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.shape[1];
+
+  /* "whitebeam/core/_whitebeam.pyx":136
+ * 
+ *     # matrix sizes
+ *     cdef size_t n = X.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef size_t m = X.shape[1]
+ * 
+ */
+  __Pyx_TraceLine(136,0,__PYX_ERR(0, 136, __pyx_L1_error))
+  __pyx_v_n = (__pyx_v_X->dimensions[0]);
+
+  /* "whitebeam/core/_whitebeam.pyx":137
+ *     # matrix sizes
+ *     cdef size_t n = X.shape[0]
+ *     cdef size_t m = X.shape[1]             # <<<<<<<<<<<<<<
+ * 
+ *     # the current 'image'
+ */
+  __Pyx_TraceLine(137,0,__PYX_ERR(0, 137, __pyx_L1_error))
+  __pyx_v_m = (__pyx_v_X->dimensions[1]);
+
+  /* "whitebeam/core/_whitebeam.pyx":140
+ * 
+ *     # the current 'image'
+ *     cdef size_t n_summary = <size_t> summary.shape[0]/2             # <<<<<<<<<<<<<<
+ * 
+ *     #
+ */
+  __Pyx_TraceLine(140,0,__PYX_ERR(0, 140, __pyx_L1_error))
+  __pyx_v_n_summary = (((size_t)(__pyx_v_summary->dimensions[0])) / 2);
+
+  /* "whitebeam/core/_whitebeam.pyx":144
+ *     #
+ *     cdef size_t n_bin
+ *     cdef size_t xdim0 = <size_t> xdim[0, 4]             # <<<<<<<<<<<<<<
+ *     cdef double k_prox
+ * 
+ */
+  __Pyx_TraceLine(144,0,__PYX_ERR(0, 144, __pyx_L1_error))
+  __pyx_t_1 = 0;
+  __pyx_t_2 = 4;
+  if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[0].shape;
+  if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+  __pyx_v_xdim0 = ((size_t)(*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_xdim.diminfo[1].strides)));
+
+  /* "whitebeam/core/_whitebeam.pyx":151
+ * 
+ *     # totals
+ *     cdef double y_tot = 0.0             # <<<<<<<<<<<<<<
+ *     cdef double z_tot = 0.0
+ *     cdef double n_na, y_na, z_na
+ */
+  __Pyx_TraceLine(151,0,__PYX_ERR(0, 151, __pyx_L1_error))
+  __pyx_v_y_tot = 0.0;
+
+  /* "whitebeam/core/_whitebeam.pyx":152
+ *     # totals
+ *     cdef double y_tot = 0.0
+ *     cdef double z_tot = 0.0             # <<<<<<<<<<<<<<
+ *     cdef double n_na, y_na, z_na
+ * 
+ */
+  __Pyx_TraceLine(152,0,__PYX_ERR(0, 152, __pyx_L1_error))
+  __pyx_v_z_tot = 0.0;
+
+  /* "whitebeam/core/_whitebeam.pyx":156
+ * 
+ *     # update E[y] & E[z]
+ *     with nogil:             # <<<<<<<<<<<<<<
+ * 
+ *         # iterate over n dimensions
+ */
+  __Pyx_TraceLine(156,0,__PYX_ERR(0, 156, __pyx_L1_error))
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      __Pyx_FastGIL_Remember();
+      #endif
+      /*try:*/ {
+
+        /* "whitebeam/core/_whitebeam.pyx":159
+ * 
+ *         # iterate over n dimensions
+ *         for i in range(n):             # <<<<<<<<<<<<<<
+ * 
+ *             # get the indices
+ */
+        __Pyx_TraceLine(159,1,__PYX_ERR(0, 159, __pyx_L4_error))
+        __pyx_t_3 = __pyx_v_n;
+        __pyx_t_4 = __pyx_t_3;
+        for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
+          __pyx_v_i = __pyx_t_5;
+
+          /* "whitebeam/core/_whitebeam.pyx":162
+ * 
+ *             # get the indices
+ *             y_i = y[i]             # <<<<<<<<<<<<<<
+ *             z_i = z[i]
+ * 
+ */
+          __Pyx_TraceLine(162,1,__PYX_ERR(0, 162, __pyx_L4_error))
+          __pyx_t_6 = __pyx_v_i;
+          __pyx_v_y_i = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_y.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_y.diminfo[0].strides));
+
+          /* "whitebeam/core/_whitebeam.pyx":163
+ *             # get the indices
+ *             y_i = y[i]
+ *             z_i = z[i]             # <<<<<<<<<<<<<<
+ * 
+ *             # add to get the totals
+ */
+          __Pyx_TraceLine(163,1,__PYX_ERR(0, 163, __pyx_L4_error))
+          __pyx_t_6 = __pyx_v_i;
+          __pyx_v_z_i = (*__Pyx_BufPtrStrided1d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_z.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_z.diminfo[0].strides));
+
+          /* "whitebeam/core/_whitebeam.pyx":166
+ * 
+ *             # add to get the totals
+ *             y_tot += y_i             # <<<<<<<<<<<<<<
+ *             z_tot += z_i
+ * 
+ */
+          __Pyx_TraceLine(166,1,__PYX_ERR(0, 166, __pyx_L4_error))
+          __pyx_v_y_tot = (__pyx_v_y_tot + __pyx_v_y_i);
+
+          /* "whitebeam/core/_whitebeam.pyx":167
+ *             # add to get the totals
+ *             y_tot += y_i
+ *             z_tot += z_i             # <<<<<<<<<<<<<<
+ * 
+ *             # iterate over m dimensions
+ */
+          __Pyx_TraceLine(167,1,__PYX_ERR(0, 167, __pyx_L4_error))
+          __pyx_v_z_tot = (__pyx_v_z_tot + __pyx_v_z_i);
+
+          /* "whitebeam/core/_whitebeam.pyx":170
+ * 
+ *             # iterate over m dimensions
+ *             for j in range(m):             # <<<<<<<<<<<<<<
+ * 
+ *                 #if xdim[j, 2] < 1e-12:
+ */
+          __Pyx_TraceLine(170,1,__PYX_ERR(0, 170, __pyx_L4_error))
+          __pyx_t_6 = __pyx_v_m;
+          __pyx_t_7 = __pyx_t_6;
+          for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+            __pyx_v_j = __pyx_t_8;
+
+            /* "whitebeam/core/_whitebeam.pyx":176
+ * 
+ *                 # check isnan to prevent errors
+ *                 if isnan(X[i, j]):             # <<<<<<<<<<<<<<
+ *                     # update summary
+ *                     summaryn[j, 1] += 1
+ */
+            __Pyx_TraceLine(176,1,__PYX_ERR(0, 176, __pyx_L4_error))
+            __pyx_t_9 = __pyx_v_i;
+            __pyx_t_10 = __pyx_v_j;
+            __pyx_t_11 = (isnan((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_X.diminfo[1].strides))) != 0);
+            if (__pyx_t_11) {
+
+              /* "whitebeam/core/_whitebeam.pyx":178
+ *                 if isnan(X[i, j]):
+ *                     # update summary
+ *                     summaryn[j, 1] += 1             # <<<<<<<<<<<<<<
+ *                     summaryn[j, 2] += y_i
+ *                     summaryn[j, 3] += z_i
+ */
+              __Pyx_TraceLine(178,1,__PYX_ERR(0, 178, __pyx_L4_error))
+              __pyx_t_10 = __pyx_v_j;
+              __pyx_t_2 = 1;
+              if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summaryn.diminfo[1].strides) += 1.0;
+
+              /* "whitebeam/core/_whitebeam.pyx":179
+ *                     # update summary
+ *                     summaryn[j, 1] += 1
+ *                     summaryn[j, 2] += y_i             # <<<<<<<<<<<<<<
+ *                     summaryn[j, 3] += z_i
+ *                 else:
+ */
+              __Pyx_TraceLine(179,1,__PYX_ERR(0, 179, __pyx_L4_error))
+              __pyx_t_10 = __pyx_v_j;
+              __pyx_t_2 = 2;
+              if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summaryn.diminfo[1].strides) += __pyx_v_y_i;
+
+              /* "whitebeam/core/_whitebeam.pyx":180
+ *                     summaryn[j, 1] += 1
+ *                     summaryn[j, 2] += y_i
+ *                     summaryn[j, 3] += z_i             # <<<<<<<<<<<<<<
+ *                 else:
+ * 
+ */
+              __Pyx_TraceLine(180,1,__PYX_ERR(0, 180, __pyx_L4_error))
+              __pyx_t_10 = __pyx_v_j;
+              __pyx_t_2 = 3;
+              if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summaryn.diminfo[1].strides) += __pyx_v_z_i;
+
+              /* "whitebeam/core/_whitebeam.pyx":176
+ * 
+ *                 # check isnan to prevent errors
+ *                 if isnan(X[i, j]):             # <<<<<<<<<<<<<<
+ *                     # update summary
+ *                     summaryn[j, 1] += 1
+ */
+              goto __pyx_L10;
+            }
+
+            /* "whitebeam/core/_whitebeam.pyx":183
+ *                 else:
+ * 
+ *                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]             # <<<<<<<<<<<<<<
+ *                     if k_prox < 0:
+ *                         k_prox = 0
+ */
+            __Pyx_TraceLine(183,1,__PYX_ERR(0, 183, __pyx_L4_error))
+            /*else*/ {
+              __pyx_t_10 = __pyx_v_i;
+              __pyx_t_9 = __pyx_v_j;
+              __pyx_t_12 = __pyx_v_j;
+              __pyx_t_2 = 1;
+              if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+              __pyx_t_13 = __pyx_v_j;
+              __pyx_t_1 = 2;
+              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+              __pyx_v_k_prox = (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_9, __pyx_pybuffernd_X.diminfo[1].strides)) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_xdim.diminfo[1].strides))) / (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)));
+
+              /* "whitebeam/core/_whitebeam.pyx":184
+ * 
+ *                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]
+ *                     if k_prox < 0:             # <<<<<<<<<<<<<<
+ *                         k_prox = 0
+ *                     elif k_prox > xdim[j, 3] - 1:
+ */
+              __Pyx_TraceLine(184,1,__PYX_ERR(0, 184, __pyx_L4_error))
+              __pyx_t_11 = ((__pyx_v_k_prox < 0.0) != 0);
+              if (__pyx_t_11) {
+
+                /* "whitebeam/core/_whitebeam.pyx":185
+ *                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]
+ *                     if k_prox < 0:
+ *                         k_prox = 0             # <<<<<<<<<<<<<<
+ *                     elif k_prox > xdim[j, 3] - 1:
+ *                         k_prox = xdim[j, 3] - 1
+ */
+                __Pyx_TraceLine(185,1,__PYX_ERR(0, 185, __pyx_L4_error))
+                __pyx_v_k_prox = 0.0;
+
+                /* "whitebeam/core/_whitebeam.pyx":184
+ * 
+ *                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]
+ *                     if k_prox < 0:             # <<<<<<<<<<<<<<
+ *                         k_prox = 0
+ *                     elif k_prox > xdim[j, 3] - 1:
+ */
+                goto __pyx_L11;
+              }
+
+              /* "whitebeam/core/_whitebeam.pyx":186
+ *                     if k_prox < 0:
+ *                         k_prox = 0
+ *                     elif k_prox > xdim[j, 3] - 1:             # <<<<<<<<<<<<<<
+ *                         k_prox = xdim[j, 3] - 1
+ *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
+ */
+              __Pyx_TraceLine(186,1,__PYX_ERR(0, 186, __pyx_L4_error))
+              __pyx_t_13 = __pyx_v_j;
+              __pyx_t_1 = 3;
+              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+              __pyx_t_11 = ((__pyx_v_k_prox > ((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - 1.0)) != 0);
+              if (__pyx_t_11) {
+
+                /* "whitebeam/core/_whitebeam.pyx":187
+ *                         k_prox = 0
+ *                     elif k_prox > xdim[j, 3] - 1:
+ *                         k_prox = xdim[j, 3] - 1             # <<<<<<<<<<<<<<
+ *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
+ *                     summary[k, 3] += 1
+ */
+                __Pyx_TraceLine(187,1,__PYX_ERR(0, 187, __pyx_L4_error))
+                __pyx_t_13 = __pyx_v_j;
+                __pyx_t_1 = 3;
+                if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+                __pyx_v_k_prox = ((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - 1.0);
+
+                /* "whitebeam/core/_whitebeam.pyx":186
+ *                     if k_prox < 0:
+ *                         k_prox = 0
+ *                     elif k_prox > xdim[j, 3] - 1:             # <<<<<<<<<<<<<<
+ *                         k_prox = xdim[j, 3] - 1
+ *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
+ */
+              }
+              __pyx_L11:;
+
+              /* "whitebeam/core/_whitebeam.pyx":188
+ *                     elif k_prox > xdim[j, 3] - 1:
+ *                         k_prox = xdim[j, 3] - 1
+ *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)             # <<<<<<<<<<<<<<
+ *                     summary[k, 3] += 1
+ *                     summary[k, 4] += y_i
+ */
+              __Pyx_TraceLine(188,1,__PYX_ERR(0, 188, __pyx_L4_error))
+              __pyx_t_13 = __pyx_v_j;
+              __pyx_t_1 = 4;
+              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+              __pyx_v_k = ((size_t)(__pyx_v_k_prox + (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - __pyx_v_xdim0) * 2.0)));
+
+              /* "whitebeam/core/_whitebeam.pyx":189
+ *                         k_prox = xdim[j, 3] - 1
+ *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
+ *                     summary[k, 3] += 1             # <<<<<<<<<<<<<<
+ *                     summary[k, 4] += y_i
+ *                     summary[k, 5] += z_i
+ */
+              __Pyx_TraceLine(189,1,__PYX_ERR(0, 189, __pyx_L4_error))
+              __pyx_t_13 = __pyx_v_k;
+              __pyx_t_1 = 3;
+              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) += 1.0;
+
+              /* "whitebeam/core/_whitebeam.pyx":190
+ *                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
+ *                     summary[k, 3] += 1
+ *                     summary[k, 4] += y_i             # <<<<<<<<<<<<<<
+ *                     summary[k, 5] += z_i
+ * 
+ */
+              __Pyx_TraceLine(190,1,__PYX_ERR(0, 190, __pyx_L4_error))
+              __pyx_t_13 = __pyx_v_k;
+              __pyx_t_1 = 4;
+              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) += __pyx_v_y_i;
+
+              /* "whitebeam/core/_whitebeam.pyx":191
+ *                     summary[k, 3] += 1
+ *                     summary[k, 4] += y_i
+ *                     summary[k, 5] += z_i             # <<<<<<<<<<<<<<
+ * 
+ *         # accumulate stats
+ */
+              __Pyx_TraceLine(191,1,__PYX_ERR(0, 191, __pyx_L4_error))
+              __pyx_t_13 = __pyx_v_k;
+              __pyx_t_1 = 5;
+              if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+              *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) += __pyx_v_z_i;
+            }
+            __pyx_L10:;
+          }
+        }
+
+        /* "whitebeam/core/_whitebeam.pyx":194
+ * 
+ *         # accumulate stats
+ *         for j in range(m):             # <<<<<<<<<<<<<<
+ *             n_bin = <size_t> xdim[j, 3]
+ * 
+ */
+        __Pyx_TraceLine(194,1,__PYX_ERR(0, 194, __pyx_L4_error))
+        __pyx_t_3 = __pyx_v_m;
+        __pyx_t_4 = __pyx_t_3;
+        for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
+          __pyx_v_j = __pyx_t_5;
+
+          /* "whitebeam/core/_whitebeam.pyx":195
+ *         # accumulate stats
+ *         for j in range(m):
+ *             n_bin = <size_t> xdim[j, 3]             # <<<<<<<<<<<<<<
+ * 
+ *             for k_raw in range(1, n_bin):
+ */
+          __Pyx_TraceLine(195,1,__PYX_ERR(0, 195, __pyx_L4_error))
+          __pyx_t_6 = __pyx_v_j;
+          __pyx_t_1 = 3;
+          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+          __pyx_v_n_bin = ((size_t)(*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)));
+
+          /* "whitebeam/core/_whitebeam.pyx":197
+ *             n_bin = <size_t> xdim[j, 3]
+ * 
+ *             for k_raw in range(1, n_bin):             # <<<<<<<<<<<<<<
+ *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
+ *                 summary[k, 3] += summary[k-1, 3]
+ */
+          __Pyx_TraceLine(197,1,__PYX_ERR(0, 197, __pyx_L4_error))
+          __pyx_t_6 = __pyx_v_n_bin;
+          __pyx_t_7 = __pyx_t_6;
+          for (__pyx_t_8 = 1; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+            __pyx_v_k_raw = __pyx_t_8;
+
+            /* "whitebeam/core/_whitebeam.pyx":198
+ * 
+ *             for k_raw in range(1, n_bin):
+ *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)             # <<<<<<<<<<<<<<
+ *                 summary[k, 3] += summary[k-1, 3]
+ *                 summary[k, 4] += summary[k-1, 4]
+ */
+            __Pyx_TraceLine(198,1,__PYX_ERR(0, 198, __pyx_L4_error))
+            __pyx_t_13 = __pyx_v_j;
+            __pyx_t_1 = 4;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+            __pyx_v_k = ((size_t)(__pyx_v_k_raw + (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - __pyx_v_xdim0) * 2.0)));
+
+            /* "whitebeam/core/_whitebeam.pyx":199
+ *             for k_raw in range(1, n_bin):
+ *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
+ *                 summary[k, 3] += summary[k-1, 3]             # <<<<<<<<<<<<<<
+ *                 summary[k, 4] += summary[k-1, 4]
+ *                 summary[k, 5] += summary[k-1, 5]
+ */
+            __Pyx_TraceLine(199,1,__PYX_ERR(0, 199, __pyx_L4_error))
+            __pyx_t_13 = (__pyx_v_k - 1);
+            __pyx_t_1 = 3;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_2 = 3;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides) += (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides));
+
+            /* "whitebeam/core/_whitebeam.pyx":200
+ *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
+ *                 summary[k, 3] += summary[k-1, 3]
+ *                 summary[k, 4] += summary[k-1, 4]             # <<<<<<<<<<<<<<
+ *                 summary[k, 5] += summary[k-1, 5]
+ *                 # fill the right node at the same time
+ */
+            __Pyx_TraceLine(200,1,__PYX_ERR(0, 200, __pyx_L4_error))
+            __pyx_t_13 = (__pyx_v_k - 1);
+            __pyx_t_1 = 4;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_2 = 4;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides) += (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides));
+
+            /* "whitebeam/core/_whitebeam.pyx":201
+ *                 summary[k, 3] += summary[k-1, 3]
+ *                 summary[k, 4] += summary[k-1, 4]
+ *                 summary[k, 5] += summary[k-1, 5]             # <<<<<<<<<<<<<<
+ *                 # fill the right node at the same time
+ *                 summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]
+ */
+            __Pyx_TraceLine(201,1,__PYX_ERR(0, 201, __pyx_L4_error))
+            __pyx_t_13 = (__pyx_v_k - 1);
+            __pyx_t_1 = 5;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_2 = 5;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides) += (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides));
+
+            /* "whitebeam/core/_whitebeam.pyx":203
+ *                 summary[k, 5] += summary[k-1, 5]
+ *                 # fill the right node at the same time
+ *                 summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]             # <<<<<<<<<<<<<<
+ *                 summary[k, 7] = y_tot - summary[k, 4] - summaryn[j, 2]
+ *                 summary[k, 8] = z_tot - summary[k, 5] - summaryn[j, 3]
+ */
+            __Pyx_TraceLine(203,1,__PYX_ERR(0, 203, __pyx_L4_error))
+            __pyx_t_13 = __pyx_v_k;
+            __pyx_t_1 = 3;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_12 = __pyx_v_j;
+            __pyx_t_2 = 1;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+            __pyx_t_9 = __pyx_v_k;
+            __pyx_t_14 = 6;
+            if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_summary.diminfo[1].strides) = ((__pyx_v_n - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summaryn.diminfo[1].strides)));
+
+            /* "whitebeam/core/_whitebeam.pyx":204
+ *                 # fill the right node at the same time
+ *                 summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]
+ *                 summary[k, 7] = y_tot - summary[k, 4] - summaryn[j, 2]             # <<<<<<<<<<<<<<
+ *                 summary[k, 8] = z_tot - summary[k, 5] - summaryn[j, 3]
+ * 
+ */
+            __Pyx_TraceLine(204,1,__PYX_ERR(0, 204, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_2 = 4;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_13 = __pyx_v_j;
+            __pyx_t_1 = 2;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+            __pyx_t_9 = __pyx_v_k;
+            __pyx_t_14 = 7;
+            if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_summary.diminfo[1].strides) = ((__pyx_v_y_tot - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summaryn.diminfo[1].strides)));
+
+            /* "whitebeam/core/_whitebeam.pyx":205
+ *                 summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]
+ *                 summary[k, 7] = y_tot - summary[k, 4] - summaryn[j, 2]
+ *                 summary[k, 8] = z_tot - summary[k, 5] - summaryn[j, 3]             # <<<<<<<<<<<<<<
+ * 
+ *             # fill the right node
+ */
+            __Pyx_TraceLine(205,1,__PYX_ERR(0, 205, __pyx_L4_error))
+            __pyx_t_13 = __pyx_v_k;
+            __pyx_t_1 = 5;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_12 = __pyx_v_j;
+            __pyx_t_2 = 3;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+            __pyx_t_9 = __pyx_v_k;
+            __pyx_t_14 = 8;
+            if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_summary.diminfo[1].strides) = ((__pyx_v_z_tot - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summaryn.diminfo[1].strides)));
+          }
+
+          /* "whitebeam/core/_whitebeam.pyx":208
+ * 
+ *             # fill the right node
+ *             k = <size_t> ((xdim[j, 4] - xdim0)*2)             # <<<<<<<<<<<<<<
+ *             summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]
+ *             summary[k, 7] = y_tot - summary[k, 4] - summaryn[j, 2]
+ */
+          __Pyx_TraceLine(208,1,__PYX_ERR(0, 208, __pyx_L4_error))
+          __pyx_t_6 = __pyx_v_j;
+          __pyx_t_2 = 4;
+          if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+          __pyx_v_k = ((size_t)(((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_xdim.diminfo[1].strides)) - __pyx_v_xdim0) * 2.0));
+
+          /* "whitebeam/core/_whitebeam.pyx":209
+ *             # fill the right node
+ *             k = <size_t> ((xdim[j, 4] - xdim0)*2)
+ *             summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]             # <<<<<<<<<<<<<<
+ *             summary[k, 7] = y_tot - summary[k, 4] - summaryn[j, 2]
+ *             summary[k, 8] = z_tot - summary[k, 5] - summaryn[j, 3]
+ */
+          __Pyx_TraceLine(209,1,__PYX_ERR(0, 209, __pyx_L4_error))
+          __pyx_t_6 = __pyx_v_k;
+          __pyx_t_2 = 3;
+          if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+          __pyx_t_7 = __pyx_v_j;
+          __pyx_t_1 = 1;
+          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+          __pyx_t_8 = __pyx_v_k;
+          __pyx_t_14 = 6;
+          if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_summary.diminfo[1].shape;
+          *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_summary.diminfo[1].strides) = ((__pyx_v_n - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summaryn.diminfo[1].strides)));
+
+          /* "whitebeam/core/_whitebeam.pyx":210
+ *             k = <size_t> ((xdim[j, 4] - xdim0)*2)
+ *             summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]
+ *             summary[k, 7] = y_tot - summary[k, 4] - summaryn[j, 2]             # <<<<<<<<<<<<<<
+ *             summary[k, 8] = z_tot - summary[k, 5] - summaryn[j, 3]
+ * 
+ */
+          __Pyx_TraceLine(210,1,__PYX_ERR(0, 210, __pyx_L4_error))
+          __pyx_t_7 = __pyx_v_k;
+          __pyx_t_1 = 4;
+          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+          __pyx_t_6 = __pyx_v_j;
+          __pyx_t_2 = 2;
+          if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+          __pyx_t_8 = __pyx_v_k;
+          __pyx_t_14 = 7;
+          if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_summary.diminfo[1].shape;
+          *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_summary.diminfo[1].strides) = ((__pyx_v_y_tot - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summaryn.diminfo[1].strides)));
+
+          /* "whitebeam/core/_whitebeam.pyx":211
+ *             summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]
+ *             summary[k, 7] = y_tot - summary[k, 4] - summaryn[j, 2]
+ *             summary[k, 8] = z_tot - summary[k, 5] - summaryn[j, 3]             # <<<<<<<<<<<<<<
+ * 
+ *         # missing values
+ */
+          __Pyx_TraceLine(211,1,__PYX_ERR(0, 211, __pyx_L4_error))
+          __pyx_t_6 = __pyx_v_k;
+          __pyx_t_2 = 5;
+          if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+          __pyx_t_7 = __pyx_v_j;
+          __pyx_t_1 = 3;
+          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+          __pyx_t_8 = __pyx_v_k;
+          __pyx_t_14 = 8;
+          if (__pyx_t_14 < 0) __pyx_t_14 += __pyx_pybuffernd_summary.diminfo[1].shape;
+          *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_14, __pyx_pybuffernd_summary.diminfo[1].strides) = ((__pyx_v_z_tot - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides))) - (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summaryn.diminfo[1].strides)));
+        }
+
+        /* "whitebeam/core/_whitebeam.pyx":214
+ * 
+ *         # missing values
+ *         for j in range(m):             # <<<<<<<<<<<<<<
+ * 
+ *             n_bin = <size_t> xdim[j, 3]
+ */
+        __Pyx_TraceLine(214,1,__PYX_ERR(0, 214, __pyx_L4_error))
+        __pyx_t_3 = __pyx_v_m;
+        __pyx_t_4 = __pyx_t_3;
+        for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
+          __pyx_v_j = __pyx_t_5;
+
+          /* "whitebeam/core/_whitebeam.pyx":216
+ *         for j in range(m):
+ * 
+ *             n_bin = <size_t> xdim[j, 3]             # <<<<<<<<<<<<<<
+ *             n_na = summaryn[j, 1]
+ *             y_na = summaryn[j, 2]
+ */
+          __Pyx_TraceLine(216,1,__PYX_ERR(0, 216, __pyx_L4_error))
+          __pyx_t_7 = __pyx_v_j;
+          __pyx_t_1 = 3;
+          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+          __pyx_v_n_bin = ((size_t)(*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)));
+
+          /* "whitebeam/core/_whitebeam.pyx":217
+ * 
+ *             n_bin = <size_t> xdim[j, 3]
+ *             n_na = summaryn[j, 1]             # <<<<<<<<<<<<<<
+ *             y_na = summaryn[j, 2]
+ *             z_na = summaryn[j, 3]
+ */
+          __Pyx_TraceLine(217,1,__PYX_ERR(0, 217, __pyx_L4_error))
+          __pyx_t_7 = __pyx_v_j;
+          __pyx_t_1 = 1;
+          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+          __pyx_v_n_na = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summaryn.diminfo[1].strides));
+
+          /* "whitebeam/core/_whitebeam.pyx":218
+ *             n_bin = <size_t> xdim[j, 3]
+ *             n_na = summaryn[j, 1]
+ *             y_na = summaryn[j, 2]             # <<<<<<<<<<<<<<
+ *             z_na = summaryn[j, 3]
+ * 
+ */
+          __Pyx_TraceLine(218,1,__PYX_ERR(0, 218, __pyx_L4_error))
+          __pyx_t_7 = __pyx_v_j;
+          __pyx_t_1 = 2;
+          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+          __pyx_v_y_na = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summaryn.diminfo[1].strides));
+
+          /* "whitebeam/core/_whitebeam.pyx":219
+ *             n_na = summaryn[j, 1]
+ *             y_na = summaryn[j, 2]
+ *             z_na = summaryn[j, 3]             # <<<<<<<<<<<<<<
+ * 
+ *             if n_na == 0:
+ */
+          __Pyx_TraceLine(219,1,__PYX_ERR(0, 219, __pyx_L4_error))
+          __pyx_t_7 = __pyx_v_j;
+          __pyx_t_1 = 3;
+          if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summaryn.diminfo[1].shape;
+          __pyx_v_z_na = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summaryn.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_summaryn.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summaryn.diminfo[1].strides));
+
+          /* "whitebeam/core/_whitebeam.pyx":221
+ *             z_na = summaryn[j, 3]
+ * 
+ *             if n_na == 0:             # <<<<<<<<<<<<<<
+ *                 continue
+ * 
+ */
+          __Pyx_TraceLine(221,1,__PYX_ERR(0, 221, __pyx_L4_error))
+          __pyx_t_11 = ((__pyx_v_n_na == 0.0) != 0);
+          if (__pyx_t_11) {
+
+            /* "whitebeam/core/_whitebeam.pyx":222
+ * 
+ *             if n_na == 0:
+ *                 continue             # <<<<<<<<<<<<<<
+ * 
+ *             for k_raw in range(n_bin):
+ */
+            __Pyx_TraceLine(222,1,__PYX_ERR(0, 222, __pyx_L4_error))
+            goto __pyx_L16_continue;
+
+            /* "whitebeam/core/_whitebeam.pyx":221
+ *             z_na = summaryn[j, 3]
+ * 
+ *             if n_na == 0:             # <<<<<<<<<<<<<<
+ *                 continue
+ * 
+ */
+          }
+
+          /* "whitebeam/core/_whitebeam.pyx":224
+ *                 continue
+ * 
+ *             for k_raw in range(n_bin):             # <<<<<<<<<<<<<<
+ *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
+ *                 k_tld = k + n_bin
+ */
+          __Pyx_TraceLine(224,1,__PYX_ERR(0, 224, __pyx_L4_error))
+          __pyx_t_7 = __pyx_v_n_bin;
+          __pyx_t_6 = __pyx_t_7;
+          for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_6; __pyx_t_8+=1) {
+            __pyx_v_k_raw = __pyx_t_8;
+
+            /* "whitebeam/core/_whitebeam.pyx":225
+ * 
+ *             for k_raw in range(n_bin):
+ *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)             # <<<<<<<<<<<<<<
+ *                 k_tld = k + n_bin
+ *                 summary[k_tld, 3] = summary[k, 3]
+ */
+            __Pyx_TraceLine(225,1,__PYX_ERR(0, 225, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_j;
+            __pyx_t_1 = 4;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_xdim.diminfo[1].shape;
+            __pyx_v_k = ((size_t)(__pyx_v_k_raw + (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_xdim.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_xdim.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_xdim.diminfo[1].strides)) - __pyx_v_xdim0) * 2.0)));
+
+            /* "whitebeam/core/_whitebeam.pyx":226
+ *             for k_raw in range(n_bin):
+ *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
+ *                 k_tld = k + n_bin             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 3] = summary[k, 3]
+ *                 summary[k_tld, 4] = summary[k, 4]
+ */
+            __Pyx_TraceLine(226,1,__PYX_ERR(0, 226, __pyx_L4_error))
+            __pyx_v_k_tld = (__pyx_v_k + __pyx_v_n_bin);
+
+            /* "whitebeam/core/_whitebeam.pyx":227
+ *                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
+ *                 k_tld = k + n_bin
+ *                 summary[k_tld, 3] = summary[k, 3]             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 4] = summary[k, 4]
+ *                 summary[k_tld, 5] = summary[k, 5]
+ */
+            __Pyx_TraceLine(227,1,__PYX_ERR(0, 227, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_1 = 3;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_13 = __pyx_v_k_tld;
+            __pyx_t_2 = 3;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides));
+
+            /* "whitebeam/core/_whitebeam.pyx":228
+ *                 k_tld = k + n_bin
+ *                 summary[k_tld, 3] = summary[k, 3]
+ *                 summary[k_tld, 4] = summary[k, 4]             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 5] = summary[k, 5]
+ *                 summary[k_tld, 6] = summary[k, 6]
+ */
+            __Pyx_TraceLine(228,1,__PYX_ERR(0, 228, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_1 = 4;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_13 = __pyx_v_k_tld;
+            __pyx_t_2 = 4;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides));
+
+            /* "whitebeam/core/_whitebeam.pyx":229
+ *                 summary[k_tld, 3] = summary[k, 3]
+ *                 summary[k_tld, 4] = summary[k, 4]
+ *                 summary[k_tld, 5] = summary[k, 5]             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 6] = summary[k, 6]
+ *                 summary[k_tld, 7] = summary[k, 7]
+ */
+            __Pyx_TraceLine(229,1,__PYX_ERR(0, 229, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_1 = 5;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_13 = __pyx_v_k_tld;
+            __pyx_t_2 = 5;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides));
+
+            /* "whitebeam/core/_whitebeam.pyx":230
+ *                 summary[k_tld, 4] = summary[k, 4]
+ *                 summary[k_tld, 5] = summary[k, 5]
+ *                 summary[k_tld, 6] = summary[k, 6]             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 7] = summary[k, 7]
+ *                 summary[k_tld, 8] = summary[k, 8]
+ */
+            __Pyx_TraceLine(230,1,__PYX_ERR(0, 230, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_1 = 6;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_13 = __pyx_v_k_tld;
+            __pyx_t_2 = 6;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides));
+
+            /* "whitebeam/core/_whitebeam.pyx":231
+ *                 summary[k_tld, 5] = summary[k, 5]
+ *                 summary[k_tld, 6] = summary[k, 6]
+ *                 summary[k_tld, 7] = summary[k, 7]             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 8] = summary[k, 8]
+ *                 summary[k_tld, 9] = 1
+ */
+            __Pyx_TraceLine(231,1,__PYX_ERR(0, 231, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_1 = 7;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_13 = __pyx_v_k_tld;
+            __pyx_t_2 = 7;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides));
+
+            /* "whitebeam/core/_whitebeam.pyx":232
+ *                 summary[k_tld, 6] = summary[k, 6]
+ *                 summary[k_tld, 7] = summary[k, 7]
+ *                 summary[k_tld, 8] = summary[k, 8]             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 9] = 1
+ * 
+ */
+            __Pyx_TraceLine(232,1,__PYX_ERR(0, 232, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_1 = 8;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            __pyx_t_13 = __pyx_v_k_tld;
+            __pyx_t_2 = 8;
+            if (__pyx_t_2 < 0) __pyx_t_2 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_13, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_2, __pyx_pybuffernd_summary.diminfo[1].strides) = (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides));
+
+            /* "whitebeam/core/_whitebeam.pyx":233
+ *                 summary[k_tld, 7] = summary[k, 7]
+ *                 summary[k_tld, 8] = summary[k, 8]
+ *                 summary[k_tld, 9] = 1             # <<<<<<<<<<<<<<
+ * 
+ *                 summary[k, 3] += n_na
+ */
+            __Pyx_TraceLine(233,1,__PYX_ERR(0, 233, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k_tld;
+            __pyx_t_1 = 9;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) = 1.0;
+
+            /* "whitebeam/core/_whitebeam.pyx":235
+ *                 summary[k_tld, 9] = 1
+ * 
+ *                 summary[k, 3] += n_na             # <<<<<<<<<<<<<<
+ *                 summary[k, 4] += y_na
+ *                 summary[k, 5] += z_na
+ */
+            __Pyx_TraceLine(235,1,__PYX_ERR(0, 235, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_1 = 3;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) += __pyx_v_n_na;
+
+            /* "whitebeam/core/_whitebeam.pyx":236
+ * 
+ *                 summary[k, 3] += n_na
+ *                 summary[k, 4] += y_na             # <<<<<<<<<<<<<<
+ *                 summary[k, 5] += z_na
+ *                 summary[k_tld, 6] += n_na
+ */
+            __Pyx_TraceLine(236,1,__PYX_ERR(0, 236, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_1 = 4;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) += __pyx_v_y_na;
+
+            /* "whitebeam/core/_whitebeam.pyx":237
+ *                 summary[k, 3] += n_na
+ *                 summary[k, 4] += y_na
+ *                 summary[k, 5] += z_na             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 6] += n_na
+ *                 summary[k_tld, 7] += y_na
+ */
+            __Pyx_TraceLine(237,1,__PYX_ERR(0, 237, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k;
+            __pyx_t_1 = 5;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) += __pyx_v_z_na;
+
+            /* "whitebeam/core/_whitebeam.pyx":238
+ *                 summary[k, 4] += y_na
+ *                 summary[k, 5] += z_na
+ *                 summary[k_tld, 6] += n_na             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 7] += y_na
+ *                 summary[k_tld, 8] += z_na
+ */
+            __Pyx_TraceLine(238,1,__PYX_ERR(0, 238, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k_tld;
+            __pyx_t_1 = 6;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) += __pyx_v_n_na;
+
+            /* "whitebeam/core/_whitebeam.pyx":239
+ *                 summary[k, 5] += z_na
+ *                 summary[k_tld, 6] += n_na
+ *                 summary[k_tld, 7] += y_na             # <<<<<<<<<<<<<<
+ *                 summary[k_tld, 8] += z_na
+ * 
+ */
+            __Pyx_TraceLine(239,1,__PYX_ERR(0, 239, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k_tld;
+            __pyx_t_1 = 7;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) += __pyx_v_y_na;
+
+            /* "whitebeam/core/_whitebeam.pyx":240
+ *                 summary[k_tld, 6] += n_na
+ *                 summary[k_tld, 7] += y_na
+ *                 summary[k_tld, 8] += z_na             # <<<<<<<<<<<<<<
+ * 
+ *     # done _create_avc
+ */
+            __Pyx_TraceLine(240,1,__PYX_ERR(0, 240, __pyx_L4_error))
+            __pyx_t_12 = __pyx_v_k_tld;
+            __pyx_t_1 = 8;
+            if (__pyx_t_1 < 0) __pyx_t_1 += __pyx_pybuffernd_summary.diminfo[1].shape;
+            *__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_summary.rcbuffer->pybuffer.buf, __pyx_t_12, __pyx_pybuffernd_summary.diminfo[0].strides, __pyx_t_1, __pyx_pybuffernd_summary.diminfo[1].strides) += __pyx_v_z_na;
+          }
+          __pyx_L16_continue:;
+        }
+      }
+
+      /* "whitebeam/core/_whitebeam.pyx":156
+ * 
+ *     # update E[y] & E[z]
+ *     with nogil:             # <<<<<<<<<<<<<<
+ * 
+ *         # iterate over n dimensions
+ */
+      __Pyx_TraceLine(156,1,__PYX_ERR(0, 156, __pyx_L4_error))
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L5;
+        }
+        __pyx_L4_error: {
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L1_error;
+        }
+        __pyx_L5:;
+      }
+  }
+
+  /* "whitebeam/core/_whitebeam.pyx":124
+ * 
+ * # create the avc :D
+ * cdef void _create_avc(             # <<<<<<<<<<<<<<
+ *         np.ndarray[DTYPE_t, ndim=2] X,
+ *         np.ndarray[DTYPE_t, ndim=1] y,
+ */
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_summary.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_summaryn.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_WriteUnraisable("whitebeam.core._whitebeam._create_avc", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_summary.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_summaryn.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_xdim.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_z.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __Pyx_TraceReturn(Py_None, 0);
+  __Pyx_RefNannyFinishContext();
+}
+
+/* "whitebeam/core/_whitebeam.pyx":250
+ * 
  * # output index
  * cdef np.ndarray[DTYPE_t, ndim=1] _apply_tree0(             # <<<<<<<<<<<<<<
  *                             np.ndarray[np.int_t, ndim=2] tree_ind,
@@ -4183,7 +4183,7 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_apply_tree0", 0);
-  __Pyx_TraceCall("_apply_tree0", __pyx_f[0], 243, 0, __PYX_ERR(0, 243, __pyx_L1_error));
+  __Pyx_TraceCall("_apply_tree0", __pyx_f[0], 250, 0, __PYX_ERR(0, 250, __pyx_L1_error));
   __pyx_pybuffer_tree_ind.pybuffer.buf = NULL;
   __pyx_pybuffer_tree_ind.refcount = 0;
   __pyx_pybuffernd_tree_ind.data = NULL;
@@ -4202,43 +4202,43 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
   __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tree_ind.rcbuffer->pybuffer, (PyObject*)__pyx_v_tree_ind, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 243, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tree_ind.rcbuffer->pybuffer, (PyObject*)__pyx_v_tree_ind, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 250, __pyx_L1_error)
   }
   __pyx_pybuffernd_tree_ind.diminfo[0].strides = __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_tree_ind.diminfo[0].shape = __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_tree_ind.diminfo[1].strides = __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_tree_ind.diminfo[1].shape = __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tree_val.rcbuffer->pybuffer, (PyObject*)__pyx_v_tree_val, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 243, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tree_val.rcbuffer->pybuffer, (PyObject*)__pyx_v_tree_val, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 250, __pyx_L1_error)
   }
   __pyx_pybuffernd_tree_val.diminfo[0].strides = __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_tree_val.diminfo[0].shape = __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_tree_val.diminfo[1].strides = __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_tree_val.diminfo[1].shape = __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 243, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 250, __pyx_L1_error)
   }
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 243, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 250, __pyx_L1_error)
   }
   __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
 
-  /* "whitebeam/core/_whitebeam.pyx":250
+  /* "whitebeam/core/_whitebeam.pyx":257
  *     # Initialize node/row indicies
  *     cdef size_t i, t
  *     cdef size_t n_samples = X.shape[0]             # <<<<<<<<<<<<<<
  * 
  *     with nogil:
  */
-  __Pyx_TraceLine(250,0,__PYX_ERR(0, 250, __pyx_L1_error))
+  __Pyx_TraceLine(257,0,__PYX_ERR(0, 257, __pyx_L1_error))
   __pyx_v_n_samples = (__pyx_v_X->dimensions[0]);
 
-  /* "whitebeam/core/_whitebeam.pyx":252
+  /* "whitebeam/core/_whitebeam.pyx":259
  *     cdef size_t n_samples = X.shape[0]
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
  *         for i in range(n_samples):
  *             t = 0
  */
-  __Pyx_TraceLine(252,0,__PYX_ERR(0, 252, __pyx_L1_error))
+  __Pyx_TraceLine(259,0,__PYX_ERR(0, 259, __pyx_L1_error))
   {
       #ifdef WITH_THREAD
       PyThreadState *_save;
@@ -4247,37 +4247,37 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
       #endif
       /*try:*/ {
 
-        /* "whitebeam/core/_whitebeam.pyx":253
+        /* "whitebeam/core/_whitebeam.pyx":260
  * 
  *     with nogil:
  *         for i in range(n_samples):             # <<<<<<<<<<<<<<
  *             t = 0
  *             while tree_ind[t,0] < 0:
  */
-        __Pyx_TraceLine(253,1,__PYX_ERR(0, 253, __pyx_L4_error))
+        __Pyx_TraceLine(260,1,__PYX_ERR(0, 260, __pyx_L4_error))
         __pyx_t_1 = __pyx_v_n_samples;
         __pyx_t_2 = __pyx_t_1;
         for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
           __pyx_v_i = __pyx_t_3;
 
-          /* "whitebeam/core/_whitebeam.pyx":254
+          /* "whitebeam/core/_whitebeam.pyx":261
  *     with nogil:
  *         for i in range(n_samples):
  *             t = 0             # <<<<<<<<<<<<<<
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):
  */
-          __Pyx_TraceLine(254,1,__PYX_ERR(0, 254, __pyx_L4_error))
+          __Pyx_TraceLine(261,1,__PYX_ERR(0, 261, __pyx_L4_error))
           __pyx_v_t = 0;
 
-          /* "whitebeam/core/_whitebeam.pyx":255
+          /* "whitebeam/core/_whitebeam.pyx":262
  *         for i in range(n_samples):
  *             t = 0
  *             while tree_ind[t,0] < 0:             # <<<<<<<<<<<<<<
  *                 if isnan(X[i, tree_ind[t,1]]):
  *                     if tree_ind[t,2]==0:
  */
-          __Pyx_TraceLine(255,1,__PYX_ERR(0, 255, __pyx_L4_error))
+          __Pyx_TraceLine(262,1,__PYX_ERR(0, 262, __pyx_L4_error))
           while (1) {
             __pyx_t_4 = __pyx_v_t;
             __pyx_t_5 = 0;
@@ -4285,14 +4285,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
             __pyx_t_6 = (((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_tree_ind.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_tree_ind.diminfo[1].strides)) < 0) != 0);
             if (!__pyx_t_6) break;
 
-            /* "whitebeam/core/_whitebeam.pyx":256
+            /* "whitebeam/core/_whitebeam.pyx":263
  *             t = 0
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):             # <<<<<<<<<<<<<<
  *                     if tree_ind[t,2]==0:
  *                         t = tree_ind[t,3]
  */
-            __Pyx_TraceLine(256,1,__PYX_ERR(0, 256, __pyx_L4_error))
+            __Pyx_TraceLine(263,1,__PYX_ERR(0, 263, __pyx_L4_error))
             __pyx_t_4 = __pyx_v_t;
             __pyx_t_5 = 1;
             if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_pybuffernd_tree_ind.diminfo[1].shape;
@@ -4302,34 +4302,34 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
             __pyx_t_6 = (isnan((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_8, __pyx_pybuffernd_X.diminfo[1].strides))) != 0);
             if (__pyx_t_6) {
 
-              /* "whitebeam/core/_whitebeam.pyx":257
+              /* "whitebeam/core/_whitebeam.pyx":264
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):
  *                     if tree_ind[t,2]==0:             # <<<<<<<<<<<<<<
  *                         t = tree_ind[t,3]
  *                     else:
  */
-              __Pyx_TraceLine(257,1,__PYX_ERR(0, 257, __pyx_L4_error))
+              __Pyx_TraceLine(264,1,__PYX_ERR(0, 264, __pyx_L4_error))
               __pyx_t_4 = __pyx_v_t;
               __pyx_t_5 = 2;
               if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_pybuffernd_tree_ind.diminfo[1].shape;
               __pyx_t_6 = (((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_tree_ind.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_tree_ind.diminfo[1].strides)) == 0) != 0);
               if (__pyx_t_6) {
 
-                /* "whitebeam/core/_whitebeam.pyx":258
+                /* "whitebeam/core/_whitebeam.pyx":265
  *                 if isnan(X[i, tree_ind[t,1]]):
  *                     if tree_ind[t,2]==0:
  *                         t = tree_ind[t,3]             # <<<<<<<<<<<<<<
  *                     else:
  *                         t = tree_ind[t,4]
  */
-                __Pyx_TraceLine(258,1,__PYX_ERR(0, 258, __pyx_L4_error))
+                __Pyx_TraceLine(265,1,__PYX_ERR(0, 265, __pyx_L4_error))
                 __pyx_t_4 = __pyx_v_t;
                 __pyx_t_5 = 3;
                 if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_pybuffernd_tree_ind.diminfo[1].shape;
                 __pyx_v_t = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_tree_ind.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_tree_ind.diminfo[1].strides));
 
-                /* "whitebeam/core/_whitebeam.pyx":257
+                /* "whitebeam/core/_whitebeam.pyx":264
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):
  *                     if tree_ind[t,2]==0:             # <<<<<<<<<<<<<<
@@ -4339,14 +4339,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
                 goto __pyx_L11;
               }
 
-              /* "whitebeam/core/_whitebeam.pyx":260
+              /* "whitebeam/core/_whitebeam.pyx":267
  *                         t = tree_ind[t,3]
  *                     else:
  *                         t = tree_ind[t,4]             # <<<<<<<<<<<<<<
  *                 else:
  *                     if X[i,tree_ind[t,1]] < tree_val[t,0]:
  */
-              __Pyx_TraceLine(260,1,__PYX_ERR(0, 260, __pyx_L4_error))
+              __Pyx_TraceLine(267,1,__PYX_ERR(0, 267, __pyx_L4_error))
               /*else*/ {
                 __pyx_t_4 = __pyx_v_t;
                 __pyx_t_5 = 4;
@@ -4355,7 +4355,7 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
               }
               __pyx_L11:;
 
-              /* "whitebeam/core/_whitebeam.pyx":256
+              /* "whitebeam/core/_whitebeam.pyx":263
  *             t = 0
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):             # <<<<<<<<<<<<<<
@@ -4365,14 +4365,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
               goto __pyx_L10;
             }
 
-            /* "whitebeam/core/_whitebeam.pyx":262
+            /* "whitebeam/core/_whitebeam.pyx":269
  *                         t = tree_ind[t,4]
  *                 else:
  *                     if X[i,tree_ind[t,1]] < tree_val[t,0]:             # <<<<<<<<<<<<<<
  *                         t = tree_ind[t,3]
  *                     else:
  */
-            __Pyx_TraceLine(262,1,__PYX_ERR(0, 262, __pyx_L4_error))
+            __Pyx_TraceLine(269,1,__PYX_ERR(0, 269, __pyx_L4_error))
             /*else*/ {
               __pyx_t_4 = __pyx_v_t;
               __pyx_t_5 = 1;
@@ -4386,20 +4386,20 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
               __pyx_t_6 = (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_8, __pyx_pybuffernd_X.diminfo[1].strides)) < (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_tree_val.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_tree_val.diminfo[1].strides))) != 0);
               if (__pyx_t_6) {
 
-                /* "whitebeam/core/_whitebeam.pyx":263
+                /* "whitebeam/core/_whitebeam.pyx":270
  *                 else:
  *                     if X[i,tree_ind[t,1]] < tree_val[t,0]:
  *                         t = tree_ind[t,3]             # <<<<<<<<<<<<<<
  *                     else:
  *                         t = tree_ind[t,4]
  */
-                __Pyx_TraceLine(263,1,__PYX_ERR(0, 263, __pyx_L4_error))
+                __Pyx_TraceLine(270,1,__PYX_ERR(0, 270, __pyx_L4_error))
                 __pyx_t_9 = __pyx_v_t;
                 __pyx_t_10 = 3;
                 if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_pybuffernd_tree_ind.diminfo[1].shape;
                 __pyx_v_t = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_tree_ind.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_tree_ind.diminfo[1].strides));
 
-                /* "whitebeam/core/_whitebeam.pyx":262
+                /* "whitebeam/core/_whitebeam.pyx":269
  *                         t = tree_ind[t,4]
  *                 else:
  *                     if X[i,tree_ind[t,1]] < tree_val[t,0]:             # <<<<<<<<<<<<<<
@@ -4409,14 +4409,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
                 goto __pyx_L12;
               }
 
-              /* "whitebeam/core/_whitebeam.pyx":265
+              /* "whitebeam/core/_whitebeam.pyx":272
  *                         t = tree_ind[t,3]
  *                     else:
  *                         t = tree_ind[t,4]             # <<<<<<<<<<<<<<
  *             y[i] = tree_ind[t,5]
  *     return y
  */
-              __Pyx_TraceLine(265,1,__PYX_ERR(0, 265, __pyx_L4_error))
+              __Pyx_TraceLine(272,1,__PYX_ERR(0, 272, __pyx_L4_error))
               /*else*/ {
                 __pyx_t_9 = __pyx_v_t;
                 __pyx_t_10 = 4;
@@ -4428,14 +4428,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
             __pyx_L10:;
           }
 
-          /* "whitebeam/core/_whitebeam.pyx":266
+          /* "whitebeam/core/_whitebeam.pyx":273
  *                     else:
  *                         t = tree_ind[t,4]
  *             y[i] = tree_ind[t,5]             # <<<<<<<<<<<<<<
  *     return y
  * 
  */
-          __Pyx_TraceLine(266,1,__PYX_ERR(0, 266, __pyx_L4_error))
+          __Pyx_TraceLine(273,1,__PYX_ERR(0, 273, __pyx_L4_error))
           __pyx_t_9 = __pyx_v_t;
           __pyx_t_10 = 5;
           if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_pybuffernd_tree_ind.diminfo[1].shape;
@@ -4444,14 +4444,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
         }
       }
 
-      /* "whitebeam/core/_whitebeam.pyx":252
+      /* "whitebeam/core/_whitebeam.pyx":259
  *     cdef size_t n_samples = X.shape[0]
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
  *         for i in range(n_samples):
  *             t = 0
  */
-      __Pyx_TraceLine(252,1,__PYX_ERR(0, 252, __pyx_L4_error))
+      __Pyx_TraceLine(259,1,__PYX_ERR(0, 259, __pyx_L4_error))
       /*finally:*/ {
         /*normal exit:*/{
           #ifdef WITH_THREAD
@@ -4471,21 +4471,21 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
       }
   }
 
-  /* "whitebeam/core/_whitebeam.pyx":267
+  /* "whitebeam/core/_whitebeam.pyx":274
  *                         t = tree_ind[t,4]
  *             y[i] = tree_ind[t,5]
  *     return y             # <<<<<<<<<<<<<<
  * 
  * # output y values
  */
-  __Pyx_TraceLine(267,0,__PYX_ERR(0, 267, __pyx_L1_error))
+  __Pyx_TraceLine(274,0,__PYX_ERR(0, 274, __pyx_L1_error))
   __Pyx_XDECREF(((PyObject *)__pyx_r));
   __Pyx_INCREF(((PyObject *)__pyx_v_y));
   __pyx_r = ((PyArrayObject *)__pyx_v_y);
   goto __pyx_L0;
 
-  /* "whitebeam/core/_whitebeam.pyx":243
- * ## I am not entirely sure why, but this only works in this format
+  /* "whitebeam/core/_whitebeam.pyx":250
+ * 
  * # output index
  * cdef np.ndarray[DTYPE_t, ndim=1] _apply_tree0(             # <<<<<<<<<<<<<<
  *                             np.ndarray[np.int_t, ndim=2] tree_ind,
@@ -4518,7 +4518,7 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree0(PyArray
   return __pyx_r;
 }
 
-/* "whitebeam/core/_whitebeam.pyx":270
+/* "whitebeam/core/_whitebeam.pyx":277
  * 
  * # output y values
  * cdef np.ndarray[DTYPE_t, ndim=1] _apply_tree1(             # <<<<<<<<<<<<<<
@@ -4555,7 +4555,7 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_apply_tree1", 0);
-  __Pyx_TraceCall("_apply_tree1", __pyx_f[0], 270, 0, __PYX_ERR(0, 270, __pyx_L1_error));
+  __Pyx_TraceCall("_apply_tree1", __pyx_f[0], 277, 0, __PYX_ERR(0, 277, __pyx_L1_error));
   __pyx_pybuffer_tree_ind.pybuffer.buf = NULL;
   __pyx_pybuffer_tree_ind.refcount = 0;
   __pyx_pybuffernd_tree_ind.data = NULL;
@@ -4574,43 +4574,43 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
   __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tree_ind.rcbuffer->pybuffer, (PyObject*)__pyx_v_tree_ind, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 270, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tree_ind.rcbuffer->pybuffer, (PyObject*)__pyx_v_tree_ind, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 277, __pyx_L1_error)
   }
   __pyx_pybuffernd_tree_ind.diminfo[0].strides = __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_tree_ind.diminfo[0].shape = __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_tree_ind.diminfo[1].strides = __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_tree_ind.diminfo[1].shape = __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tree_val.rcbuffer->pybuffer, (PyObject*)__pyx_v_tree_val, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 270, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tree_val.rcbuffer->pybuffer, (PyObject*)__pyx_v_tree_val, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 277, __pyx_L1_error)
   }
   __pyx_pybuffernd_tree_val.diminfo[0].strides = __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_tree_val.diminfo[0].shape = __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_tree_val.diminfo[1].strides = __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_tree_val.diminfo[1].shape = __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 270, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) __PYX_ERR(0, 277, __pyx_L1_error)
   }
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_X.diminfo[1].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_X.diminfo[1].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 270, __pyx_L1_error)
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_y.rcbuffer->pybuffer, (PyObject*)__pyx_v_y, &__Pyx_TypeInfo_nn___pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 277, __pyx_L1_error)
   }
   __pyx_pybuffernd_y.diminfo[0].strides = __pyx_pybuffernd_y.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_y.diminfo[0].shape = __pyx_pybuffernd_y.rcbuffer->pybuffer.shape[0];
 
-  /* "whitebeam/core/_whitebeam.pyx":277
+  /* "whitebeam/core/_whitebeam.pyx":284
  *     # Initialize node/row indicies
  *     cdef size_t i, t
  *     cdef size_t n_samples = X.shape[0]             # <<<<<<<<<<<<<<
  * 
  *     with nogil:
  */
-  __Pyx_TraceLine(277,0,__PYX_ERR(0, 277, __pyx_L1_error))
+  __Pyx_TraceLine(284,0,__PYX_ERR(0, 284, __pyx_L1_error))
   __pyx_v_n_samples = (__pyx_v_X->dimensions[0]);
 
-  /* "whitebeam/core/_whitebeam.pyx":279
+  /* "whitebeam/core/_whitebeam.pyx":286
  *     cdef size_t n_samples = X.shape[0]
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
  *         for i in range(n_samples):
  *             t = 0
  */
-  __Pyx_TraceLine(279,0,__PYX_ERR(0, 279, __pyx_L1_error))
+  __Pyx_TraceLine(286,0,__PYX_ERR(0, 286, __pyx_L1_error))
   {
       #ifdef WITH_THREAD
       PyThreadState *_save;
@@ -4619,37 +4619,37 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
       #endif
       /*try:*/ {
 
-        /* "whitebeam/core/_whitebeam.pyx":280
+        /* "whitebeam/core/_whitebeam.pyx":287
  * 
  *     with nogil:
  *         for i in range(n_samples):             # <<<<<<<<<<<<<<
  *             t = 0
  *             while tree_ind[t,0] < 0:
  */
-        __Pyx_TraceLine(280,1,__PYX_ERR(0, 280, __pyx_L4_error))
+        __Pyx_TraceLine(287,1,__PYX_ERR(0, 287, __pyx_L4_error))
         __pyx_t_1 = __pyx_v_n_samples;
         __pyx_t_2 = __pyx_t_1;
         for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
           __pyx_v_i = __pyx_t_3;
 
-          /* "whitebeam/core/_whitebeam.pyx":281
+          /* "whitebeam/core/_whitebeam.pyx":288
  *     with nogil:
  *         for i in range(n_samples):
  *             t = 0             # <<<<<<<<<<<<<<
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):
  */
-          __Pyx_TraceLine(281,1,__PYX_ERR(0, 281, __pyx_L4_error))
+          __Pyx_TraceLine(288,1,__PYX_ERR(0, 288, __pyx_L4_error))
           __pyx_v_t = 0;
 
-          /* "whitebeam/core/_whitebeam.pyx":282
+          /* "whitebeam/core/_whitebeam.pyx":289
  *         for i in range(n_samples):
  *             t = 0
  *             while tree_ind[t,0] < 0:             # <<<<<<<<<<<<<<
  *                 if isnan(X[i, tree_ind[t,1]]):
  *                     if tree_ind[t,2]==0:
  */
-          __Pyx_TraceLine(282,1,__PYX_ERR(0, 282, __pyx_L4_error))
+          __Pyx_TraceLine(289,1,__PYX_ERR(0, 289, __pyx_L4_error))
           while (1) {
             __pyx_t_4 = __pyx_v_t;
             __pyx_t_5 = 0;
@@ -4657,14 +4657,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
             __pyx_t_6 = (((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_tree_ind.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_tree_ind.diminfo[1].strides)) < 0) != 0);
             if (!__pyx_t_6) break;
 
-            /* "whitebeam/core/_whitebeam.pyx":283
+            /* "whitebeam/core/_whitebeam.pyx":290
  *             t = 0
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):             # <<<<<<<<<<<<<<
  *                     if tree_ind[t,2]==0:
  *                         t = tree_ind[t,3]
  */
-            __Pyx_TraceLine(283,1,__PYX_ERR(0, 283, __pyx_L4_error))
+            __Pyx_TraceLine(290,1,__PYX_ERR(0, 290, __pyx_L4_error))
             __pyx_t_4 = __pyx_v_t;
             __pyx_t_5 = 1;
             if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_pybuffernd_tree_ind.diminfo[1].shape;
@@ -4674,34 +4674,34 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
             __pyx_t_6 = (isnan((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_8, __pyx_pybuffernd_X.diminfo[1].strides))) != 0);
             if (__pyx_t_6) {
 
-              /* "whitebeam/core/_whitebeam.pyx":284
+              /* "whitebeam/core/_whitebeam.pyx":291
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):
  *                     if tree_ind[t,2]==0:             # <<<<<<<<<<<<<<
  *                         t = tree_ind[t,3]
  *                     else:
  */
-              __Pyx_TraceLine(284,1,__PYX_ERR(0, 284, __pyx_L4_error))
+              __Pyx_TraceLine(291,1,__PYX_ERR(0, 291, __pyx_L4_error))
               __pyx_t_4 = __pyx_v_t;
               __pyx_t_5 = 2;
               if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_pybuffernd_tree_ind.diminfo[1].shape;
               __pyx_t_6 = (((*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_tree_ind.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_tree_ind.diminfo[1].strides)) == 0) != 0);
               if (__pyx_t_6) {
 
-                /* "whitebeam/core/_whitebeam.pyx":285
+                /* "whitebeam/core/_whitebeam.pyx":292
  *                 if isnan(X[i, tree_ind[t,1]]):
  *                     if tree_ind[t,2]==0:
  *                         t = tree_ind[t,3]             # <<<<<<<<<<<<<<
  *                     else:
  *                         t = tree_ind[t,4]
  */
-                __Pyx_TraceLine(285,1,__PYX_ERR(0, 285, __pyx_L4_error))
+                __Pyx_TraceLine(292,1,__PYX_ERR(0, 292, __pyx_L4_error))
                 __pyx_t_4 = __pyx_v_t;
                 __pyx_t_5 = 3;
                 if (__pyx_t_5 < 0) __pyx_t_5 += __pyx_pybuffernd_tree_ind.diminfo[1].shape;
                 __pyx_v_t = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_tree_ind.diminfo[0].strides, __pyx_t_5, __pyx_pybuffernd_tree_ind.diminfo[1].strides));
 
-                /* "whitebeam/core/_whitebeam.pyx":284
+                /* "whitebeam/core/_whitebeam.pyx":291
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):
  *                     if tree_ind[t,2]==0:             # <<<<<<<<<<<<<<
@@ -4711,14 +4711,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
                 goto __pyx_L11;
               }
 
-              /* "whitebeam/core/_whitebeam.pyx":287
+              /* "whitebeam/core/_whitebeam.pyx":294
  *                         t = tree_ind[t,3]
  *                     else:
  *                         t = tree_ind[t,4]             # <<<<<<<<<<<<<<
  *                 else:
  *                     if X[i,tree_ind[t,1]] < tree_val[t,0]:
  */
-              __Pyx_TraceLine(287,1,__PYX_ERR(0, 287, __pyx_L4_error))
+              __Pyx_TraceLine(294,1,__PYX_ERR(0, 294, __pyx_L4_error))
               /*else*/ {
                 __pyx_t_4 = __pyx_v_t;
                 __pyx_t_5 = 4;
@@ -4727,7 +4727,7 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
               }
               __pyx_L11:;
 
-              /* "whitebeam/core/_whitebeam.pyx":283
+              /* "whitebeam/core/_whitebeam.pyx":290
  *             t = 0
  *             while tree_ind[t,0] < 0:
  *                 if isnan(X[i, tree_ind[t,1]]):             # <<<<<<<<<<<<<<
@@ -4737,14 +4737,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
               goto __pyx_L10;
             }
 
-            /* "whitebeam/core/_whitebeam.pyx":289
+            /* "whitebeam/core/_whitebeam.pyx":296
  *                         t = tree_ind[t,4]
  *                 else:
  *                     if X[i,tree_ind[t,1]] < tree_val[t,0]:             # <<<<<<<<<<<<<<
  *                         t = tree_ind[t,3]
  *                     else:
  */
-            __Pyx_TraceLine(289,1,__PYX_ERR(0, 289, __pyx_L4_error))
+            __Pyx_TraceLine(296,1,__PYX_ERR(0, 296, __pyx_L4_error))
             /*else*/ {
               __pyx_t_4 = __pyx_v_t;
               __pyx_t_5 = 1;
@@ -4758,20 +4758,20 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
               __pyx_t_6 = (((*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_X.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_X.diminfo[0].strides, __pyx_t_8, __pyx_pybuffernd_X.diminfo[1].strides)) < (*__Pyx_BufPtrStrided2d(__pyx_t_9whitebeam_4core_10_whitebeam_DTYPE_t *, __pyx_pybuffernd_tree_val.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_tree_val.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_tree_val.diminfo[1].strides))) != 0);
               if (__pyx_t_6) {
 
-                /* "whitebeam/core/_whitebeam.pyx":290
+                /* "whitebeam/core/_whitebeam.pyx":297
  *                 else:
  *                     if X[i,tree_ind[t,1]] < tree_val[t,0]:
  *                         t = tree_ind[t,3]             # <<<<<<<<<<<<<<
  *                     else:
  *                         t = tree_ind[t,4]
  */
-                __Pyx_TraceLine(290,1,__PYX_ERR(0, 290, __pyx_L4_error))
+                __Pyx_TraceLine(297,1,__PYX_ERR(0, 297, __pyx_L4_error))
                 __pyx_t_9 = __pyx_v_t;
                 __pyx_t_10 = 3;
                 if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_pybuffernd_tree_ind.diminfo[1].shape;
                 __pyx_v_t = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_tree_ind.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_tree_ind.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_tree_ind.diminfo[1].strides));
 
-                /* "whitebeam/core/_whitebeam.pyx":289
+                /* "whitebeam/core/_whitebeam.pyx":296
  *                         t = tree_ind[t,4]
  *                 else:
  *                     if X[i,tree_ind[t,1]] < tree_val[t,0]:             # <<<<<<<<<<<<<<
@@ -4781,14 +4781,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
                 goto __pyx_L12;
               }
 
-              /* "whitebeam/core/_whitebeam.pyx":292
+              /* "whitebeam/core/_whitebeam.pyx":299
  *                         t = tree_ind[t,3]
  *                     else:
  *                         t = tree_ind[t,4]             # <<<<<<<<<<<<<<
  *             y[i] = tree_val[t,1]
  *     return y
  */
-              __Pyx_TraceLine(292,1,__PYX_ERR(0, 292, __pyx_L4_error))
+              __Pyx_TraceLine(299,1,__PYX_ERR(0, 299, __pyx_L4_error))
               /*else*/ {
                 __pyx_t_9 = __pyx_v_t;
                 __pyx_t_10 = 4;
@@ -4800,13 +4800,13 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
             __pyx_L10:;
           }
 
-          /* "whitebeam/core/_whitebeam.pyx":293
+          /* "whitebeam/core/_whitebeam.pyx":300
  *                     else:
  *                         t = tree_ind[t,4]
  *             y[i] = tree_val[t,1]             # <<<<<<<<<<<<<<
  *     return y
  */
-          __Pyx_TraceLine(293,1,__PYX_ERR(0, 293, __pyx_L4_error))
+          __Pyx_TraceLine(300,1,__PYX_ERR(0, 300, __pyx_L4_error))
           __pyx_t_9 = __pyx_v_t;
           __pyx_t_10 = 1;
           if (__pyx_t_10 < 0) __pyx_t_10 += __pyx_pybuffernd_tree_val.diminfo[1].shape;
@@ -4815,14 +4815,14 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
         }
       }
 
-      /* "whitebeam/core/_whitebeam.pyx":279
+      /* "whitebeam/core/_whitebeam.pyx":286
  *     cdef size_t n_samples = X.shape[0]
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
  *         for i in range(n_samples):
  *             t = 0
  */
-      __Pyx_TraceLine(279,1,__PYX_ERR(0, 279, __pyx_L4_error))
+      __Pyx_TraceLine(286,1,__PYX_ERR(0, 286, __pyx_L4_error))
       /*finally:*/ {
         /*normal exit:*/{
           #ifdef WITH_THREAD
@@ -4842,18 +4842,18 @@ static PyArrayObject *__pyx_f_9whitebeam_4core_10_whitebeam__apply_tree1(PyArray
       }
   }
 
-  /* "whitebeam/core/_whitebeam.pyx":294
+  /* "whitebeam/core/_whitebeam.pyx":301
  *                         t = tree_ind[t,4]
  *             y[i] = tree_val[t,1]
  *     return y             # <<<<<<<<<<<<<<
  */
-  __Pyx_TraceLine(294,0,__PYX_ERR(0, 294, __pyx_L1_error))
+  __Pyx_TraceLine(301,0,__PYX_ERR(0, 301, __pyx_L1_error))
   __Pyx_XDECREF(((PyObject *)__pyx_r));
   __Pyx_INCREF(((PyObject *)__pyx_v_y));
   __pyx_r = ((PyArrayObject *)__pyx_v_y);
   goto __pyx_L0;
 
-  /* "whitebeam/core/_whitebeam.pyx":270
+  /* "whitebeam/core/_whitebeam.pyx":277
  * 
  * # output y values
  * cdef np.ndarray[DTYPE_t, ndim=1] _apply_tree1(             # <<<<<<<<<<<<<<
@@ -5859,8 +5859,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_X, __pyx_k_X, sizeof(__pyx_k_X), 0, 0, 1, 1},
   {&__pyx_n_s_apply_tree, __pyx_k_apply_tree, sizeof(__pyx_k_apply_tree), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
-  {&__pyx_n_s_cnvs, __pyx_k_cnvs, sizeof(__pyx_k_cnvs), 0, 0, 1, 1},
-  {&__pyx_n_s_cnvsn, __pyx_k_cnvsn, sizeof(__pyx_k_cnvsn), 0, 0, 1, 1},
   {&__pyx_n_s_create_avc, __pyx_k_create_avc, sizeof(__pyx_k_create_avc), 0, 0, 1, 1},
   {&__pyx_n_s_float64, __pyx_k_float64, sizeof(__pyx_k_float64), 0, 0, 1, 1},
   {&__pyx_n_s_i_end, __pyx_k_i_end, sizeof(__pyx_k_i_end), 0, 0, 1, 1},
@@ -5879,6 +5877,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_reorder, __pyx_k_reorder, sizeof(__pyx_k_reorder), 0, 0, 1, 1},
   {&__pyx_n_s_split_value, __pyx_k_split_value, sizeof(__pyx_k_split_value), 0, 0, 1, 1},
+  {&__pyx_n_s_summary, __pyx_k_summary, sizeof(__pyx_k_summary), 0, 0, 1, 1},
+  {&__pyx_n_s_summaryn, __pyx_k_summaryn, sizeof(__pyx_k_summaryn), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_tree_ind, __pyx_k_tree_ind, sizeof(__pyx_k_tree_ind), 0, 0, 1, 1},
   {&__pyx_n_s_tree_val, __pyx_k_tree_val, sizeof(__pyx_k_tree_val), 0, 0, 1, 1},
@@ -5890,7 +5890,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 110, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(1, 884, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -5923,41 +5923,41 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "whitebeam/core/_whitebeam.pyx":16
+  /* "whitebeam/core/_whitebeam.pyx":17
  * ctypedef np.float64_t DTYPE_t
  * 
  * def reorder(X, y, z, i_start, i_end, j_split, split_value, missing):             # <<<<<<<<<<<<<<
  *     """Reorders the thing
  * 
  */
-  __pyx_tuple__6 = PyTuple_Pack(8, __pyx_n_s_X, __pyx_n_s_y, __pyx_n_s_z, __pyx_n_s_i_start, __pyx_n_s_i_end, __pyx_n_s_j_split, __pyx_n_s_split_value, __pyx_n_s_missing); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(8, __pyx_n_s_X, __pyx_n_s_y, __pyx_n_s_z, __pyx_n_s_i_start, __pyx_n_s_i_end, __pyx_n_s_j_split, __pyx_n_s_split_value, __pyx_n_s_missing); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
-  __pyx_codeobj_ = (PyObject*)__Pyx_PyCode_New(8, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_whitebeam_core__whitebeam_pyx, __pyx_n_s_reorder, 16, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj_)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_codeobj_ = (PyObject*)__Pyx_PyCode_New(8, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_whitebeam_core__whitebeam_pyx, __pyx_n_s_reorder, 17, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj_)) __PYX_ERR(0, 17, __pyx_L1_error)
 
-  /* "whitebeam/core/_whitebeam.pyx":84
- * 
+  /* "whitebeam/core/_whitebeam.pyx":35
+ *     return _reorder(X, y, z, i_start, i_end, j_split, split_value, missing)
  * 
  * def create_avc(np.ndarray[DTYPE_t, ndim=2] X not None,             # <<<<<<<<<<<<<<
  *         np.ndarray[DTYPE_t, ndim=1] y not None,
  *         np.ndarray[DTYPE_t, ndim=1] z not None,
  */
-  __pyx_tuple__7 = PyTuple_Pack(6, __pyx_n_s_X, __pyx_n_s_y, __pyx_n_s_z, __pyx_n_s_xdim, __pyx_n_s_cnvs, __pyx_n_s_cnvsn); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(6, __pyx_n_s_X, __pyx_n_s_y, __pyx_n_s_z, __pyx_n_s_xdim, __pyx_n_s_summary, __pyx_n_s_summaryn); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(6, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_whitebeam_core__whitebeam_pyx, __pyx_n_s_create_avc, 84, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(6, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_whitebeam_core__whitebeam_pyx, __pyx_n_s_create_avc, 35, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 35, __pyx_L1_error)
 
-  /* "whitebeam/core/_whitebeam.pyx":223
- *     # done _create_avc
+  /* "whitebeam/core/_whitebeam.pyx":52
+ *     return 0
  * 
  * def apply_tree(tree_ind, tree_val, X, y, output_type):             # <<<<<<<<<<<<<<
  *     """Apply trained tree to a dataset
  * 
  */
-  __pyx_tuple__8 = PyTuple_Pack(5, __pyx_n_s_tree_ind, __pyx_n_s_tree_val, __pyx_n_s_X, __pyx_n_s_y, __pyx_n_s_output_type); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(5, __pyx_n_s_tree_ind, __pyx_n_s_tree_val, __pyx_n_s_X, __pyx_n_s_y, __pyx_n_s_output_type); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
-  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(5, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_whitebeam_core__whitebeam_pyx, __pyx_n_s_apply_tree, 223, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(5, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_whitebeam_core__whitebeam_pyx, __pyx_n_s_apply_tree, 52, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) __PYX_ERR(0, 52, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -6287,99 +6287,99 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "whitebeam/core/_whitebeam.pyx":13
- * from libc.math cimport isnan
+  /* "whitebeam/core/_whitebeam.pyx":14
  * 
+ * # define default dtype
  * DTYPE = np.float64             # <<<<<<<<<<<<<<
  * ctypedef np.float64_t DTYPE_t
  * 
  */
-  __Pyx_TraceLine(13,0,__PYX_ERR(0, 13, __pyx_L1_error))
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 13, __pyx_L1_error)
+  __Pyx_TraceLine(14,0,__PYX_ERR(0, 14, __pyx_L1_error))
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 13, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, __pyx_t_2) < 0) __PYX_ERR(0, 13, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, __pyx_t_2) < 0) __PYX_ERR(0, 14, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "whitebeam/core/_whitebeam.pyx":16
+  /* "whitebeam/core/_whitebeam.pyx":17
  * ctypedef np.float64_t DTYPE_t
  * 
  * def reorder(X, y, z, i_start, i_end, j_split, split_value, missing):             # <<<<<<<<<<<<<<
  *     """Reorders the thing
  * 
  */
-  __Pyx_TraceLine(16,0,__PYX_ERR(0, 16, __pyx_L1_error))
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_9whitebeam_4core_10_whitebeam_1reorder, NULL, __pyx_n_s_whitebeam_core__whitebeam); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __Pyx_TraceLine(17,0,__PYX_ERR(0, 17, __pyx_L1_error))
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_9whitebeam_4core_10_whitebeam_1reorder, NULL, __pyx_n_s_whitebeam_core__whitebeam); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_reorder, __pyx_t_2) < 0) __PYX_ERR(0, 16, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_reorder, __pyx_t_2) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "whitebeam/core/_whitebeam.pyx":34
+  /* "whitebeam/core/_whitebeam.pyx":35
  *     return _reorder(X, y, z, i_start, i_end, j_split, split_value, missing)
- * 
- * cdef size_t _reorder(             # <<<<<<<<<<<<<<
- *         np.ndarray[DTYPE_t, ndim=2] X, # X: 2-d numpy array (n x m)
- *         np.ndarray[DTYPE_t, ndim=1] y, # y: 1-d numpy array (n)
- */
-  __Pyx_TraceLine(34,0,__PYX_ERR(0, 34, __pyx_L1_error))
-
-
-  /* "whitebeam/core/_whitebeam.pyx":84
- * 
  * 
  * def create_avc(np.ndarray[DTYPE_t, ndim=2] X not None,             # <<<<<<<<<<<<<<
  *         np.ndarray[DTYPE_t, ndim=1] y not None,
  *         np.ndarray[DTYPE_t, ndim=1] z not None,
  */
-  __Pyx_TraceLine(84,0,__PYX_ERR(0, 84, __pyx_L1_error))
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_9whitebeam_4core_10_whitebeam_3create_avc, NULL, __pyx_n_s_whitebeam_core__whitebeam); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __Pyx_TraceLine(35,0,__PYX_ERR(0, 35, __pyx_L1_error))
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_9whitebeam_4core_10_whitebeam_3create_avc, NULL, __pyx_n_s_whitebeam_core__whitebeam); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_create_avc, __pyx_t_2) < 0) __PYX_ERR(0, 84, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_create_avc, __pyx_t_2) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "whitebeam/core/_whitebeam.pyx":102
- * 
- * 
- * cdef void _create_avc(             # <<<<<<<<<<<<<<
- *         np.ndarray[DTYPE_t, ndim=2] X,
- *         np.ndarray[DTYPE_t, ndim=1] y,
- */
-  __Pyx_TraceLine(102,0,__PYX_ERR(0, 102, __pyx_L1_error))
-
-
-  /* "whitebeam/core/_whitebeam.pyx":223
- *     # done _create_avc
+  /* "whitebeam/core/_whitebeam.pyx":52
+ *     return 0
  * 
  * def apply_tree(tree_ind, tree_val, X, y, output_type):             # <<<<<<<<<<<<<<
  *     """Apply trained tree to a dataset
  * 
  */
-  __Pyx_TraceLine(223,0,__PYX_ERR(0, 223, __pyx_L1_error))
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_9whitebeam_4core_10_whitebeam_5apply_tree, NULL, __pyx_n_s_whitebeam_core__whitebeam); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 223, __pyx_L1_error)
+  __Pyx_TraceLine(52,0,__PYX_ERR(0, 52, __pyx_L1_error))
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_9whitebeam_4core_10_whitebeam_5apply_tree, NULL, __pyx_n_s_whitebeam_core__whitebeam); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_apply_tree, __pyx_t_2) < 0) __PYX_ERR(0, 223, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_apply_tree, __pyx_t_2) < 0) __PYX_ERR(0, 52, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "whitebeam/core/_whitebeam.pyx":243
- * ## I am not entirely sure why, but this only works in this format
+  /* "whitebeam/core/_whitebeam.pyx":74
+ * 
+ * 
+ * cdef size_t _reorder(             # <<<<<<<<<<<<<<
+ *         np.ndarray[DTYPE_t, ndim=2] X, # X: 2-d numpy array (n x m)
+ *         np.ndarray[DTYPE_t, ndim=1] y, # y: 1-d numpy array (n)
+ */
+  __Pyx_TraceLine(74,0,__PYX_ERR(0, 74, __pyx_L1_error))
+
+
+  /* "whitebeam/core/_whitebeam.pyx":124
+ * 
+ * # create the avc :D
+ * cdef void _create_avc(             # <<<<<<<<<<<<<<
+ *         np.ndarray[DTYPE_t, ndim=2] X,
+ *         np.ndarray[DTYPE_t, ndim=1] y,
+ */
+  __Pyx_TraceLine(124,0,__PYX_ERR(0, 124, __pyx_L1_error))
+
+
+  /* "whitebeam/core/_whitebeam.pyx":250
+ * 
  * # output index
  * cdef np.ndarray[DTYPE_t, ndim=1] _apply_tree0(             # <<<<<<<<<<<<<<
  *                             np.ndarray[np.int_t, ndim=2] tree_ind,
  *                             np.ndarray[DTYPE_t, ndim=2] tree_val,
  */
-  __Pyx_TraceLine(243,0,__PYX_ERR(0, 243, __pyx_L1_error))
+  __Pyx_TraceLine(250,0,__PYX_ERR(0, 250, __pyx_L1_error))
 
 
-  /* "whitebeam/core/_whitebeam.pyx":270
+  /* "whitebeam/core/_whitebeam.pyx":277
  * 
  * # output y values
  * cdef np.ndarray[DTYPE_t, ndim=1] _apply_tree1(             # <<<<<<<<<<<<<<
  *                             np.ndarray[np.int_t, ndim=2] tree_ind,
  *                             np.ndarray[DTYPE_t, ndim=2] tree_val,
  */
-  __Pyx_TraceLine(270,0,__PYX_ERR(0, 270, __pyx_L1_error))
+  __Pyx_TraceLine(277,0,__PYX_ERR(0, 277, __pyx_L1_error))
 
 
   /* "whitebeam/core/_whitebeam.pyx":1
@@ -6844,6 +6844,27 @@ static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type) {
         return 1;
     PyErr_Format(PyExc_TypeError, "Cannot convert %.200s to %.200s",
                  Py_TYPE(obj)->tp_name, type->tp_name);
+    return 0;
+}
+
+/* ArgTypeTest */
+static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact)
+{
+    if (unlikely(!type)) {
+        PyErr_SetString(PyExc_SystemError, "Missing type object");
+        return 0;
+    }
+    else if (exact) {
+        #if PY_MAJOR_VERSION == 2
+        if ((type == &PyBaseString_Type) && likely(__Pyx_PyBaseString_CheckExact(obj))) return 1;
+        #endif
+    }
+    else {
+        if (likely(__Pyx_TypeCheck(obj, type))) return 1;
+    }
+    PyErr_Format(PyExc_TypeError,
+        "Argument '%.200s' has incorrect type (expected %.200s, got %.200s)",
+        name, type->tp_name, Py_TYPE(obj)->tp_name);
     return 0;
 }
 
@@ -7407,69 +7428,6 @@ fail:;
   return -1;
 }
 
-/* WriteUnraisableException */
-  static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
-                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
-                                  int full_traceback, CYTHON_UNUSED int nogil) {
-    PyObject *old_exc, *old_val, *old_tb;
-    PyObject *ctx;
-    __Pyx_PyThreadState_declare
-#ifdef WITH_THREAD
-    PyGILState_STATE state;
-    if (nogil)
-        state = PyGILState_Ensure();
-#ifdef _MSC_VER
-    else state = (PyGILState_STATE)-1;
-#endif
-#endif
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
-    if (full_traceback) {
-        Py_XINCREF(old_exc);
-        Py_XINCREF(old_val);
-        Py_XINCREF(old_tb);
-        __Pyx_ErrRestore(old_exc, old_val, old_tb);
-        PyErr_PrintEx(1);
-    }
-    #if PY_MAJOR_VERSION < 3
-    ctx = PyString_FromString(name);
-    #else
-    ctx = PyUnicode_FromString(name);
-    #endif
-    __Pyx_ErrRestore(old_exc, old_val, old_tb);
-    if (!ctx) {
-        PyErr_WriteUnraisable(Py_None);
-    } else {
-        PyErr_WriteUnraisable(ctx);
-        Py_DECREF(ctx);
-    }
-#ifdef WITH_THREAD
-    if (nogil)
-        PyGILState_Release(state);
-#endif
-}
-
-/* ArgTypeTest */
-  static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact)
-{
-    if (unlikely(!type)) {
-        PyErr_SetString(PyExc_SystemError, "Missing type object");
-        return 0;
-    }
-    else if (exact) {
-        #if PY_MAJOR_VERSION == 2
-        if ((type == &PyBaseString_Type) && likely(__Pyx_PyBaseString_CheckExact(obj))) return 1;
-        #endif
-    }
-    else {
-        if (likely(__Pyx_TypeCheck(obj, type))) return 1;
-    }
-    PyErr_Format(PyExc_TypeError,
-        "Argument '%.200s' has incorrect type (expected %.200s, got %.200s)",
-        name, type->tp_name, Py_TYPE(obj)->tp_name);
-    return 0;
-}
-
 /* BytesEquals */
   static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals) {
 #if CYTHON_COMPILING_IN_PYPY
@@ -7616,6 +7574,48 @@ return_ne:
     Py_XDECREF(owned_ref);
     #endif
     return (equals == Py_NE);
+#endif
+}
+
+/* WriteUnraisableException */
+  static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
+                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
+                                  int full_traceback, CYTHON_UNUSED int nogil) {
+    PyObject *old_exc, *old_val, *old_tb;
+    PyObject *ctx;
+    __Pyx_PyThreadState_declare
+#ifdef WITH_THREAD
+    PyGILState_STATE state;
+    if (nogil)
+        state = PyGILState_Ensure();
+#ifdef _MSC_VER
+    else state = (PyGILState_STATE)-1;
+#endif
+#endif
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
+    if (full_traceback) {
+        Py_XINCREF(old_exc);
+        Py_XINCREF(old_val);
+        Py_XINCREF(old_tb);
+        __Pyx_ErrRestore(old_exc, old_val, old_tb);
+        PyErr_PrintEx(1);
+    }
+    #if PY_MAJOR_VERSION < 3
+    ctx = PyString_FromString(name);
+    #else
+    ctx = PyUnicode_FromString(name);
+    #endif
+    __Pyx_ErrRestore(old_exc, old_val, old_tb);
+    if (!ctx) {
+        PyErr_WriteUnraisable(Py_None);
+    } else {
+        PyErr_WriteUnraisable(ctx);
+        Py_DECREF(ctx);
+    }
+#ifdef WITH_THREAD
+    if (nogil)
+        PyGILState_Release(state);
 #endif
 }
 

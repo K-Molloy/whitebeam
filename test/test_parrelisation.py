@@ -1,4 +1,4 @@
-from whitebeam.base import DecisionTreeRegressor, XGBoostedRegressor
+from whitebeam.base import DecisionTreeRegressor, XGBoostedClassifier
 
 from sklearn.datasets import make_friedman1
 from sklearn.datasets import make_friedman2
@@ -50,8 +50,8 @@ def test_xgboost_parallelisation():
     X_train, X_test, y_train, y_test = train_test_split(X, y, 
                                         test_size=test_size)
 
-    model_p1 = XGBoostedRegressor(max_depth=max_depth, n_jobs=1)
-    model_p2 = XGBoostedRegressor(max_depth=max_depth, n_jobs=2)
+    model_p1 = XGBoostedClassifier(max_depth=max_depth, n_jobs=1)
+    model_p2 = XGBoostedClassifier(max_depth=max_depth, n_jobs=2)
 
     start = time.time()
     model_p1.fit(X_train, y_train)

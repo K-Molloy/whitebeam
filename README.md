@@ -54,7 +54,8 @@ Installing from source requires `python-dev` which can be installed using
 ```
 sudo apt-get install python3-dev
 ```
-then cloning this repo, installing requirements and building
+then cloning this repo, installing requirements and building which is handled by poetry
+
 ```
 git clone https://github.com/K-Molloy/whitebeam
 pip install -r requirements.txt

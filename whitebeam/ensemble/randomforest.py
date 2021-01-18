@@ -30,12 +30,12 @@ class RandomForestEnsemble():
         y = y.astype(np.float)
  
         whitebeam_tmp = DecisionTreeClassifier()
-        whitebeam_tmp.init_cnvs(X)
-        xdim, cnvs, cnvsn = whitebeam_tmp.get_cnvs()
+        whitebeam_tmp.init_summary(X)
+        xdim, summary, summaryn = whitebeam_tmp.get_summary()
         for i in range(self.n_estimators):
             estimator = self.base_estimator(**self.base_params)
-            estimator.set_cnvs(xdim, cnvs, cnvsn)
-            estimator.fit(X, y, init_cnvs=False)
+            estimator.set_summary(xdim, summary, summaryn)
+            estimator.fit(X, y, init_summary=False)
             self.estimators.append(estimator)
 
     def predict(self, X):

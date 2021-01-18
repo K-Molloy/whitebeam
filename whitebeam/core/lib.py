@@ -17,8 +17,8 @@ from whitebeam.core._whitebeam import (
 from whitebeam.utils.util import (
     reconstruct_tree,
     get_xdim,
-    get_cnvsn,
-    get_cnvs,
+    get_summaryn,
+    get_summary,
     get_child_branch)
 import numpy as np
 import json
@@ -72,18 +72,31 @@ class Whitebeam:
         self.tree_val   = np.zeros((1,2), dtype=np.float)
         self.mask       = None
         self.xdim       = None
-        self.cnvs       = None
-        self.cnvsn      = None
+        self.summary    = None
+        self.summaryn   = None
         self.n_jobs     = n_jobs
         if self.n_jobs < 0:
             self.n_jobs = cpu_count()
 
     def get_avc(self, X, y, z, i_start, i_end, parallel):
+        """Calculate AVC matrix
+
+        Args:
+            X (array): Data Array
+            y (array): Target Array
+            z ([type]): [description]
+            i_start ([type]): [description]
+            i_end ([type]): [description]
+            parallel ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
         n, m = X.shape
         y_i = y[i_start:i_end]
         z_i = z[i_start:i_end]
-        self.cnvs[:,3:] = 0  # initialize canvas
-        self.cnvsn[:,1:] = 0 # initialize canvas for NA
+        self.summary[:,3:] = 0  # initialize canvas
+        self.summaryn[:,1:] = 0 # initialize canvas for NA
 
         # TODO: smart guidance on "n_jobs"
         k = int(np.ceil(m/self.n_jobs))
@@ -97,9 +110,9 @@ class Whitebeam:
                         self.xdim[j_end-1,3]*2)
             X_ij = X[i_start:i_end,j_start:j_end]
             xdim_j = self.xdim[j_start:j_end,:]
-            cnvs_j = self.cnvs[jj_start:jj_end,:]
-            cnvsn_j = self.cnvsn[j_start:j_end,:]
-            create_avc(X_ij, y_i, z_i, xdim_j, cnvs_j, cnvsn_j)
+            summary_j = self.summary[jj_start:jj_end,:]
+            summaryn_j = self.summaryn[j_start:j_end,:]
+            create_avc(X_ij, y_i, z_i, xdim_j, summary_j, summaryn_j)
             return 0
 
         #t0 = time.time()
@@ -107,7 +120,7 @@ class Whitebeam:
         #t1 = time.time() - t0
         #print(i_end-i_start, t1)
 
-        return self.cnvs
+        return self.summary
 
     def split_branch(self, X, y, z, branch, parallel):
         """Splits the data (X, y) into two children based on 
@@ -164,7 +177,7 @@ class Whitebeam:
                     branches_new.append(child)
         return branches_new, leaves_new
 
-    def fit(self, X, y, init_cnvs=True, parallel=None): 
+    def fit(self, X, y, init_summary=True, parallel=None): 
         """Fit a tree to the data (X, y)."""
 
         n, m = X.shape
@@ -200,11 +213,11 @@ class Whitebeam:
                     "y_lst": [], 
                     "n_samples": n}]
 
-        if init_cnvs:
-            self.init_cnvs(X)
+        if init_summary:
+            self.init_summary(X)
 
         self.leaves = []
-        if self.xdim is None or self.cnvs is None or self.cnvsn is None:
+        if self.xdim is None or self.summary is None or self.summaryn is None:
             logging.error("canvas is not initialized. no tree trained")
             return 1
 
@@ -243,20 +256,20 @@ class Whitebeam:
         else:
             return out 
 
-    def init_cnvs(self, X):
+    def init_summary(self, X):
         self.xdim = get_xdim(X, self.n_hist_max)
-        self.cnvs = get_cnvs(self.xdim)
-        self.cnvsn = get_cnvsn(self.xdim)
+        self.summary = get_summary(self.xdim)
+        self.summaryn = get_summaryn(self.xdim)
 
-    def set_cnvs(self, xdim, cnvs, cnvsn):
+    def set_summary(self, xdim, summary, summaryn):
         self.xdim = xdim
-        self.cnvs = cnvs
-        self.cnvsn = cnvsn
-        self.cnvs[:,3:] = 0  # initialize canvas
-        self.cnvsn[:,1:] = 0 # initialize canvas for NA
+        self.summary = summary
+        self.summaryn = summaryn
+        self.summary[:,3:] = 0  # initialize canvas
+        self.summaryn[:,1:] = 0 # initialize canvas for NA
  
-    def get_cnvs(self):
-        return self.xdim, self.cnvs, self.cnvsn
+    def get_summary(self):
+        return self.xdim, self.summary, self.summaryn
 
     def is_stochastic(self):
         return self.subsample < 1.0
@@ -348,9 +361,6 @@ class Whitebeam:
     def update_feature_importances(self):
         """Returns a modified feature importance.
             This formula takes into account of node coverage and leaf value.
-            NOTE: This is different from regular feature importances that
-                are used in RandomForests or GBM.
-            For more info, please see the PaloBoost paper.
         """
         if self.n_features_ == 0:
             return None

@@ -38,7 +38,7 @@ def test_alpha_auc():
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
     max_depth = 4
-    model = AlphaTreeClassifier(alpha=3.0, max_depth=max_depth)
+    model = CCPTreeClassifier(alpha=3.0, max_depth=max_depth)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     score = accuracy_score(y_test, y_hat)
@@ -62,7 +62,7 @@ def test_xgboost_auc():
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
     max_depth = 4
-    model = XGBoostedRegressor(max_depth=max_depth)
+    model = XGBoostedClassifier(max_depth=max_depth)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     score = accuracy_score(y_test, y_hat)

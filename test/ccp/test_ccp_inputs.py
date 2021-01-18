@@ -1,4 +1,4 @@
-from whitebeam.base import AlphaTreeClassifier
+from whitebeam.base import CCPTreeClassifier
 
 from sklearn.model_selection import train_test_split
 import numpy as np
@@ -17,7 +17,7 @@ def test_alpha_alpha_data_types_fail(param_alpha):
 
     # should fail DURING THE <model.fit> CALL
     with pytest.raises(Exception) as e_info:
-        model = AlphaTreeClassifier(alpha=param_alpha)
+        model = CCPTreeClassifier(alpha=param_alpha)
         model.fit(X_train, y_train)
 
 @pytest.mark.parametrize("param_depth", [2+3j, "3", []])
@@ -27,7 +27,7 @@ def test_alpha_depth_data_types_fail(param_depth):
 
     # should fail DURING THE <model.fit> CALL
     with pytest.raises(Exception) as e_info:
-        model = AlphaTreeClassifier(max_depth=param_depth)
+        model = CCPTreeClassifier(max_depth=param_depth)
         model.fit(X_train, y_train)
 
 # for some reason, a complex number does not call an error here :/
@@ -41,7 +41,7 @@ def test_alpha_split_data_types_fail(param_split):
 
     # should fail DURING THE <model.fit> CALL
     with pytest.raises(Exception) as e_info:
-        model = AlphaTreeClassifier(min_samples_split=param_split)
+        model = CCPTreeClassifier(min_samples_split=param_split)
         model.fit(X_train, y_train)
 
 @pytest.mark.parametrize("param_leaf", [2+3j, "3", []])
@@ -51,7 +51,7 @@ def test_alpha_leaf_data_types_fail(param_leaf):
 
     # should fail DURING THE <model.fit> CALL
     with pytest.raises(Exception) as e_info:
-        model = AlphaTreeClassifier(min_samples_leaf= param_leaf)
+        model = CCPTreeClassifier(min_samples_leaf= param_leaf)
         model.fit(X_train, y_train)
 
 # ---------------
@@ -63,7 +63,7 @@ def test_alpha_alpha_data_types_pass(param_alpha):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = AlphaTreeClassifier(alpha=param_alpha)
+    model = CCPTreeClassifier(alpha=param_alpha)
     model.fit(X_train, y_train)
 
 @pytest.mark.parametrize("param_depth", [True, 3.2])
@@ -71,7 +71,7 @@ def test_alpha_depth_data_types_pass(param_depth):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = AlphaTreeClassifier(max_depth=param_depth)
+    model = CCPTreeClassifier(max_depth=param_depth)
     model.fit(X_train, y_train)
 
 # for some reason, a complex number does not call an error here :/
@@ -81,7 +81,7 @@ def test_alpha_split_data_types_pass(param_split):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = AlphaTreeClassifier(min_samples_split=param_split)
+    model = CCPTreeClassifier(min_samples_split=param_split)
     model.fit(X_train, y_train)
 
 @pytest.mark.parametrize("param_leaf", [True, 3.2])
@@ -90,7 +90,7 @@ def test_alpha_leaf_data_types_pass(param_leaf):
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
     # should fail DURING THE <model.fit> CALL
-    model = AlphaTreeClassifier(min_samples_leaf= param_leaf)
+    model = CCPTreeClassifier(min_samples_leaf= param_leaf)
     model.fit(X_train, y_train)
 
 

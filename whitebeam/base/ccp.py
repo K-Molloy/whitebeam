@@ -1,4 +1,4 @@
-# alpha tree
+# cost-complexity tree tree
 # Whitebeam | Kieran Molloy | Lancaster University 2020
 
 """
@@ -12,7 +12,7 @@ from whitebeam.core.lib import Whitebeam
 import numpy as np
 
 
-class AlphaTreeClassifier(Whitebeam):
+class CCPTreeClassifier(Whitebeam):
 
     def __init__(self,
                 alpha=1.0, 

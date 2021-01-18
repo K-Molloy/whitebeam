@@ -1,4 +1,4 @@
-from whitebeam.base import XGBoostedRegressor
+from whitebeam.base import XGBoostedClassifier
 
 from sklearn.metrics import accuracy_score
 
@@ -13,7 +13,7 @@ def test_xgb_output():
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = XGBoostedRegressor()
+    model = XGBoostedClassifier()
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
 
@@ -25,7 +25,7 @@ def test_xgb_labels():
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = XGBoostedRegressor()
+    model = XGBoostedClassifier()
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
 
@@ -42,7 +42,7 @@ def test_xgb_depth(param_depth):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
 
-    model = XGBoostedRegressor(max_depth=param_depth)
+    model = XGBoostedClassifier(max_depth=param_depth)
     model.fit(X_train, y_train)
     y_hat = model.predict(X_test)
     score = accuracy_score(y_test, y_hat)
@@ -54,7 +54,7 @@ def test_xgb_depth(param_depth):
 def test_xgb_split_leaf(param_split, param_leaf):
 
     X_train, X_test, y_train, y_test = generate_binary_classification()
-    model = XGBoostedRegressor(max_depth=4,
+    model = XGBoostedClassifier(max_depth=4,
                       min_samples_split=param_split,
                       min_samples_leaf= param_leaf)
     model.fit(X_train, y_train)

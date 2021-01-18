@@ -10,6 +10,7 @@ cimport numpy as np
 cimport cython
 from libc.math cimport isnan
 
+# define default dtype
 DTYPE = np.float64
 ctypedef np.float64_t DTYPE_t
 
@@ -30,6 +31,45 @@ def reorder(X, y, z, i_start, i_end, j_split, split_value, missing):
         [integer]: head index
     """
     return _reorder(X, y, z, i_start, i_end, j_split, split_value, missing)
+
+def create_avc(np.ndarray[DTYPE_t, ndim=2] X not None, 
+        np.ndarray[DTYPE_t, ndim=1] y not None, 
+        np.ndarray[DTYPE_t, ndim=1] z not None, 
+        np.ndarray[DTYPE_t, ndim=2] xdim not None, 
+        np.ndarray[DTYPE_t, ndim=2] summary not None, 
+        np.ndarray[DTYPE_t, ndim=2] summaryn not None):
+    """Calculate AVC Logic from component factors. And leave as component factors
+
+    Returns:
+        0: Build pass
+    """        
+
+    # canvas --> (create_avc) --> avc 
+    # AVC: Attribute-Value Class group in RainForest
+    _create_avc(X, y, z, xdim, summary, summaryn)
+    return 0
+
+def apply_tree(tree_ind, tree_val, X, y, output_type):
+    """Apply trained tree to a dataset
+
+    Args:
+        tree_ind (2-d Numpy Array): base index
+        tree_val (2-d Numpy Array): values
+        X (2-d Numpy Array): X Values
+        y (1-d Numpy Array): Y Values
+        output_type (string): "index" returns indices
+
+    Returns:
+        1-d Numpy Array: Fitted Values
+    """    
+    if output_type == "index":
+        return _apply_tree0(tree_ind, tree_val, X, y)
+    else:
+        return _apply_tree1(tree_ind, tree_val, X, y)
+
+################################################################################
+# cython functions
+
  
 cdef size_t _reorder(
         np.ndarray[DTYPE_t, ndim=2] X, # X: 2-d numpy array (n x m)
@@ -80,32 +120,14 @@ cdef size_t _reorder(
 
     return i_head
 
-
-def create_avc(np.ndarray[DTYPE_t, ndim=2] X not None, 
-        np.ndarray[DTYPE_t, ndim=1] y not None, 
-        np.ndarray[DTYPE_t, ndim=1] z not None, 
-        np.ndarray[DTYPE_t, ndim=2] xdim not None, 
-        np.ndarray[DTYPE_t, ndim=2] cnvs not None, 
-        np.ndarray[DTYPE_t, ndim=2] cnvsn not None):
-    """Calculate AVC Logic from component factors. And leave as component factors
-
-    Returns:
-        0: Build pass
-    """        
-
-    # canvas --> (create_avc) --> avc 
-    # AVC: Attribute-Value Class group in RainForest
-    _create_avc(X, y, z, xdim, cnvs, cnvsn)
-    return 0
-
-
+# create the avc :D
 cdef void _create_avc(
         np.ndarray[DTYPE_t, ndim=2] X, 
         np.ndarray[DTYPE_t, ndim=1] y, 
         np.ndarray[DTYPE_t, ndim=1] z, 
         np.ndarray[DTYPE_t, ndim=2] xdim, 
-        np.ndarray[DTYPE_t, ndim=2] cnvs, 
-        np.ndarray[DTYPE_t, ndim=2] cnvsn):
+        np.ndarray[DTYPE_t, ndim=2] summary, 
+        np.ndarray[DTYPE_t, ndim=2] summaryn):
 
     # indices
     cdef size_t i, j, k, k_raw, k_tld
@@ -114,9 +136,8 @@ cdef void _create_avc(
     cdef size_t n = X.shape[0]
     cdef size_t m = X.shape[1]
 
-    # CNVs - Copy Number Variations
-    # A CNV is when the number of copies of a particular gene varies from one individual to the next.
-    cdef size_t n_cnvs = <size_t> cnvs.shape[0]/2
+    # the current 'image'
+    cdef size_t n_summary = <size_t> summary.shape[0]/2
 
     # 
     cdef size_t n_bin
@@ -153,10 +174,10 @@ cdef void _create_avc(
 
                 # check isnan to prevent errors
                 if isnan(X[i, j]):
-                    # update CNVS
-                    cnvsn[j, 1] += 1
-                    cnvsn[j, 2] += y_i
-                    cnvsn[j, 3] += z_i
+                    # update summary
+                    summaryn[j, 1] += 1
+                    summaryn[j, 2] += y_i
+                    summaryn[j, 3] += z_i
                 else:
 
                     k_prox = (X[i, j] - xdim[j, 1])/xdim[j, 2]
@@ -165,9 +186,9 @@ cdef void _create_avc(
                     elif k_prox > xdim[j, 3] - 1:
                         k_prox = xdim[j, 3] - 1
                     k = <size_t> (k_prox + (xdim[j, 4] - xdim0)*2)
-                    cnvs[k, 3] += 1
-                    cnvs[k, 4] += y_i
-                    cnvs[k, 5] += z_i
+                    summary[k, 3] += 1
+                    summary[k, 4] += y_i
+                    summary[k, 5] += z_i
 
         # accumulate stats
         for j in range(m):
@@ -175,27 +196,27 @@ cdef void _create_avc(
             
             for k_raw in range(1, n_bin): 
                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
-                cnvs[k, 3] += cnvs[k-1, 3] 
-                cnvs[k, 4] += cnvs[k-1, 4] 
-                cnvs[k, 5] += cnvs[k-1, 5] 
+                summary[k, 3] += summary[k-1, 3] 
+                summary[k, 4] += summary[k-1, 4] 
+                summary[k, 5] += summary[k-1, 5] 
                 # fill the right node at the same time
-                cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]
-                cnvs[k, 7] = y_tot - cnvs[k, 4] - cnvsn[j, 2]
-                cnvs[k, 8] = z_tot - cnvs[k, 5] - cnvsn[j, 3]
+                summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]
+                summary[k, 7] = y_tot - summary[k, 4] - summaryn[j, 2]
+                summary[k, 8] = z_tot - summary[k, 5] - summaryn[j, 3]
 
             # fill the right node
             k = <size_t> ((xdim[j, 4] - xdim0)*2)
-            cnvs[k, 6] = n - cnvs[k, 3] - cnvsn[j, 1]
-            cnvs[k, 7] = y_tot - cnvs[k, 4] - cnvsn[j, 2]
-            cnvs[k, 8] = z_tot - cnvs[k, 5] - cnvsn[j, 3]
+            summary[k, 6] = n - summary[k, 3] - summaryn[j, 1]
+            summary[k, 7] = y_tot - summary[k, 4] - summaryn[j, 2]
+            summary[k, 8] = z_tot - summary[k, 5] - summaryn[j, 3]
 
         # missing values
         for j in range(m):
 
             n_bin = <size_t> xdim[j, 3]
-            n_na = cnvsn[j, 1]
-            y_na = cnvsn[j, 2]
-            z_na = cnvsn[j, 3]
+            n_na = summaryn[j, 1]
+            y_na = summaryn[j, 2]
+            z_na = summaryn[j, 3]
 
             if n_na == 0:
                 continue
@@ -203,42 +224,28 @@ cdef void _create_avc(
             for k_raw in range(n_bin):
                 k = <size_t> (k_raw + (xdim[j, 4] - xdim0)*2)
                 k_tld = k + n_bin
-                cnvs[k_tld, 3] = cnvs[k, 3]
-                cnvs[k_tld, 4] = cnvs[k, 4]
-                cnvs[k_tld, 5] = cnvs[k, 5]
-                cnvs[k_tld, 6] = cnvs[k, 6]
-                cnvs[k_tld, 7] = cnvs[k, 7]
-                cnvs[k_tld, 8] = cnvs[k, 8]
-                cnvs[k_tld, 9] = 1
+                summary[k_tld, 3] = summary[k, 3]
+                summary[k_tld, 4] = summary[k, 4]
+                summary[k_tld, 5] = summary[k, 5]
+                summary[k_tld, 6] = summary[k, 6]
+                summary[k_tld, 7] = summary[k, 7]
+                summary[k_tld, 8] = summary[k, 8]
+                summary[k_tld, 9] = 1
 
-                cnvs[k, 3] += n_na
-                cnvs[k, 4] += y_na
-                cnvs[k, 5] += z_na
-                cnvs[k_tld, 6] += n_na
-                cnvs[k_tld, 7] += y_na
-                cnvs[k_tld, 8] += z_na
+                summary[k, 3] += n_na
+                summary[k, 4] += y_na
+                summary[k, 5] += z_na
+                summary[k_tld, 6] += n_na
+                summary[k_tld, 7] += y_na
+                summary[k_tld, 8] += z_na
 
     # done _create_avc
 
-def apply_tree(tree_ind, tree_val, X, y, output_type):
-    """Apply trained tree to a dataset
-
-    Args:
-        tree_ind (2-d Numpy Array): base index
-        tree_val (2-d Numpy Array): values
-        X (2-d Numpy Array): X Values
-        y (1-d Numpy Array): Y Values
-        output_type (string): "index" returns indices
-
-    Returns:
-        1-d Numpy Array: Fitted Values
-    """    
-    if output_type == "index":
-        return _apply_tree0(tree_ind, tree_val, X, y)
-    else:
-        return _apply_tree1(tree_ind, tree_val, X, y)
 
 ## I am not entirely sure why, but this only works in this format
+## but both are required, even though they are basically the same 
+## function at this point
+
 # output index
 cdef np.ndarray[DTYPE_t, ndim=1] _apply_tree0(
                             np.ndarray[np.int_t, ndim=2] tree_ind, 
